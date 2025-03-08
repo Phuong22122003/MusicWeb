@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 w-full z-100 flex justify-center bg-[#333]">
+<header class="sticky top-0 left-0 w-full z-100 flex justify-center bg-[#333]">
   <div class="flex w-[100%] lg:w-[60%]">
     <ul class="flex w-[30%] justify-between">
       <li
@@ -25,11 +25,18 @@
     <ul
       class="flex w-[30%] items-center justify-center py-[9px] mr-[10px] ml-[8px]"
     >
-      <input
-        type="text"
-        class="min-w-[150px] w-[100%] h-[28px] rounded outline-none bg-white py-[5px] px-[7px]"
-        placeholder="Search"
-      />
+      <div
+        class="relative min-w-[150px] w-[100%] h-[28px] rounded bg-white py-[5px] px-[7px]"
+      >
+        <form>
+          <input type="text" class="w-full outline-none" placeholder="Search" />
+          <button type="button" class="cursor-pointer">
+            <i
+              class="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2"
+            ></i>
+          </button>
+        </form>
+      </div>
     </ul>
     <ul class="flex items-center justify-between">
       <li class="m-[10px]">
