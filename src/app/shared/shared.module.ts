@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { SoundCardComponent } from './components/sound-card/sound-card.component';
 import { RelatedTrackComponent } from './components/related-track/related-track.component';
+import { WavesurferComponent } from './components/wavesurfer/wavesurfer.component';
 
 
 
@@ -10,7 +11,8 @@ import { RelatedTrackComponent } from './components/related-track/related-track.
   declarations: [
     HeaderComponent,
     SoundCardComponent,
-    RelatedTrackComponent
+    RelatedTrackComponent,
+    WavesurferComponent
   ],
   imports: [
     CommonModule
@@ -18,7 +20,8 @@ import { RelatedTrackComponent } from './components/related-track/related-track.
   exports:[
     HeaderComponent,
     SoundCardComponent,
-    RelatedTrackComponent
+    RelatedTrackComponent,
+    WavesurferComponent
   ]
 })
 export class SharedModule { }
