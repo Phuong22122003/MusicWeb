@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ExampleListComponent } from './components/example-list/example-list.component';
 
-
-
 const routes: Routes = [
-  {  path:"list",  component:ExampleListComponent},
+  { path: '', component: ExampleListComponent },
   { path: '**', redirectTo: 'list', pathMatch: 'full' },
 ];
 
@@ -14,4 +12,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ExampleRoutingModule { }
+export class ExampleRoutingModule {}

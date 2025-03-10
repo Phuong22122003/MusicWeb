@@ -2,16 +2,23 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+  // {
+  //   path: '',
+  //   loadChildren: () =>
+  //     import('./modules/example/example.module').then((m) => m.ExampleModule),
+  // },
   {
-    path:"",
-    loadChildren:()=>import("./modules/example/example.module").then((m)=>m.ExampleModule)
+    path: 'home',
+    loadChildren: () =>
+      import('./modules/visitor-home/visitor-home.module').then(
+        (m) => m.VisitorHomeModule
+      ),
   },
-  { path: '**', redirectTo: 'example', pathMatch: 'full' },
-
+  { path: '**', redirectTo: 'example-list', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

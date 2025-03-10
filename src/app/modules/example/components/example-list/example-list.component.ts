@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-example-list',
   standalone: false,
   templateUrl: './example-list.component.html',
-  styleUrl: './example-list.component.scss'
+  styleUrl: './example-list.component.scss',
 })
-export class ExampleListComponent {
-
-}
+export class ExampleListComponent {}
