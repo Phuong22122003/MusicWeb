@@ -15,4 +15,12 @@ export class SoundCardComponent {
   @Input() likeCount: number = 0;
   @Input() repeatCount: number = 0;
   @Input() commentCount: number = 0;
+
+  isShow = false;
+  showPlayButton(){
+    this.isShow=true;
+  }
+  hiddenPlayButton(){
+    this.isShow=false;
+  }
 }

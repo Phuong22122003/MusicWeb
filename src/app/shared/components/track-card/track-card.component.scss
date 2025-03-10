@@ -1,8 +1,16 @@
-.rotate {
-    writing-mode: vertical-lr;
-   -webkit-transform: rotate(-180deg);
-   -moz-transform: rotate(-180deg);
+.track-name{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: normal;
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-weight: 100;
 }
+.username{
+    color: rgb(84, 84, 84);
+}
+
 .play-button{
     position: absolute;
     left: 50%;
@@ -31,4 +39,7 @@
 }
 .unliked{
     fill: white;
+}
+.followed{
+    fill: var(--soundcloud-color);
 }
