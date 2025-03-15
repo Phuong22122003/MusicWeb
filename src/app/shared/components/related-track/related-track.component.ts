@@ -1,5 +1,7 @@
 import { Component,Input } from '@angular/core';
 import {RelatedTrack } from '../../../core/models/playlist';
+import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-related-track',
@@ -11,25 +13,27 @@ export class RelatedTrackComponent {
   
   @Input() relatedTrack!:RelatedTrack;
 
-  isHovered = false;
-  isLiked = false;
-
-  prevent(event:any){
-    event.stopPropagation();
-  }
-  playTrack(event:any){
-    event.stopPropagation();
-    alert('play')
-  }
-  toggleLike(event:any){
-    event.stopPropagation();
-    this.isLiked = !this.isLiked;
-  }
-  
-  showPlayButton(){
-    this.isHovered=true;
-  }
-  hiddenPlayButton(){
-    this.isHovered=false;
-  }
+   isShow = false;
+   @Input() isLiked = false;
+   @Input() isFollowed =false;
+   constructor(private router: Router){}
+   goToPlaylist(){
+     // this.router.navigate(['track',this.track.id]);
+     alert('go to track')
+   }
+ 
+   playTrack(){
+     alert('play')
+   }
+ 
+   prevent(){
+ 
+   }
+ 
+   toggleLike():Observable<any>{
+     return of(true);
+   }
+   toggleFollow():Observable<any>{
+     return of(true);
+   }
 }

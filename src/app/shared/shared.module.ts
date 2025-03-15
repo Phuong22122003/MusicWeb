@@ -10,6 +10,10 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ArtistCardComponent } from './components/artist-card/artist-card.component';
+import { CardComponent } from './components/card/card.component';
+import { CardListComponent } from './components/card-list/card-list.component';
+import { RecommendedCardComponent } from './components/recommended-card/recommended-card.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SideBarComponent,
     UserCardComponent,
     AuthModalComponent,
+    ArtistCardComponent,
+    CardComponent,
+    CardListComponent,
+    RecommendedCardComponent,
   ],
   imports: [CommonModule, FormsModule],
   exports: [
@@ -31,6 +39,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TrackCardComponent,
     SideBarComponent,
     WavesurferComponent,
+    ArtistCardComponent,
+    CardComponent,
+    CardListComponent,
+    RecommendedCardComponent
   ],
 })
 export class SharedModule {}

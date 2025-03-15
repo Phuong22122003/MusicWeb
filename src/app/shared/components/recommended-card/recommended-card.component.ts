@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'app-track-card',
+  selector: 'app-recommended-card',
   standalone: false,
-  templateUrl: './track-card.component.html',
-  styleUrl: './track-card.component.scss'
+  templateUrl: './recommended-card.component.html',
+  styleUrl: './recommended-card.component.scss'
 })
-export class TrackCardComponent {
+export class RecommendedCardComponent {
   @Input({required:true}) track!:Track;
   isShow = false;
   @Input() isLiked = false;
@@ -34,6 +34,5 @@ export class TrackCardComponent {
   toggleFollow():Observable<any>{
     return of(true);
   }
-
 
 }
