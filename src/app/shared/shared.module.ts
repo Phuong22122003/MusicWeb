@@ -10,6 +10,7 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HeaderLogoutComponent } from './components/header-logout/header-logout.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     SideBarComponent,
     UserCardComponent,
     AuthModalComponent,
+    HeaderLogoutComponent,
   ],
   imports: [CommonModule, FormsModule],
   exports: [
@@ -31,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     TrackCardComponent,
     SideBarComponent,
     WavesurferComponent,
+    HeaderLogoutComponent,
   ],
 })
 export class SharedModule {}

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomepageLogoutAndroidComponent } from './modules/homepage-signed-out/components/homepage-signed-out/homepage-logout-android/homepage-logout-android.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,12 @@ const routes: Routes = [
     path:"discover",
     loadChildren:()=>import("./modules/home/home.module").then((m)=>m.HomeModule)
   },
-  { path: '**', redirectTo: 'discover', pathMatch: 'full' },
+  {
+    path:"logout",
+    loadChildren:()=>import("./modules/homepage-signed-out/homepage-signed-out.module").then((m)=>m.HomepageSignedOutModule)
+  },
+  { path: 'logout/android', component: HomepageLogoutAndroidComponent },
+  { path: '**', redirectTo: 'logout', pathMatch: 'full' },
 
 ];
 
