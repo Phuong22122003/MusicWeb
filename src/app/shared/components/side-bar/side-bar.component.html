@@ -1,0 +1,43 @@
+<div class="flex flex-col">
+    <div>
+        <div class="flex justify-between">
+            <h3 class="">Artirst you should follow</h3>
+            <span class="sidebarHeader__more__webi_style">Refresh list</span>
+        </div>
+        <app-user-card ></app-user-card>
+    </div>
+    <div>
+        <div class="flex justify-between">
+            <h3>24 Likes</h3>
+            <span class="sidebarHeader__more__webi_style">View all</span>
+        </div>
+        <div *ngFor="let sound of soundCards">
+            <app-sound-card
+              [author]="sound.author"
+              [songTitle]="sound.songTitle"
+              [playCount]="sound.playCount"
+              [likeCount]="sound.likeCount"
+              [repeatCount]="sound.repeatCount"
+              [commentCount]="sound.commentCount">
+            </app-sound-card>
+          </div>
+          
+    </div>
+    <div>
+        <div class="flex justify-between">
+            <h3>Listening history</h3>
+            <span class="sidebarHeader__more__webi_style">View all</span>
+        </div>
+        <div *ngFor="let sound of soundCards">
+            <app-sound-card
+              [author]="sound.author"
+              [songTitle]="sound.songTitle"
+              [playCount]="sound.playCount"
+              [likeCount]="sound.likeCount"
+              [repeatCount]="sound.repeatCount"
+              [commentCount]="sound.commentCount">
+            </app-sound-card>
+          </div>
+          
+    </div>
+</div>

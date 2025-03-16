@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { AuthService } from '../../../core/services/auth-service';
-import {
-  trigger,
-  state,
-  style,
-  transition,
-  animate,
-} from '@angular/animations';
+// import {
+//   trigger,
+//   state,
+//   style,
+//   transition,
+//   animate,
+// } from '@angular/animations';
 import { UserCreation } from '../../../core/models/UserCreation';
 enum Scene {
   EnterUserName,

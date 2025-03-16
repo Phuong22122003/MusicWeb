@@ -1,17 +1,31 @@
-<div class="w-48 text-center">
-  <div class="relative w-full border-4 border-gray-400 rounded-lg p-1">
-    <img src="assets/image.png" alt="Song" class="w-full h-auto rounded-md">
-    <div class="absolute top-2 right-2">
-      <img src="assets/soundcloud.svg" alt="SoundCloud" class="w-4 h-4">
+<app-card
+  [goTo]="goToPlaylist"
+  [toggleLike]="toggleLike"
+  [toggleFollow]="toggleFollow"
+>
+  <div class="flex">
+
+    <div class="flex flex-col">
+      <div class="bg-gray-400 p-4 w-full flex-grow-1">
+        <img src={{relatedTrack.trackPath}} alt="Song" class="w-full">
+      </div>
+      <p class="bg-black text-white text-sm p-1">{{relatedTrack.trackName}}</p>
     </div>
-    <div class="absolute right-0 top-1/4 bg-gray-500 text-white text-xs py-0 px-1 rotate-90 border-radius 0.125rem">
-      RELATED TRACKS
+    <div class="flex flex-col item-center bg-gray-500">
+      <img src="assets/soundcloud.svg" alt="SoundCloud" class="w-4 h-4">
+      <div class="text-white text-xs rotate flex-grow-1 p-1">
+        <p class="text-center ">
+          RELATED TRACKS
+        </p>
+      </div>
     </div>
   </div>
-  <!-- Tên bài hát -> truyền tên bài hát -->
-  <p class="text-sm font-semibold mt-1 truncate">{{ songTitle }}</p>
-  <!-- Tên tác giả -> truyền tên tác giả -->
-  <p class="text-xs text-gray-500">
-    <span class="font-semibold">{{ author }}</span>
-  </p>
-</div>
+  <div footer class="pt-2 flex flex-col ">
+    <a class="text-sm font-semibold mt-1 truncate">{{ relatedTrack.trackName }}</a>
+    <!-- Tên tác giả -> truyền tên tác giả -->
+    <a class="text-xs text-gray-500">
+      <span class="font-semibold">{{ relatedTrack.authors }}</span>
+    </a>
+  </div>
+
+</app-card>
