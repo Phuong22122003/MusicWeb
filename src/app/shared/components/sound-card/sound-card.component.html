@@ -1,5 +1,5 @@
 <div 
-  class="flex justify-between cursor-pointer mb-2" style="gap: 10px;"
+  class="flex justify-between cursor-pointer mb-2 relative" style="gap: 10px;"
   (mouseover)="showPlayButton()"
   (mouseleave)="hiddenPlayButton()"
 >
@@ -37,5 +37,14 @@
 </div>
 
 <ng-template #hover>
-  
+  <div class="hover">
+    <div class="flex justify-between">
+      <div class="play-button">
+        <img src="./assets/svg/play-circle-svgrepo-com.svg" alt="play-circle-svgrepo-com.svg">
+      </div>
+      <div>
+        <i class="fa-solid fa-heart text-red-500"></i>
+      </div>
+    </div>
+  </div>
 </ng-template>

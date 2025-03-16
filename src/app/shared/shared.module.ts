@@ -11,6 +11,10 @@ import { AuthModalComponent } from './components/auth-modal/auth-modal.component
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderLogoutComponent } from './components/header-logout/header-logout.component';
+import { ArtistCardComponent } from './components/artist-card/artist-card.component';
+import { CardComponent } from './components/card/card.component';
+import { CardListComponent } from './components/card-list/card-list.component';
+import { RecommendedCardComponent } from './components/recommended-card/recommended-card.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +27,10 @@ import { HeaderLogoutComponent } from './components/header-logout/header-logout.
     UserCardComponent,
     AuthModalComponent,
     HeaderLogoutComponent,
+    ArtistCardComponent,
+    CardComponent,
+    CardListComponent,
+    RecommendedCardComponent,
   ],
   imports: [CommonModule, FormsModule],
   exports: [
@@ -34,6 +42,10 @@ import { HeaderLogoutComponent } from './components/header-logout/header-logout.
     SideBarComponent,
     WavesurferComponent,
     HeaderLogoutComponent,
+    ArtistCardComponent,
+    CardComponent,
+    CardListComponent,
+    RecommendedCardComponent
   ],
 })
 export class SharedModule {}

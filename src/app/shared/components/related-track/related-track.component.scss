@@ -1,34 +1,5 @@
-.rotate {
+:host ::ng-deep .rotate {
     writing-mode: vertical-lr;
    -webkit-transform: rotate(-180deg);
    -moz-transform: rotate(-180deg);
-}
-.play-button{
-    position: absolute;
-    left: 50%;
-    top: 30%;
-    transform: translate(-50%, 0);
-    width: 70px;
-    height: 70px;
-}
-.track-footer{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 20px;
-    display: flex;
-    padding-right: 20px;
-    padding-bottom: 25px;
-    padding-top: 5px;
-    justify-content: flex-end;
-    gap: 10px;
-    background: linear-gradient(to top, rgba(76, 76, 76, 0.7), rgba(103, 103, 103, 0.2));
-
-}
-
-.liked{
-    fill: var(--soundcloud-color);
-}
-.unliked{
-    fill: white;
 }
