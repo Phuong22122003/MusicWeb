@@ -9,13 +9,16 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { HeaderLogoutComponent } from './components/header-logout/header-logout.component';
 import { ArtistCardComponent } from './components/artist-card/artist-card.component';
 import { CardComponent } from './components/card/card.component';
 import { CardListComponent } from './components/card-list/card-list.component';
 import { RecommendedCardComponent } from './components/recommended-card/recommended-card.component';
-
+import { NextPlaylistComponent } from './components/next-playlist/next-playlist.component';
+import { NextUpComponent } from './components/next-playlist/next-up/next-up.component';
+import { NextUpItemComponent } from './components/next-playlist/next-up/next-up-item/next-up-item.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -31,8 +34,12 @@ import { RecommendedCardComponent } from './components/recommended-card/recommen
     CardComponent,
     CardListComponent,
     RecommendedCardComponent,
+    NextPlaylistComponent,
+    NextUpComponent,
+    NextUpItemComponent,
   ],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
+  providers: [],
   exports: [
     HeaderComponent,
     AuthModalComponent,
@@ -45,7 +52,9 @@ import { RecommendedCardComponent } from './components/recommended-card/recommen
     ArtistCardComponent,
     CardComponent,
     CardListComponent,
-    RecommendedCardComponent
+    RecommendedCardComponent,
+    NextPlaylistComponent,
+    NextUpItemComponent,
   ],
 })
 export class SharedModule {}
