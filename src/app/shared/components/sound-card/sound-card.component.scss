@@ -4,9 +4,11 @@
     width: 100%;
     padding: 0 15px;
     top: 25%;
+    
 }
 
 .play-button{
-    width: 30px;
-    height: 30px;
+    background-color: var(--primary-orange-color);
+    padding: 7px; 
+    border-radius: 50%;
 }

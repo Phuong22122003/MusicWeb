@@ -2,29 +2,33 @@
   [goTo]="goToPlaylist"
   [toggleLike]="toggleLike"
   [toggleFollow]="toggleFollow"
+  [playTrack]="playTrack"
 >
   <div class="flex">
 
-    <div class="flex flex-col">
-      <div class="bg-gray-400 p-4 w-full flex-grow-1">
-        <img src={{relatedTrack.trackPath}} alt="Song" class="w-full">
+    <div class="relative">
+      <div class="border-b-[25px] border-b-[#080b0c] border-r-[25px] border-r-[#6a6d6c]">
+        <div class="w-full flex-grow-1 border-[20px] border-y-[#8b8882] border-x-[#b6b3ac]">
+          <img src={{relatedTrack.trackPath}} alt="Song" class="w-full">
+        </div>
       </div>
-      <p class="bg-black text-white text-sm p-1">{{relatedTrack.trackName}}</p>
-    </div>
-    <div class="flex flex-col item-center bg-gray-500">
-      <img src="assets/soundcloud.svg" alt="SoundCloud" class="w-4 h-4">
-      <div class="text-white text-xs rotate flex-grow-1 p-1">
-        <p class="text-center ">
-          RELATED TRACKS
-        </p>
+      <p class=" text-white text-sm  absolute bottom-0 left-1 w-full">{{relatedTrack.trackName}}</p>
+      <div class="flex flex-col item-center  absolute right-0 top-0 h-full">
+        <img src="assets/soundcloud.svg" alt="SoundCloud" class="w-4 h-4">
+        <div class="text-white text-xs rotate flex-grow-1 p-1">
+          <p class="text-center ">
+            RELATED TRACKS
+          </p>
+          <!-- bg-[#8b8884]bg-[#0b0c0b] -->
+        </div>
       </div>
     </div>
   </div>
-  <div footer class="pt-2 flex flex-col ">
-    <a class="text-sm font-semibold mt-1 truncate">{{ relatedTrack.trackName }}</a>
+  <div footer class="pt-[2px] flex flex-col ">
+    <a class="text-sm  truncate">{{ relatedTrack.trackName }}</a>
     <!-- Tên tác giả -> truyền tên tác giả -->
-    <a class="text-xs text-gray-500">
-      <span class="font-semibold">{{ relatedTrack.authors }}</span>
+    <a class="text-xs text-gray-500 m-0">
+      <span>{{ relatedTrack.authors }}</span>
     </a>
   </div>
 

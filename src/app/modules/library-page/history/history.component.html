@@ -1,1 +1,29 @@
-<p>history works!</p>
+<div class="mx-auto">
+    <div class="flex flex-row justify-between items-center py-[10px]" filter>
+        <h2 class="text-[18px] font-[100] text-[#999;]">Hear the tracks you’ve played:</h2>
+        <div class="flex flex-row justify-between items-center gap-[20px]">
+            <button>
+                Clear all history
+            </button>
+            <input 
+                type="text" 
+                class="filter" 
+                style="line-height: 1.6"
+                placeholder="Filter"
+            >
+        </div>
+    </div>
+    <div class="">
+        <app-track-info-and-wave *ngFor="let track of tracks" [track]="track" class="block mb-8">
+        </app-track-info-and-wave>
+    </div>  
+</div>
+<!-- sm: - Khi màn hình có chiều rộng từ 640px trở lên.
+
+md: - Khi màn hình có chiều rộng từ 768px trở lên.
+
+lg: - Khi màn hình có chiều rộng từ 1024px trở lên.
+
+xl: - Khi màn hình có chiều rộng từ 1280px trở lên.
+
+2xl: - Khi màn hình có chiều rộng từ 1536px trở lên. -->

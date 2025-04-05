@@ -7,7 +7,10 @@ import { AlbumsComponent } from './albums/albums.component';
 import { StationsComponent } from './stations/stations.component';
 import { FollowingComponent } from './following/following.component';
 import { HistoryComponent } from './history/history.component';
-
+import { LibraryRoutingModule } from './library-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from "../../shared/shared.module";
 
 
 @NgModule({
@@ -21,7 +24,11 @@ import { HistoryComponent } from './history/history.component';
     HistoryComponent
   ],
   imports: [
-    CommonModule
-  ]
+    CommonModule,
+    LibraryRoutingModule,
+    NgSelectModule,
+    FormsModule,
+    SharedModule
+]
 })
 export class LibraryPageModule { }

@@ -19,6 +19,8 @@ import { NextPlaylistComponent } from './components/next-playlist/next-playlist.
 import { NextUpComponent } from './components/next-playlist/next-up/next-up.component';
 import { NextUpItemComponent } from './components/next-playlist/next-up/next-up-item/next-up-item.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TrackInfoAndWaveComponent } from './components/track-info-and-wave/track-info-and-wave.component';
+import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -37,8 +39,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     NextPlaylistComponent,
     NextUpComponent,
     NextUpItemComponent,
+    TrackInfoAndWaveComponent,
   ],
-  imports: [CommonModule, FormsModule, DragDropModule],
+  imports: [CommonModule, FormsModule, DragDropModule,RouterModule],
   providers: [],
   exports: [
     HeaderComponent,
@@ -55,6 +58,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     RecommendedCardComponent,
     NextPlaylistComponent,
     NextUpItemComponent,
+    TrackInfoAndWaveComponent
   ],
 })
 export class SharedModule {}

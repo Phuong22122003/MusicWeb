@@ -1,10 +1,15 @@
 .play-button{
     position: absolute;
     left: 50%;
-    top: 30%;
-    transform: translate(-50%, 0);
-    width: 70px;
-    height: 70px;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--primary-orange-color);
+    padding: 12px; 
+    border-radius: 50%;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+.play-button:hover {
+    background-color: #ff3300;
 }
 .footer{
     position: absolute;
@@ -21,12 +26,11 @@
 
 }
 
-.liked{
+.soundcloud-color{
     fill: var(--soundcloud-color);
+    color: var(--soundcloud-color);
 }
-.unliked{
+.white-color{
     fill: white;
-}
-.followed{
-    fill: var(--soundcloud-color);
+    color: white;
 }

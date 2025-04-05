@@ -30,7 +30,7 @@ export class RecentlyPlayedComponent implements OnInit{
         user_id:String(i),
         username:"user"+i,
         file_path:"./assets/audio/music.mp3",
-        cover_image_path:"/assets/images/image.png",
+        cover_image_path:"/assets/images/background/bg-galaxy-1.jpg",
         duration:'0:12',
         create_at:'01/01/2025',
       }

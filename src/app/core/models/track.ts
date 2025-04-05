@@ -9,4 +9,7 @@ export interface Track {
   duration: string;
   create_at: string;
   username: string;
+  liked?:number;
+  played?:number;
+  comment?:number;
 }

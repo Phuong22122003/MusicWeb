@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
-import { ApiResponse } from '../models/ApiResponse';
+import { ApiResponse } from '../models/api_response';
 import { ErrorHandlerService } from './error-handler-service';
 
 @Injectable({
