@@ -1,0 +1,32 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-album',
+  standalone: false,
+  templateUrl: './album.component.html',
+  styleUrl: './album.component.scss'
+})
+export class AlbumComponent {
+  @Input() playlist!:Playlist;
+  @Output() play = new EventEmitter<PlaylistComponent>();
+  currentTrack!:Track;
+  isPlaying=false;
+
+  @ViewChild('trackComponent') trackInfoAndWave!:TrackInfoAndWaveComponent ;
+  ngOnInit(): void {
+    this.currentTrack=this.playlist.tracks[0];
+  }
+  togglePlay(isPlaying:boolean){
+    this.isPlaying = isPlaying;
+    this.play.emit(this);
+  }
+  playNext(track:Track){
+    this.togglePlay(true);
+    this.trackInfoAndWave.changeUrl(track.file_path);
+    this.currentTrack = track;
+  }
+  stopPlay(){
+    this.trackInfoAndWave.pause();
+    this.isPlaying = false;
+  }
+}
