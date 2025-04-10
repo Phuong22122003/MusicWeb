@@ -7,4 +7,5 @@ export interface UserCreation {
   gender: string; // '0' có thể là Nam, '1' có thể là Nữ
   roles: string[]; // Danh sách quyền (ví dụ: ['ADMIN'])
   email: string;
+  displayName: string;
 }

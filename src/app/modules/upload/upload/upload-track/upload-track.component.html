@@ -1,0 +1,85 @@
+<div>
+  <app-dynamic-form
+    [formFields]="[{
+    name: 'image',
+    label: 'Upload Image',
+    type: 'image',
+    options: {
+      widthImage: 400,
+      heighImage: 400,
+    },
+  },
+  {
+    columnSpan: 2,
+    name: 'trackTitle',
+    label: 'Track Title',
+    type: 'text',
+    placeholder: 'Enter track title',
+    validators: [Validators.required],
+
+  },
+  {
+    columnSpan: 2,
+    name: 'trackLink',
+    label: 'Track Link',
+    type: 'url',
+
+    placeholder: 'Enter track link',
+  },
+  {
+    columnSpan: 2,
+    name: 'mainArtists',
+    label: 'Main Artists',
+    type: 'text',
+    placeholder: 'Enter main artists',
+
+    validators: [Validators.required],
+  },
+  {
+    columnSpan: 2,
+    name: 'genre',
+    label: 'Genre',
+    type: 'select',
+    placeholder: 'Select a genre',
+    options: {
+      defaultValue: '2'
+    },
+    dataSelect: genres,
+  },
+  {
+    columnSpan: 2,
+    name: 'tags',
+    label: 'Tags',
+    type: 'multi-select',
+    placeholder: 'Select tags',
+    options: {
+      defaultValue: ['hit', 'new', 'classic']
+    },
+    dataSelect: [
+      { id: 'hit', name: 'Hit' },
+      { id: 'new', name: 'New' },
+      { id: 'classic', name: 'Classic' },
+    ],
+
+  },
+  {
+    columnSpan: 2,
+    name: 'description',
+    label: 'Description',
+    type: 'textarea',
+    options: {defaultValue: 'Test', includeDefault: true},
+    placeholder: 'Enter description',
+  },
+  {
+    columnSpan: 2,
+    name: 'trackPrivacy',
+    label: 'Track Privacy',
+    type: 'radio',
+    dataSelect: [{id: 'public', name: 'Public'}, {id: 'private', name: 'Private'}],
+    options: {
+      defaultValue: 'public'
+    },
+    validators: [Validators.required],
+  }]"
+  ></app-dynamic-form>
+</div>

@@ -1,0 +1,13 @@
+<div>
+  <p [class]="paragraphClass" class="overflow-hidden transition-all">
+    {{ desc }}
+  </p>
+
+  <button
+    *ngIf="desc.length > 0"
+    (click)="toggle()"
+    class="text-blue-500 mt-2 hover:underline focus:outline-none"
+  >
+    {{ isExpanded ? "Show less" : "Show more" }}
+  </button>
+</div>

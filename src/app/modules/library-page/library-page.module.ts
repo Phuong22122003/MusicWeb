@@ -11,6 +11,7 @@ import { LibraryRoutingModule } from './library-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from "../../shared/shared.module";
+import { FollowingItemComponent } from './following/following-item/following-item.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedModule } from "../../shared/shared.module";
     AlbumsComponent,
     StationsComponent,
     FollowingComponent,
-    HistoryComponent
+    HistoryComponent,
+    FollowingItemComponent
   ],
   imports: [
     CommonModule,

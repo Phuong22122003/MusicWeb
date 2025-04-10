@@ -1,26 +1,32 @@
-import { AfterViewInit, Component, ElementRef, Input, Output, EventEmitter ,ViewChild } from '@angular/core';
-import WaveSurfer from 'wavesurfer.js'
-import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js'
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+} from '@angular/core';
+import WaveSurfer from 'wavesurfer.js';
+import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js';
 
 @Component({
   selector: 'app-wavesurfer',
   standalone: false,
   templateUrl: './wavesurfer.component.html',
-  styleUrl: './wavesurfer.component.scss'
+  styleUrl: './wavesurfer.component.scss',
 })
 export class WavesurferComponent implements AfterViewInit {
-  @Input({required:true}) trackUrl="./assets/audio/music.mp3";
-  @Input() height:number=100;
+  @Input({ required: false }) trackUrl = './assets/audios/music.mp3';
+  @Input() height: number = 100;
   @Input() isMuted = false;
   @Output() playStateChanged = new EventEmitter<boolean>();
   @ViewChild('waveform', { static: true }) waveformRef!: ElementRef;
   @ViewChild('totalTime', { static: false }) totalTimeRef!: ElementRef;
   private wavesurfer!: WaveSurfer;
-  constructor(){
+  constructor() {
     // alert('a')
   }
-
-  
 
   ngAfterViewInit(): void {
     this.wavesurfer = WaveSurfer.create({
@@ -29,9 +35,9 @@ export class WavesurferComponent implements AfterViewInit {
       progressColor: '#f8400d',
       cursorColor: '#f8400d',
       url: this.trackUrl,
-      barWidth:2,
-      barHeight:1,
-      height:this.height,
+      barWidth: 2,
+      barHeight: 1,
+      height: this.height,
 
       plugins: [
         Hover.create({
@@ -46,30 +52,34 @@ export class WavesurferComponent implements AfterViewInit {
     this.events();
   }
 
-  play(){
+  play() {
     this.wavesurfer.play();
   }
-  pause(){
+  pause() {
     this.wavesurfer.pause();
   }
-  changeUrl(url:string){
+  changeUrl(url: string) {
     this.wavesurfer.load(url);
     this.wavesurfer.on('ready', () => {
-      this.totalTimeRef.nativeElement.innerText = this.formatTime(this.wavesurfer?.getDuration());
+      this.totalTimeRef.nativeElement.innerText = this.formatTime(
+        this.wavesurfer?.getDuration()
+      );
       this.wavesurfer.play();
       this.playStateChanged.emit(true);
     });
   }
-  events(){
-    this.wavesurfer?.on('interaction',()=>{
+  events() {
+    this.wavesurfer?.on('interaction', () => {
       this.wavesurfer?.play();
       this.playStateChanged.emit(true);
     });
-    this.wavesurfer?.on('finish',()=>{
+    this.wavesurfer?.on('finish', () => {
       this.playStateChanged.emit(false);
-    })
+    });
     this.wavesurfer.on('ready', () => {
-      this.totalTimeRef.nativeElement.innerText = this.formatTime(this.wavesurfer?.getDuration());
+      this.totalTimeRef.nativeElement.innerText = this.formatTime(
+        this.wavesurfer?.getDuration()
+      );
     });
 
     this.wavesurfer.setMuted(this.isMuted);

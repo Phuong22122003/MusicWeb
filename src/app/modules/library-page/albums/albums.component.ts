@@ -4,8 +4,9 @@ import { Component } from '@angular/core';
   selector: 'app-albums',
   standalone: false,
   templateUrl: './albums.component.html',
-  styleUrl: './albums.component.scss'
+  styleUrl: './albums.component.scss',
 })
 export class AlbumsComponent {
-
+  options = ['All', 'Created', 'Liked'];
+  selectedOption: string = 'All';
 }

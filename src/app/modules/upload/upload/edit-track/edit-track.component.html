@@ -1,0 +1,74 @@
+<div (click)="onClose($event)" class="fixed inset-0 bg-black/50 z-999999999">
+  <div
+    (click)="$event.stopPropagation()"
+    [@slideInOut]="panelState"
+    class="ml-auto bg-white w-[35%] h-full"
+  >
+    <div class="flex items-center gap-4 py-8 px-4">
+      <i (click)="onClose($event)" class="text-[18px] fa-solid fa-xmark"></i>
+      <span class="font-semibold">Edit track</span>
+    </div>
+    <div class="w-full h-[1px] bg-gray-200"></div>
+    <div class="py-8 px-4" *ngIf="trackCreation">
+      <app-dynamic-form
+        (submit)="onSubmit($event)"
+        [formFields]="[
+          {
+            columnSpan: 2,
+            name: 'trackTitle',
+            label: 'Track Title',
+            type: 'text',
+            validators: [Validators.required],
+            options: {
+              defaultValue: trackCreation.title
+            }
+          },
+          {
+            columnSpan: 2,
+            name: 'mainArtists',
+            label: 'Main Artists',
+            type: 'text',
+            validators: [Validators.required],
+
+            options: {
+              defaultValue: trackCreation.mainArtists
+            }
+          },
+          {
+            columnSpan: 2,
+            name: 'genre',
+            label: 'Genre',
+            type: 'select',
+            placeholder: 'Add or search for genre',
+            dataSelect: genreList,
+            options: {
+              defaultValue: trackCreation.genreId
+            }
+          },
+          {
+            columnSpan: 2,
+            name: 'tags',
+            label: 'Tags',
+            type: 'multi-select',
+            dataSelect: tagList,
+            placeholder: 'Add or search for tags',
+            options: {
+              defaultValue: trackCreation.tagIds
+            }
+          },
+          {
+            columnSpan: 2,
+            name: 'description',
+            label: 'Description',
+            type: 'text',
+            placeholder:
+              'Tracks with descriptions tend to get more plays and engagements.',
+            options: {
+              defaultValue: trackCreation.description
+            }
+          }
+        ]"
+      ></app-dynamic-form>
+    </div>
+  </div>
+</div>

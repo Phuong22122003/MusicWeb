@@ -1,0 +1,63 @@
+<div class="bg-[#a3a3b6] px-4 py-4 flex gap-6">
+  <div id="top" class="grow-7 flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <div class="flex gap-2 items-center">
+        <div class="play-button" (click)="onPlay()">
+          <svg
+            width="36px"
+            height="36px"
+            viewBox="0 0 18 29"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
+            class="m-3 ng-star-inserted"
+          >
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+              sketch:type="MSPage"
+            >
+              <g
+                id="buttons"
+                sketch:type="MSArtboardGroup"
+                transform="translate(-1665.000000, -818.000000)"
+                fill="#FFFFFF"
+              >
+                <path
+                  d="M1665,847 L1669.15385,832.5 L1665,818 L1683,832.5 L1665,847 Z"
+                  id="Play-60"
+                  sketch:type="MSShapeGroup"
+                ></path>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="text-white flex flex-col gap-2">
+          <span class="bg-[#212227] p-2">Nhạc nhẹ</span>
+          <span class="text-[#ccc] hover:text-white bg-[#212227] p-2"
+            >Phương</span
+          >
+        </div>
+        <!-- <svg *ngIf="isPlaying"  width="48px" height="48px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 9H11V15H9V9Z" fill="white" />
+          <path d="M15 15H13V9H15V15Z" fill="white" />
+      </svg> -->
+      </div>
+      <div class="text-white">
+        <span>2 years ago</span>
+      </div>
+    </div>
+    <app-wavesurfer [isMuted]="muted"></app-wavesurfer>
+  </div>
+  <div class="w-[340px] h-[340px]">
+    <img
+      class="w-full h-full object-cover"
+      src="assets/images/city.jpg"
+      alt=""
+    />
+  </div>
+</div>

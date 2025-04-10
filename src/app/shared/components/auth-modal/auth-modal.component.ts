@@ -8,6 +8,8 @@ import { AuthService } from '../../../core/services/auth-service';
 //   animate,
 // } from '@angular/animations';
 import { UserCreation } from '../../../core/models/UserCreation';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 enum Scene {
   EnterUserName,
   EnterPasswordNewAccount,
@@ -30,6 +32,7 @@ export class AuthModalComponent {
   email: string = '';
   dob: string = '';
   gender: string = '';
+  displayName: string = '';
   currentScene: Scene = Scene.EnterUserName;
   passwordMessage = '';
   usernameMessage = '';
@@ -38,10 +41,15 @@ export class AuthModalComponent {
   dobMessage = '';
   genderMessage = '';
   emailMessage = '';
+  displayMessage = '';
   isOpen = true;
   isClosing = false;
   @Output() modalClosed = new EventEmitter<void>();
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toast: ToastrService
+  ) {}
   onCheckUsername() {
     if (this.username.length < 3) {
       this.usernameMessage = 'User is at least 3 characters';
@@ -74,8 +82,9 @@ export class AuthModalComponent {
       .login({ username: this.username, password: this.password })
       .subscribe({
         next: (res) => {
-          console.log(res);
           this.authService.saveToken(res.data['token']);
+          this.router.navigate(['/discover']);
+          this.onCloseModal();
         },
         error: (err) => {
           this.passwordMessage = err.message;
@@ -143,6 +152,11 @@ export class AuthModalComponent {
       isValid = false;
     }
 
+    if (!this.displayName || this.displayName.length === 0) {
+      this.displayMessage = 'Enter your display name';
+      isValid = false;
+    }
+
     if (!isValid) return;
 
     let user: UserCreation = {
@@ -154,20 +168,26 @@ export class AuthModalComponent {
       gender: this.gender,
       roles: ['USER'],
       email: this.email,
+      displayName: this.displayName,
     };
 
     this.authService.register(user).subscribe({
       next: (value) => {
-        console.log(value.data);
+        this.toast.success('Register successfully', 'Success');
+        this.router.navigate(['home']);
+        this.onCloseModal();
       },
       error: (err) => {
         console.log(err);
 
         if (err['code'] === 1014) {
-          console.log('vao email');
           this.emailMessage = 'Email existed';
         }
       },
     });
+  }
+  loginWithGoogle() {
+    window.location.href =
+      'http://localhost:8888/api/identity/oauth2/authorization/google';
   }
 }

@@ -7,33 +7,29 @@ import { Observable, of } from 'rxjs';
   selector: 'app-track-card',
   standalone: false,
   templateUrl: './track-card.component.html',
-  styleUrl: './track-card.component.scss'
+  styleUrl: './track-card.component.scss',
 })
 export class TrackCardComponent {
-  @Input({required:true}) track!:Track;
+  @Input({ required: false }) track!: Track;
   isShow = false;
   @Input() isLiked = false;
-  @Input() isFollowed =false;
-  constructor(private router: Router){}
-  goToTrack(){
+  @Input() isFollowed = false;
+  constructor(private router: Router) {}
+  goToTrack() {
     // this.router.navigate(['track',this.track.id]);
-    alert('go to track')
+    alert('go to track');
   }
 
-  playTrack(){
-    alert('play')
+  playTrack() {
+    alert('play');
   }
 
-  prevent(){
+  prevent() {}
 
-  }
-
-  toggleLike():Observable<any>{
+  toggleLike(): Observable<any> {
     return of(true);
   }
-  toggleFollow():Observable<any>{
+  toggleFollow(): Observable<any> {
     return of(true);
   }
-
-
 }

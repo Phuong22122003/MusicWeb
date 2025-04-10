@@ -310,6 +310,5 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
   handleDropDrag(event: any) {
     this.tracks = event.tracks;
     this.currentIndex = event.currentIndex;
-    console.log(this.tracks);
   }
 }

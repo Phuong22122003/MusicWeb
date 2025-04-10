@@ -7,6 +7,8 @@ import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
+import { NoHeaderModule } from './layouts/no-header/no-header.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +20,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
     SharedModule,
     HttpClientModule,
   ],
-  providers: [provideAnimations()],
+  providers: [provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

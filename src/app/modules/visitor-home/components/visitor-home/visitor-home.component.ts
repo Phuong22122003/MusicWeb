@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-visitor-home',
@@ -22,14 +23,13 @@ export class VisitorHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   intervalSub: any;
   @ViewChild('slider') slider: ElementRef | undefined;
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, private authService: AuthService) {}
   ngOnInit(): void {}
   onShowAuthModal() {
-    this.isShowAuthModal = true;
+    this.authService.isOpenAuthModal.next(true);
   }
   onCloseModal() {
-    console.log('alo');
-    this.isShowAuthModal = false;
+    this.authService.isOpenAuthModal.next(false);
   }
   ngAfterViewInit(): void {
     this.intervalSub = setInterval(() => {

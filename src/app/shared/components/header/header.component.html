@@ -11,7 +11,8 @@
             class="brightness-0 invert"
         /></a>
       </li>
-      <li routerLink="home"
+      <li
+        [routerLink]="isLoggedIn ? ['discover'] : ['home']"
         class="flex-1 text-[rgb(204,204,204)] hover:bg-black hover:text-white py-3 flex items-center justify-center cursor-pointer border-r border-[#111]"
       >
         <a>Home</a>
@@ -39,7 +40,10 @@
         </form>
       </div>
     </ul>
-    <ul class="flex items-center justify-between">
+    <ul
+      *ngIf="isLoggedIn && userProfile; else noLoggedIn"
+      class="flex items-center justify-between"
+    >
       <li class="m-[10px]">
         <a
           href="/"
@@ -52,7 +56,8 @@
       >
         For Artists
       </li>
-      <li routerLink="upload"
+      <li
+        routerLink="upload"
         class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer"
       >
         Upload
@@ -61,7 +66,11 @@
         class="group cursor-pointer hover:bg-[#111] flex justify-between items-center px-[10px] py-[12px] gap-3 relative"
       >
         <img
-          src="https://t3.ftcdn.net/jpg/03/22/53/38/360_F_322533850_Lz5JL2K0nVqL48gjCiRLSa2ssxpdfyer.jpg"
+          [src]="
+            userProfile.avatar?.startsWith('https')
+              ? userProfile.avatar
+              : avatarUrl + '/' + userProfile.avatar
+          "
           alt=""
           class="rounded-full object-cover h-[26px] w-[26px]"
         />
@@ -69,11 +78,14 @@
         <ul
           class="z-100 hidden absolute left-0 top-full border border-[#ccc] bg-[#fff] group-hover:block"
         >
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-user"></i>
-            Profile
+          <li>
+            <a
+              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              [routerLink]="['/profile', userProfile.userId]"
+            >
+              <i class="fa-solid fa-user"></i>
+              Profile
+            </a>
           </li>
           <li
             class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
@@ -130,10 +142,11 @@
             Insights
           </li>
           <li
+            (click)="onLogOut()"
             class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
           >
             <i class="fa-solid fa-arrows-up-down-left-right"></i>
-            Distribute
+            Logout
           </li>
         </ul>
       </li>
@@ -148,5 +161,23 @@
         ></i>
       </li>
     </ul>
+    <ng-template #noLoggedIn>
+      <ul class="grow gap-4 justify-end items-center flex">
+        <button
+          (click)="onShowAuthModal()"
+          type="button"
+          class="cursor-pointer bg-white px-[15px] py-[4px] rounded"
+        >
+          Sign in
+        </button>
+        <button
+          (click)="onShowAuthModal()"
+          type="button"
+          class="cursor-pointer bg-[var(--primary-orange-color)] px-4 py-[4px] rounded text-white"
+        >
+          Create account
+        </button>
+      </ul>
+    </ng-template>
   </div>
 </header>
