@@ -10,7 +10,6 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HeaderLogoutComponent } from './components/header-logout/header-logout.component';
 import { ArtistCardComponent } from './components/artist-card/artist-card.component';
 import { CardComponent } from './components/card/card.component';
 import { CardListComponent } from './components/card-list/card-list.component';
@@ -24,6 +23,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TrackInfoAndWaveComponent } from './components/track-info-and-wave/track-info-and-wave.component';
 import { RouterModule } from '@angular/router';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
+import { LibraryTabComponent } from './components/library-tab/library-tab.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -34,7 +34,6 @@ import { SocialLoginComponent } from './components/social-login/social-login.com
     SideBarComponent,
     UserCardComponent,
     AuthModalComponent,
-    HeaderLogoutComponent,
     ArtistCardComponent,
     CardComponent,
     CardListComponent,
@@ -45,6 +44,7 @@ import { SocialLoginComponent } from './components/social-login/social-login.com
     DynamicFormComponent,
     TrackInfoAndWaveComponent,
     SocialLoginComponent,
+    LibraryTabComponent,
   ],
   imports: [
     CommonModule,
@@ -63,7 +63,6 @@ import { SocialLoginComponent } from './components/social-login/social-login.com
     TrackCardComponent,
     SideBarComponent,
     WavesurferComponent,
-    HeaderLogoutComponent,
     ArtistCardComponent,
     CardComponent,
     CardListComponent,
@@ -73,6 +72,7 @@ import { SocialLoginComponent } from './components/social-login/social-login.com
     TrackInfoAndWaveComponent,
     DynamicFormComponent,
     NgSelectModule,
+    LibraryTabComponent,
   ],
 })
 export class SharedModule {}
