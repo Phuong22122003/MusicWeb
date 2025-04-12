@@ -10,4 +10,5 @@ export interface UserProfile {
   avatar: string | null;
   userId: string;
   followerCount?: 0; //Tiện cho việc hiển thi UI
+  followingCount?: 0; //Tiện cho việc hiển thi UI
 }

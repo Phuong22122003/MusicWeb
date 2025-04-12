@@ -17,13 +17,16 @@
       >
         <a>Home</a>
       </li>
+
       <li
-        routerLink="library"
         class="flex-1 text-[rgb(204,204,204)] hover:bg-black hover:text-white py-3 flex items-center justify-center cursor-pointer border-r border-[#111]"
+        [routerLink]="isLoggedIn && userProfile ? 'library' : null"
+        (click)="!isLoggedIn || !userProfile ? onShowAuthModal() : null"
       >
         <a>Library</a>
       </li>
     </ul>
+
     <ul
       class="flex w-[30%] items-center justify-center py-[9px] mr-[10px] ml-[8px]"
     >
@@ -87,47 +90,43 @@
               Profile
             </a>
           </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-heart"></i>
-            Likes
+          <li>
+            <a
+              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              [routerLink]="['/library', 'likes']"
+            >
+              <i class="fa-solid fa-heart"></i>
+              Likes
+            </a>
+          </li>
+          <li>
+            <a
+              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              [routerLink]="['/library', 'playlists']"
+            >
+              <i class="fa-solid fa-list"></i>
+              Playlists
+            </a>
+          </li>
+          <li>
+            <a
+              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              [routerLink]="['/library', 'following']"
+            >
+              <i class="fa-solid fa-person-walking-arrow-right"></i>
+              Following
+            </a>
           </li>
           <li
             class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
           >
-            <i class="fa-solid fa-list"></i>
-            Playlists
-          </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-wave-square"></i>
-            Stations
-          </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-person-walking-arrow-right"></i>
-            Following
-          </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-person-walking-arrow-loop-left"></i>
-            Who to follow
-          </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-star"></i>
-            Try Artist Pro
-          </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-gift"></i>
-            Partner offers
+            <a
+              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              [routerLink]="['/library', 'following']"
+            >
+              <i class="fa-solid fa-person-walking-arrow-loop-left"></i>
+              Who to follow
+            </a>
           </li>
           <li
             class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"

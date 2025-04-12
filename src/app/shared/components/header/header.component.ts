@@ -3,6 +3,7 @@ import { AuthService } from '../../../core/services/auth-service';
 import { ProfileService } from '../../../core/services/profile.service';
 import { UserProfile } from '../../../core/models/user_profile';
 import { environment } from '../../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,8 @@ export class HeaderComponent implements OnInit {
   avatarUrl = environment.fileApi + '/image/avatar';
   constructor(
     private authService: AuthService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -38,5 +40,6 @@ export class HeaderComponent implements OnInit {
   }
   onLogOut() {
     this.authService.logout();
+    this.router.navigate(['home']);
   }
 }

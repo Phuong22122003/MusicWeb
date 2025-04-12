@@ -32,7 +32,7 @@ export class AlbumComponent {
   }
   playNext(track: Track) {
     this.togglePlay(true);
-    this.trackInfoAndWave.changeUrl(track.file_path);
+    this.trackInfoAndWave.changeUrl(track.fileName);
     this.currentTrack = track;
   }
   stopPlay() {

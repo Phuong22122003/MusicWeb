@@ -1,4 +1,8 @@
-<app-track-play></app-track-play>
+<app-track-play
+  *ngIf="track"
+  [profile]="profile"
+  [track]="track"
+></app-track-play>
 
 <div class="px-4 grid grid-cols-9 gap-4 mt-4">
   <!-- LEFT SIDE -->
@@ -10,10 +14,13 @@
 
       <div class="flex col-span-1 gap-4 px-4">
         <div class="">
-          <app-profile></app-profile>
+          <app-profile [profile]="profile"></app-profile>
         </div>
         <div class="grow">
-          <app-track-desc></app-track-desc>
+          <app-track-desc
+            *ngIf="track"
+            [desc]="track.description"
+          ></app-track-desc>
           <app-comment></app-comment>
         </div>
       </div>

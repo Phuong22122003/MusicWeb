@@ -6,6 +6,9 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import WaveSurfer from 'wavesurfer.js';
 import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js';
@@ -16,10 +19,11 @@ import Hover from 'wavesurfer.js/dist/plugins/hover.esm.js';
   templateUrl: './wavesurfer.component.html',
   styleUrl: './wavesurfer.component.scss',
 })
-export class WavesurferComponent implements AfterViewInit {
+export class WavesurferComponent implements OnInit, AfterViewInit, OnChanges {
   @Input({ required: false }) trackUrl = './assets/audios/music.mp3';
   @Input() height: number = 100;
   @Input() isMuted = false;
+  @Input() isPlay = false;
   @Output() playStateChanged = new EventEmitter<boolean>();
   @ViewChild('waveform', { static: true }) waveformRef!: ElementRef;
   @ViewChild('totalTime', { static: false }) totalTimeRef!: ElementRef;
@@ -27,7 +31,9 @@ export class WavesurferComponent implements AfterViewInit {
   constructor() {
     // alert('a')
   }
-
+  ngOnInit(): void {
+    console.log(this.trackUrl);
+  }
   ngAfterViewInit(): void {
     this.wavesurfer = WaveSurfer.create({
       container: this.waveformRef?.nativeElement,
@@ -51,7 +57,15 @@ export class WavesurferComponent implements AfterViewInit {
     });
     this.events();
   }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.wavesurfer) {
+      if (changes['isPlay'].currentValue) {
+        this.wavesurfer.pause();
+      } else {
+        this.wavesurfer.play();
+      }
+    }
+  }
   play() {
     this.wavesurfer.play();
   }

@@ -9,54 +9,54 @@ import { PlaylistComponent } from './playlist/playlist.component';
   selector: 'app-playlists',
   standalone: false,
   templateUrl: './playlists.component.html',
-  styleUrl: './playlists.component.scss'
+  styleUrl: './playlists.component.scss',
 })
-export class PlaylistsComponent  implements OnInit{
-  playlists:Playlist[]=[];
-  currentPlaylistComponent?:PlaylistComponent;
-  play(playlistComponent:PlaylistComponent){
-    if(this.currentPlaylistComponent===null){
-      this.currentPlaylistComponent=playlistComponent;
-    }
-    else if(this.currentPlaylistComponent!=playlistComponent){
+export class PlaylistsComponent implements OnInit {
+  playlists: Playlist[] = [];
+  currentPlaylistComponent?: PlaylistComponent;
+  play(playlistComponent: PlaylistComponent) {
+    if (this.currentPlaylistComponent === null) {
+      this.currentPlaylistComponent = playlistComponent;
+    } else if (this.currentPlaylistComponent != playlistComponent) {
       this.currentPlaylistComponent?.stopPlay();
-      this.currentPlaylistComponent=playlistComponent;
+      this.currentPlaylistComponent = playlistComponent;
     }
   }
   ngOnInit(): void {
-    for(let i=0;i<10;i++){
+    for (let i = 0; i < 10; i++) {
       const tracks = this.getMockTracks();
       const currentTrack = tracks[0];
-      currentTrack.id = '123'+i;
-      this.playlists.push ({
-        id:'123'+i,
-        cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-        like:100,
+      currentTrack.id = '123' + i;
+      this.playlists.push({
+        id: '123' + i,
+        cover_image_path:
+          'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
+        like: 100,
         tracks: tracks,
-      })
+      });
     }
   }
-  getMockTracks(){
-    const tracks = []
-    for(let i =0;i<10;i++){
-      const track:Track = {
-        id: '1'+i,
+  getMockTracks() {
+    const tracks = [];
+    for (let i = 0; i < 10; i++) {
+      const track: Track = {
+        id: '1' + i,
         name: 'My Song123123',
         title: 'Awesome Track',
         description: 'A great song to listen to',
-        file_path: 'assets/audios/NhuNgayHomQua.mp3',
-        cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-        user_id: '123',
+        fileName: 'assets/audios/NhuNgayHomQua.mp3',
+        coverImagePath:
+          'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
+        userId: '123',
         duration: '03:45',
-        create_at: '2024-03-17T12:00:00Z',
+        createdAt: '2024-03-17T12:00:00Z',
         username: 'john_doe',
-        played:100,
-        liked:100,
-        comment:100
-      }
+        played: 100,
+        liked: 100,
+        comment: 100,
+      };
       tracks.push(track);
     }
     return tracks;
   }
-  
 }

@@ -88,7 +88,6 @@ export class AuthService {
     localStorage.removeItem('auth_token');
     this.loggedInSubject.next(false);
     this.tokenCheckInterval?.unsubscribe();
-    this.router.navigate(['home']);
   }
 
   checkUsernameExisted(username: string): Observable<ApiResponse<any>> {

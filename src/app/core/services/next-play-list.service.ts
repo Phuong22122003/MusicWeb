@@ -11,11 +11,11 @@ export class NextPlayListService {
     name: 'Undefined',
     title: 'Undefined',
     description: 'Undefined',
-    file_path: '/assets/audios/music.mp3',
-    cover_image_path: '/assets/image.png',
-    user_id: 'Undefined',
+    fileName: '/assets/audios/music.mp3',
+    coverImagePath: '/assets/image.png',
+    userId: 'Undefined',
     duration: 'Undefined',
-    create_at: 'Undefined',
+    createdAt: 'Undefined',
     username: 'Undefined',
   });
   addTrackListSubject: BehaviorSubject<Track[]> = new BehaviorSubject<Track[]>(

@@ -1,41 +1,45 @@
-<div class="flex items-center justify-center">
+<div *ngIf="profile" class="flex items-center justify-center">
   <div class="flex flex-col items-center space-y-3">
     <!-- Avatar -->
     <div
       class="w-[120px] h-[120px] rounded-full bg-green-700 flex items-center justify-center text-white text-5xl font-semibold"
     >
-      n
+      <img
+        class="w-full h-full rounded-full object-cover"
+        *ngIf="profile.avatar; else defaultAvatar"
+        src="{{ profile.avatar }}"
+        alt=""
+        srcset=""
+      />
+      <ng-template #defaultAvatar>
+        {{ profile.displayName[0] }}
+      </ng-template>
     </div>
 
     <!-- Name -->
-    <div class="text-lg font-medium text-gray-800">Phương</div>
+    <div class="text-lg font-medium text-gray-800 text-center">
+      {{ profile.displayName }}
+    </div>
 
     <!-- Stats -->
     <div class="flex items-center space-x-4 text-sm text-gray-600">
       <div class="flex items-center space-x-1">
         <i class="fas fa-users"></i>
-        <span>2</span>
+        <span>{{ profile.followerCount }}</span>
       </div>
       <div class="flex items-center space-x-1">
         <i class="fas fa-wave-square"></i>
-        <span>2</span>
+        <span>{{ profile.followingCount }}</span>
       </div>
     </div>
 
     <!-- Follow Button -->
     <button
+      *ngIf="loggedUserId == profile.userId"
       class="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 py-1 rounded flex items-center space-x-1"
     >
       <i class="fas fa-user-plus"></i>
       <span>Follow</span>
     </button>
-
-    <!-- Report -->
-    <div
-      class="flex items-center space-x-1 text-sm text-gray-600 hover:text-black cursor-pointer"
-    >
-      <i class="fas fa-exclamation-diamond"></i>
-      <span>Report</span>
-    </div>
   </div>
 </div>

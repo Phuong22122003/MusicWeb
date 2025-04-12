@@ -64,7 +64,7 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
           if (tracks && tracks.length > 0) {
             this.tracks = tracks;
             this.username = this.tracks[0].username;
-            this.audioUrl = this.tracks[0].file_path;
+            this.audioUrl = this.tracks[0].fileName;
             this.trackName = this.tracks[0].name;
           }
         }
@@ -79,7 +79,7 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!selectedTrack) return;
           if (res.type === 'PLAY') {
             if (this.currentIndex !== res.index) {
-              this.audioUrl = selectedTrack.file_path;
+              this.audioUrl = selectedTrack.fileName;
               this.username = selectedTrack.username;
               this.trackName = selectedTrack.name;
               audioPlayerEl.load();
@@ -100,11 +100,11 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
         name: 'My Song123123',
         title: 'Awesome Track',
         description: 'A great song to listen to',
-        file_path: 'assets/audios/NhuNgayHomQua.mp3',
-        cover_image_path: '/assets/image.png',
-        user_id: '123',
+        fileName: 'assets/audios/NhuNgayHomQua.mp3',
+        coverImagePath: '/assets/image.png',
+        userId: '123',
         duration: '03:45',
-        create_at: '2024-03-17T12:00:00Z',
+        createdAt: '2024-03-17T12:00:00Z',
         username: 'john_doe',
       },
       {
@@ -112,11 +112,11 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
         name: 'My Song 2',
         title: 'Awesome Track 2',
         description: 'A great song to listen to 2',
-        file_path: 'assets/audios/NoiNayCoAnh.mp3',
-        cover_image_path: '/assets/image.png',
-        user_id: '123',
+        fileName: 'assets/audios/NoiNayCoAnh.mp3',
+        coverImagePath: '/assets/image.png',
+        userId: '123',
         duration: '03:30',
-        create_at: '2024-03-17T12:00:00Z',
+        createdAt: '2024-03-17T12:00:00Z',
         username: 'john_doe',
       },
       {
@@ -124,11 +124,11 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
         name: 'My Song 3',
         title: 'Awesome Track 2',
         description: 'A great song to listen to 2',
-        file_path: 'assets/audios/NoiNayCoAnh.mp3',
-        cover_image_path: '/assets/image.png',
-        user_id: '123',
+        fileName: 'assets/audios/NoiNayCoAnh.mp3',
+        coverImagePath: '/assets/image.png',
+        userId: '123',
         duration: '03:30',
-        create_at: '2024-03-17T12:00:00Z',
+        createdAt: '2024-03-17T12:00:00Z',
         username: 'john_doe',
       },
       {
@@ -136,11 +136,11 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
         name: 'My Song 4',
         title: 'Awesome Track 2',
         description: 'A great song to listen to 2',
-        file_path: 'assets/audios/NoiNayCoAnh.mp3',
-        cover_image_path: '/assets/image.png',
-        user_id: '123',
+        fileName: 'assets/audios/NoiNayCoAnh.mp3',
+        coverImagePath: '/assets/image.png',
+        userId: '123',
         duration: '03:30',
-        create_at: '2024-03-17T12:00:00Z',
+        createdAt: '2024-03-17T12:00:00Z',
         username: 'john_doe',
       },
     ]);
@@ -212,7 +212,7 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
     let track: Track = this.tracks[index];
     if (!track) return;
     const audio = this.audioPlayer.nativeElement;
-    this.audioUrl = track.file_path;
+    this.audioUrl = track.fileName;
     this.username = track.username;
     this.trackName = track.name;
     audio.load();

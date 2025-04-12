@@ -2,14 +2,15 @@ export interface Track {
   id: string;
   name: string;
   title?: string | null;
-  description?: string | null;
-  file_path: string;
-  cover_image_path: string;
-  user_id: string;
+  description?: string;
+  fileName: string;
+  coverImagePath: string;
+  userId: string;
   duration: string;
-  create_at: string;
+  createdAt: string;
   username: string;
-  liked?:number;
-  played?:number;
-  comment?:number;
+  liked?: number;
+  played?: number;
+  comment?: number;
+  countPlay?: number;
 }

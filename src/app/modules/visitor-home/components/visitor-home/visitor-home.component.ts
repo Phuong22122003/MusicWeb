@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-visitor-home',
@@ -23,8 +24,16 @@ export class VisitorHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   intervalSub: any;
   @ViewChild('slider') slider: ElementRef | undefined;
-  constructor(private renderer: Renderer2, private authService: AuthService) {}
-  ngOnInit(): void {}
+  constructor(
+    private renderer: Renderer2,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/discover']);
+    }
+  }
   onShowAuthModal() {
     this.authService.isOpenAuthModal.next(true);
   }

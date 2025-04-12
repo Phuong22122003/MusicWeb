@@ -10,9 +10,10 @@ import { HistoryComponent } from './history/history.component';
 import { LibraryRoutingModule } from './library-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
-import { SharedModule } from "../../shared/shared.module";
+import { SharedModule } from '../../shared/shared.module';
 import { FollowingItemComponent } from './following/following-item/following-item.component';
-
+import { LibraryComponent } from './library.component';
+import { LibraryTabComponent } from './library-tab/library-tab.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +24,16 @@ import { FollowingItemComponent } from './following/following-item/following-ite
     StationsComponent,
     FollowingComponent,
     HistoryComponent,
-    FollowingItemComponent
+    FollowingItemComponent,
+    LibraryComponent,
+    LibraryTabComponent,
   ],
   imports: [
     CommonModule,
     LibraryRoutingModule,
     NgSelectModule,
     FormsModule,
-    SharedModule
-]
+    SharedModule,
+  ],
 })
-export class LibraryPageModule { }
+export class LibraryPageModule {}

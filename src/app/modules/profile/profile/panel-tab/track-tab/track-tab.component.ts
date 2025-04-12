@@ -15,11 +15,11 @@ export class TrackTabComponent implements OnInit {
     name: 'My Track Name',
     title: 'Track Title',
     description: 'A description of the track.',
-    file_path: 'assets/music/track1.mp3',
-    cover_image_path: 'assets/images/image.png',
-    user_id: 'user123',
+    fileName: 'assets/music/track1.mp3',
+    coverImagePath: 'assets/images/image.png',
+    userId: 'user123',
     duration: '3:45',
-    create_at: '2025-04-07T12:00:00Z',
+    createdAt: '2025-04-07T12:00:00Z',
     username: 'john_doe',
     liked: 150,
     played: 2000,
@@ -28,6 +28,6 @@ export class TrackTabComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     const routePath = this.route.snapshot.url[0]?.path;
-    console.log(routePath, 'hihi');
+    console.log(routePath);
   }
 }

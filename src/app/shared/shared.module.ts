@@ -23,7 +23,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TrackInfoAndWaveComponent } from './components/track-info-and-wave/track-info-and-wave.component';
 import { RouterModule } from '@angular/router';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
-import { LibraryTabComponent } from './components/library-tab/library-tab.component';
+import { TimeAgoPipe } from './pipes/time-ago.pipe';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -44,7 +45,7 @@ import { LibraryTabComponent } from './components/library-tab/library-tab.compon
     DynamicFormComponent,
     TrackInfoAndWaveComponent,
     SocialLoginComponent,
-    LibraryTabComponent,
+    TimeAgoPipe,
   ],
   imports: [
     CommonModule,
@@ -72,7 +73,7 @@ import { LibraryTabComponent } from './components/library-tab/library-tab.compon
     TrackInfoAndWaveComponent,
     DynamicFormComponent,
     NgSelectModule,
-    LibraryTabComponent,
+    TimeAgoPipe,
   ],
 })
 export class SharedModule {}

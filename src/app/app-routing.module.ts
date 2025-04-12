@@ -30,7 +30,7 @@ const routes: Routes = [
           import('./modules/library-page/library-page.module').then(
             (m) => m.LibraryPageModule
           ),
-        canActivate: [],
+        canActivate: [AuthGuard],
       },
       {
         path: 'search',

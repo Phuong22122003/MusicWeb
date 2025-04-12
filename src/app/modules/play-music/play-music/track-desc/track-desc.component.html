@@ -1,5 +1,9 @@
+@if (desc) {
 <div>
-  <p [class]="paragraphClass" class="overflow-hidden transition-all">
+  <p
+    [class]="paragraphClass"
+    class="line-clamp-2 overflow-hidden transition-all"
+  >
     {{ desc }}
   </p>
 
@@ -11,3 +15,5 @@
     {{ isExpanded ? "Show less" : "Show more" }}
   </button>
 </div>
+
+}

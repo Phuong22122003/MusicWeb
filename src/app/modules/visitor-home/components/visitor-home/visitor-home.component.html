@@ -317,7 +317,7 @@
       </div>
     </div>
     <a
-      href="/"
+      [routerLink]="['/discover']"
       class="px-[23px] py-[13px] rounded block mx-auto w-fit text-white text-[18px] bg-[var(--primary-orange-color)]"
       >Explore trending playlists</a
     >
@@ -392,7 +392,3 @@
     </div>
   </div>
 </div>
-<app-auth-modal
-  *ngIf="isShowAuthModal"
-  (modalClosed)="onCloseModal()"
-></app-auth-modal>

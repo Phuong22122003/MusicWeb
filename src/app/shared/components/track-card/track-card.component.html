@@ -1,12 +1,14 @@
 <app-card
-    [goTo]="goToTrack"
-    [playTrack]="playTrack"
-    [toggleLike]="toggleLike"
-    [toggleFollow]="toggleFollow"
+  [goTo]="goToTrack"
+  [playTrack]="playTrack"
+  [toggleLike]="toggleLike"
+  [toggleFollow]="toggleFollow"
 >
-    <img src={{track.cover_image_path}} alt="">
-    <div footer class="pt-2 flex flex-col ">
-        <a class="text-sm mt-1 truncate" href={{track.id}}>{{track.name}}</a>
-        <a class="text-xs text-gray-500" href={{track.user_id}}>{{track.username}}</a>
-    </div>
+  <img src="{{ track.coverImagePath }}" alt="" />
+  <div footer class="pt-2 flex flex-col">
+    <a class="text-sm mt-1 truncate" href="{{ track.id }}">{{ track.name }}</a>
+    <a class="text-xs text-gray-500" href="{{ track.userId }}">{{
+      track.username
+    }}</a>
+  </div>
 </app-card>

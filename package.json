@@ -24,6 +24,7 @@
     "@pqina/pintura": "^8.92.7",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.0.12",
+    "date-fns": "^4.1.0",
     "music-web": "file:",
     "ngx-toastr": "^19.0.0",
     "postcss": "^8.5.3",
