@@ -31,7 +31,13 @@ export class HeaderComponent implements OnInit {
         });
     });
   }
-
+  onSearch(query:any){
+    console.log(query);
+    const trimmed = query.trim();
+    if (trimmed) {
+      this.router.navigate(['/search/tracks'], { queryParams: { q: trimmed } });
+    }
+  }
   onShowAuthModal() {
     this.authService.isOpenAuthModal.next(true);
   }

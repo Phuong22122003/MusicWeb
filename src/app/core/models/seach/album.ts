@@ -1,10 +1,10 @@
 import { Track } from "../track";
 import { TrackAndWave } from "../track_wave";
 
-export interface Playlist{
+export interface Album{
     id:string;
     cover_image_path:string;
     tracks:TrackAndWave[];
     like:number;
-    created_date?:string;
+    release_date:string;
 }

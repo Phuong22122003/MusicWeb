@@ -24,6 +24,7 @@ import { TrackInfoAndWaveComponent } from './components/track-info-and-wave/trac
 import { RouterModule } from '@angular/router';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
+import { TrackListComponent } from './components/track-list/track-list.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { TimeAgoPipe } from './pipes/time-ago.pipe';
     TrackInfoAndWaveComponent,
     SocialLoginComponent,
     TimeAgoPipe,
+    TrackListComponent,
   ],
   imports: [
     CommonModule,

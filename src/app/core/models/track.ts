@@ -5,6 +5,7 @@ export interface Track {
   description?: string;
   fileName: string;
   coverImagePath: string;
+  coverImageName?: string;
   userId: string;
   duration: string;
   createdAt: string;

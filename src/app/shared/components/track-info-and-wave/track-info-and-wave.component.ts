@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { WavesurferComponent } from '../wavesurfer/wavesurfer.component';
-import { Track } from '../../../core/models/track';
+import { TrackAndWave } from '../../../core/models/track_wave';
 
 @Component({
   selector: 'app-track-info-and-wave',
@@ -11,7 +11,7 @@ import { Track } from '../../../core/models/track';
 export class TrackInfoAndWaveComponent {
   isPlaying = false;
   isCommentVisible  = false;
-  @Input() track!:Track;
+  @Input() trackAndWave!:TrackAndWave;
   @Input() useForPlaylistAndAlbum:boolean=false;
   @Output() clickPlayButton = new EventEmitter<boolean>();
   @Output() comment = new EventEmitter<String>();

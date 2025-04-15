@@ -1,126 +1,81 @@
 <div class="flex items-start px-4 py-2">
   <div>
-    <a class="block w-[160px] h-[160px]">
-      <img class="rounded-[10px]" [src]="track.coverImagePath" alt="" />
-    </a>
+      <a class="block w-[160px] h-[160px]">
+          <img class="rounded-[10px]" [src]="trackAndWave.cover_image_path" alt="">
+      </a>
   </div>
   <div class="flex flex-col w-full px-4 gap-2">
-    <div class="header flex justify-between items-center">
-      <div class="header flex gap-4 items-center">
-        <div class="play-button" (click)="togglePlaying()">
-          <svg
-            *ngIf="!isPlaying"
-            class="m-3"
-            width="24px"
-            height="24px"
-            viewBox="0 0 18 29"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"
-          >
-            <g
-              id="Page-1"
-              stroke="none"
-              stroke-width="1"
-              fill="none"
-              fill-rule="evenodd"
-              sketch:type="MSPage"
-            >
-              <g
-                id="buttons"
-                sketch:type="MSArtboardGroup"
-                transform="translate(-1665.000000, -818.000000)"
-                fill="#FFFFFF"
-              >
-                <path
-                  d="M1665,847 L1669.15385,832.5 L1665,818 L1683,832.5 L1665,847 Z"
-                  id="Play-60"
-                  sketch:type="MSShapeGroup"
-                ></path>
-              </g>
-            </g>
-          </svg>
-          <svg
-            *ngIf="isPlaying"
-            width="48px"
-            height="48px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M9 9H11V15H9V9Z" fill="white" />
-            <path d="M15 15H13V9H15V15Z" fill="white" />
-          </svg>
-        </div>
-        <div class="flex flex-col">
-          <a class="text-gray-500" href="">{{ track.username }}</a>
-          <a class="font-bold" href="">{{ track.name }}</a>
-        </div>
+      <div class="header flex justify-between items-center">
+          <div class="header flex  gap-4 items-center">
+              <div class="play-button" (click)="togglePlaying()">
+                  <svg *ngIf="!isPlaying" class="m-3" width="24px" height="24px" viewBox="0 0 18 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+                      <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                          <g id="buttons" sketch:type="MSArtboardGroup" transform="translate(-1665.000000, -818.000000)" fill="#FFFFFF">
+                              <path d="M1665,847 L1669.15385,832.5 L1665,818 L1683,832.5 L1665,847 Z" id="Play-60" sketch:type="MSShapeGroup"></path>
+                          </g>
+                      </g>
+                  </svg>
+                  <svg *ngIf="isPlaying"  width="48px" height="48px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 9H11V15H9V9Z" fill="white" />
+                      <path d="M15 15H13V9H15V15Z" fill="white" />
+                  </svg>
+              </div>
+              <div class="flex flex-col">
+                  <a  class="text-gray-500" href="">{{trackAndWave.username}}</a>
+                  <a  class="font-bold" href="">{{trackAndWave.name}}</a>
+              </div>
+          </div>
+          <div class="">
+              <div class="upload-time"></div>
+              <div>
+                  <ng-container *ngFor="let tag of trackAndWave.tags">
+                      <a href="{{tag.url}}"  class="tag px-3 py-1 rounded-[10px] bg-[#f3f3f3]">#{{tag.name}}</a>
+                  </ng-container>
+              </div>
+          </div>
       </div>
-      <div class="">
-        <div class="upload-time"></div>
-        <div class="tag px-3 py-1 rounded-[10px] bg-[#f3f3f3]">
-          <a href="" class="">#pop</a>
-        </div>
+      <div class="wave-form h-[60px]">
+          <app-wavesurfer [isMuted]="false" (playStateChanged)="changeButtonIcon($event)" #waveform  [height]=50 trackUrl="./assets/audios/music.mp3"></app-wavesurfer>
       </div>
-    </div>
-    <div class="wave-form h-[60px]">
-      <app-wavesurfer
-        [isMuted]="false"
-        (playStateChanged)="changeButtonIcon($event)"
-        #waveform
-        [height]="50"
-        trackUrl="./assets/audios/music.mp3"
-      ></app-wavesurfer>
-    </div>
-    <ng-content select="[list]"></ng-content>
-    <div *ngIf="!useForPlaylistAndAlbum" class="comment">
-      <div
-        *ngIf="isCommentVisible"
-        class="opacity-0 transition-opacity duration-500 ease-in-out opacity-100"
-      >
-        <img src="" alt="" />
-        <input
-          class="w-full p-2 bg-[#f3f3f3] outline-none"
-          placeholder="Write a comment"
-          type="text"
-          name=""
-          id=""
-        />
+      <ng-content select="[list]"></ng-content>
+      <div *ngIf="!useForPlaylistAndAlbum" class="comment">
+          <div *ngIf="isCommentVisible" class="opacity-0 transition-opacity duration-500 ease-in-out opacity-100">
+              <img src="" alt="">
+              <input class="w-full p-2 bg-[#f3f3f3] outline-none" placeholder="Write a comment" type="text" name="" id="">
+          </div>
       </div>
-    </div>
-    <div class="action flex justify-between">
-      <div class="flex gap-4">
-        <div
-          class="flex gap-2 items-center px-3 py-2 bg-[#f3f3f3] rounded-[4px]"
-        >
-          <i class="fa-solid fa-heart"></i>
-          <span>{{ track.liked }}</span>
-          <!-- <span>Like</span> -->
-        </div>
-        <div class="px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
-          <i class="fa-regular fa-clone"></i>
-          <!-- <span>Copy Link</span> -->
-        </div>
-        <div class="px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
-          <i class="fa-solid fa-ellipsis"></i>
-          <!-- <span>Copy Link</span> -->
-        </div>
+      <div class="action flex  justify-between">
+          <div class="flex gap-4">
+              <div class="flex gap-2 items-center px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
+                  <i class="fa-solid fa-heart"></i>
+                  <span>{{trackAndWave.liked}}</span>
+                  <!-- <span>Like</span> -->
+              </div>
+              <div  class="px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
+                  <i class="fa-regular fa-clone"></i>
+                  <!-- <span>Copy Link</span> -->
+              </div>
+              <div  class="px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
+                  <i class="fa-solid fa-ellipsis"></i>
+                  <!-- <span>Copy Link</span> -->
+              </div>
+              <div class="px-3 py-2 bg-[#f3f3f3] rounded-[4px]">
+                  <svg width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M7.81 4.03L4.78 7.06 3.72 6l1.22-1.22H3.75c-.69 0-1.25.56-1.25 1.25v3.85H1V6.03a2.75 2.75 0 012.75-2.75h1.19L3.72 2.06 4.78 1l3.03 3.03zM15 4.75H9v-1.5h6v1.5zM15 9.88H7v-1.5h8v1.5zM1 15h14v-1.5H1V15z" fill="currentColor">  
+                      </path>
+                  </svg>
+              </div>
+          </div>
+          <div *ngIf="!useForPlaylistAndAlbum" class="flex gap-4 text-gray-500 text-[13px]">
+              <div class="flex gap-2 items-center px-3 py-2 rounded-[4px]">
+                  <i class="fa-solid fa-play"></i>
+                  <span>{{trackAndWave.played}}</span>
+              </div>
+              <div class="flex gap-2 items-center px-3 py-2  rounded-[4px]">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>{{trackAndWave.comment}}</span>
+              </div>
+          </div>
       </div>
-      <div
-        *ngIf="!useForPlaylistAndAlbum"
-        class="flex gap-4 text-gray-500 text-[13px]"
-      >
-        <div class="flex gap-2 items-center px-3 py-2 rounded-[4px]">
-          <i class="fa-solid fa-play"></i>
-          <span>{{ track.played }}</span>
-        </div>
-        <div class="flex gap-2 items-center px-3 py-2 rounded-[4px]">
-          <i class="fa-solid fa-comment"></i>
-          <span>{{ track.comment }}</span>
-        </div>
-      </div>
-    </div>
   </div>
 </div>

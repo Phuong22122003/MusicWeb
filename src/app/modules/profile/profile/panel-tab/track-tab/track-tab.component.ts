@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Track } from '../../../../../core/models/track';
 import { ActivatedRoute } from '@angular/router';
+import { TrackAndWave } from '../../../../../core/models/track_wave';
 
 @Component({
   selector: 'app-track-tab',
@@ -10,21 +11,33 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class TrackTabComponent implements OnInit {
   routePath = '';
-  track: Track = {
-    id: '12345',
-    name: 'My Track Name',
-    title: 'Track Title',
-    description: 'A description of the track.',
-    fileName: 'assets/music/track1.mp3',
-    coverImagePath: 'assets/images/image.png',
-    userId: 'user123',
-    duration: '3:45',
-    createdAt: '2025-04-07T12:00:00Z',
+  track:TrackAndWave = {
+    id: '1',
+    name: 'My Song123123',
+    file_path: 'assets/audios/NhuNgayHomQua.mp3',
+    cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
+    user_id: '123',
+    duration: '03:45',
+    create_at: '2024-03-17T12:00:00Z',
     username: 'john_doe',
-    liked: 150,
-    played: 2000,
-    comment: 45,
-  };
+    played:100,
+    liked:100,
+    comment:100,
+    tags:[
+      {
+        url:'/tag',
+        name:'Pop'
+      },
+      {
+        url:'/tag',
+        name:'Childrens'
+      },
+      {
+        url:'/tag',
+        name:'Rap'
+      },
+    ]
+  }
   constructor(private route: ActivatedRoute) {}
   ngOnInit(): void {
     const routePath = this.route.snapshot.url[0]?.path;
