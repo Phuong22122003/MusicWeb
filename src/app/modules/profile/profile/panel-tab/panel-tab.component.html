@@ -2,14 +2,6 @@
   <!-- Tabs -->
   <div class="flex space-x-6">
     <a
-      routerLink="all"
-      routerLinkActive="text-orange-500 border-b-2 border-orange-500 font-semibold"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="tab-link"
-      >All</a
-    >
-
-    <a
       routerLink="popular-tracks"
       routerLinkActive="text-orange-500 border-b-2 border-orange-500 font-semibold"
       class="tab-link"
@@ -41,11 +33,12 @@
       *ngIf="userId === loginUserId; else followingButton"
       class="flex items-center space-x-2"
     >
-      <button
+      <a
+        [routerLink]="['/you', 'insights']"
         class="cursor-pointer bg-orange-500 text-white px-3 py-1 rounded flex items-center text-sm"
       >
         <i class="fas fa-chart-bar mr-2"></i> Your Insights
-      </button>
+      </a>
       <button
         (click)="onOpenEditProfile()"
         class="cursor-pointer border px-3 py-1 rounded flex items-center text-sm"

@@ -1,3 +1,3 @@
-<ng-container *ngFor="let playlist of playlists;">
-    <app-playlist (play)="play($event)" [playlist]="playlist"></app-playlist>
+<ng-container *ngFor="let playlist of playlists">
+  <app-track-list [tracklist]="playlist"></app-track-list>
 </ng-container>

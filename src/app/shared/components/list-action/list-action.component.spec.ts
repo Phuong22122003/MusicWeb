@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AllTabComponent } from './all-tab.component';
+import { ListActionComponent } from './list-action.component';
 
-describe('AllTabComponent', () => {
-  let component: AllTabComponent;
-  let fixture: ComponentFixture<AllTabComponent>;
+describe('ListActionComponent', () => {
+  let component: ListActionComponent;
+  let fixture: ComponentFixture<ListActionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AllTabComponent]
+      declarations: [ListActionComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AllTabComponent);
+    fixture = TestBed.createComponent(ListActionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

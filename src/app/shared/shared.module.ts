@@ -25,7 +25,19 @@ import { RouterModule } from '@angular/router';
 import { SocialLoginComponent } from './components/social-login/social-login.component';
 import { TimeAgoPipe } from './pipes/time-ago.pipe';
 import { TrackListComponent } from './components/track-list/track-list.component';
-
+import { TrackActionsComponent } from './components/track-actions/track-actions.component';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { PlaylistModalComponent } from './components/playlist-modal/playlist-modal.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { TrackActionComponent } from './components/track-action/track-action.component';
+import { ListActionComponent } from './components/list-action/list-action.component';
+import { EditPlaylistComponent } from './components/list-action/edit-playlist/edit-playlist.component';
+import { EditTrackComponent } from './components/track-action/edit-track/edit-track.component';
+import { FormatDatePipe } from './pipes/format-date.pipe';
+import { FollowingCircleComponent } from './components/following-circle/following-circle.component';
+import { NotificationComponent } from './components/notification/notification.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -48,6 +60,17 @@ import { TrackListComponent } from './components/track-list/track-list.component
     SocialLoginComponent,
     TimeAgoPipe,
     TrackListComponent,
+    TrackActionsComponent,
+    ClickOutsideDirective,
+    PlaylistModalComponent,
+    ConfirmDialogComponent,
+    TrackActionComponent,
+    ListActionComponent,
+    EditPlaylistComponent,
+    EditTrackComponent,
+    FormatDatePipe,
+    FollowingCircleComponent,
+    NotificationComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +79,8 @@ import { TrackListComponent } from './components/track-list/track-list.component
     NgSelectModule,
     DragDropModule,
     RouterModule,
+    MatButtonModule,
+    MatDialogModule,
   ],
   providers: [],
   exports: [
@@ -76,6 +101,16 @@ import { TrackListComponent } from './components/track-list/track-list.component
     DynamicFormComponent,
     NgSelectModule,
     TimeAgoPipe,
+    TrackActionsComponent,
+    ClickOutsideDirective,
+    PlaylistModalComponent,
+    TrackListComponent,
+    ConfirmDialogComponent,
+    TrackActionComponent,
+    ListActionComponent,
+    FormatDatePipe,
+    FollowingCircleComponent,
+    NotificationComponent,
   ],
 })
 export class SharedModule {}

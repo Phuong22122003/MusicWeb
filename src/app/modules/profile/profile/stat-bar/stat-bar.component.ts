@@ -5,11 +5,18 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 import { FollowService } from '../../../../core/services/follow.service';
 import { UserProfile } from '../../../../core/models/user_profile';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../../core/services/auth-service';
+import { TrackStatisticsService } from '../../../../core/services/track-statistic.service';
+import { TrackService } from '../../../../core/services/track.service';
+import { Track } from '../../../../core/models/track';
+import getAvatarUrl from '../../../../shared/utils/get-avatar-url';
 
 @Component({
   selector: 'app-stat-bar',
@@ -18,14 +25,17 @@ import { AuthService } from '../../../../core/services/auth-service';
   styleUrl: './stat-bar.component.scss',
 })
 export class StatBarComponent implements OnInit, OnChanges {
-  @Input() userId!: string;
+  @Input() userId: string = '';
+  userProfile?: UserProfile;
   followings: UserProfile[] = [];
   followers: UserProfile[] = [];
-
+  tracks: Track[] = [];
+  avatarUrl = '';
   constructor(
     private followService: FollowService,
     private toast: ToastrService,
-    private authService: AuthService
+    private authService: AuthService,
+    private trackService: TrackService
   ) {}
 
   ngOnInit(): void {
@@ -44,10 +54,12 @@ export class StatBarComponent implements OnInit, OnChanges {
     forkJoin({
       followings: this.followService.getFollowings(this.userId, 0, 5),
       followers: this.followService.getFollowers(this.userId, 0, 5),
+      tracks: this.trackService.getTracksByUserId(this.userId),
     }).subscribe({
-      next: ({ followings, followers }) => {
+      next: ({ followings, followers, tracks }) => {
         this.followings = followings.data.content;
         this.followers = followers.data.content;
+        this.tracks = tracks.data;
       },
       error: (err) => {
         this.toast.error('Fail to load follow data: ' + err.message, 'Error');
@@ -65,5 +77,9 @@ export class StatBarComponent implements OnInit, OnChanges {
 
   trackByUserId(index: number, user: UserProfile): string {
     return user.userId; // dùng userId thay vì email nếu có thể
+  }
+
+  getAvatarUrl(avatar: string | null) {
+    return getAvatarUrl(avatar as string, null);
   }
 }

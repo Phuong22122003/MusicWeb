@@ -1,10 +1,12 @@
 <form class="flex flex-col justify-center items-center" [formGroup]="form">
-  <div
-    [ngClass]="{
-      'w-[100%]': !hasImageHorizontal,
-    }"
-  >
-    <div class="lg:flex-row flex-col flex gap-24">
+  <div class="w-full">
+    <div
+      class="flex gap-4"
+      [ngClass]="{
+        'flex-col': !hasImageHorizontal,
+        'flex-row': hasImageHorizontal
+      }"
+    >
       @for (field of formFields; track $index) { @if (field.type=='image') {
       <label
         *ngIf="field.type === 'image'"
@@ -12,7 +14,7 @@
           width: (field.options?.widthImage || 400) + 'px',
           height: (field.options?.heighImage || 400) + 'px'
         }"
-        class="cursor-pointer label-files border-2 border-dashed transition-all duration-[1000] ease-linear hover:border-black border-[#00000026] flex flex-col items-center justify-center gap-4 rounded-[4px]"
+        class="cursor-pointer mx-auto label-files border-2 border-dashed transition-all duration-[1000] ease-linear hover:border-black border-[#00000026] flex flex-col items-center justify-center gap-4 rounded-[4px]"
         [for]="field.name"
       >
         @if (editedImageUrl) {

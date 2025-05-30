@@ -8,11 +8,9 @@ import { UsersComponent } from './component/users/users.component';
 import { PlaylistsComponent } from './component/playlists/playlists.component';
 import { AlbumsComponent } from './component/albums/albums.component';
 import { UserComponent } from './component/users/user/user.component';
-import { SharedModule } from "../../shared/shared.module";
+import { SharedModule } from '../../shared/shared.module';
 import { PlaylistComponent } from './component/playlists/playlist/playlist.component';
 import { AlbumComponent } from './component/albums/album/album.component';
-
-
 
 @NgModule({
   declarations: [
@@ -24,12 +22,8 @@ import { AlbumComponent } from './component/albums/album/album.component';
     AlbumsComponent,
     UserComponent,
     PlaylistComponent,
-    AlbumComponent
+    AlbumComponent,
   ],
-  imports: [
-    CommonModule,
-    SearchRoutingModule,
-    SharedModule
-]
+  imports: [CommonModule, SearchRoutingModule, SharedModule],
 })
-export class SearchModule { }
+export class SearchModule {}

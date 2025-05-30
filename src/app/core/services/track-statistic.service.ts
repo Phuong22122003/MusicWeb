@@ -1,0 +1,169 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { ErrorHandlerService } from './error-handler-service';
+import { CommentResponse } from '../models/comment/comment-response.model';
+import { ApiResponse } from '../models/api_response';
+import { catchError, Observable } from 'rxjs';
+import {
+  CommentStatisticResponse,
+  LikeResponse,
+  PlayResponse,
+  TopTrack,
+} from '../models/statistic/statistic.model';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TrackStatisticsService {
+  private apiUrl = `${environment.apiBaseUrl}/music-service/track-statistics`;
+  private adminStatisticUrl = `${environment.apiBaseUrl}/admin-service/statistic`;
+  private userStatisticUrl = `${environment.apiBaseUrl}/user-library/statistic`;
+  constructor(
+    private http: HttpClient,
+    private errorHandlerService: ErrorHandlerService
+  ) {}
+
+  getCommentsForTrack(
+    trackId: string
+  ): Observable<ApiResponse<CommentResponse[]>> {
+    return this.http
+      .get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/comments/${trackId}`)
+      .pipe(catchError(this.errorHandlerService.handleError));
+  }
+
+  getCommentCountForTrack(trackId: string): Observable<ApiResponse<number>> {
+    return this.http
+      .get<ApiResponse<number>>(`${this.apiUrl}/comments/count/${trackId}`)
+      .pipe(catchError(this.errorHandlerService.handleError));
+  }
+
+  getPlayCount(trackId: string): Observable<ApiResponse<number>> {
+    return this.http
+      .get<ApiResponse<number>>(`${this.apiUrl}/cout_play/${trackId}`)
+      .pipe(catchError(this.errorHandlerService.handleError));
+  }
+
+  getTotalCommentLikes(trackId: string): Observable<ApiResponse<number>> {
+    return this.http
+      .get<ApiResponse<number>>(`${this.apiUrl}/comments/likes/${trackId}`)
+      .pipe(catchError(this.errorHandlerService.handleError));
+  }
+
+  getTrackLikeCount(trackId: string): Observable<ApiResponse<number>> {
+    return this.http
+      .get<ApiResponse<number>>(`${this.apiUrl}/liked/count/${trackId}`)
+      .pipe(catchError(this.errorHandlerService.handleError));
+  }
+  // Admin Statistic Url
+  getPlayResponse(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<PlayResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<PlayResponse>>(
+      `${this.adminStatisticUrl}/plays`,
+      {
+        params,
+      }
+    );
+  }
+
+  getLikeResponse(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<LikeResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<LikeResponse>>(
+      `${this.adminStatisticUrl}/likes`,
+      {
+        params,
+      }
+    );
+  }
+
+  getCommentStatisticResponse(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<CommentStatisticResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<CommentStatisticResponse>>(
+      `${this.adminStatisticUrl}/comments`,
+      { params }
+    );
+  }
+  // User
+  getCommentStatisticUserResponse(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<CommentStatisticResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<CommentStatisticResponse>>(
+      `${this.userStatisticUrl}/comments`,
+      { params }
+    );
+  }
+  getLikeStatisticUserResponse(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<LikeResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<LikeResponse>>(
+      `${this.userStatisticUrl}/likes`,
+      { params }
+    );
+  }
+  getPlayResponseUser(
+    fromDate: string,
+    toDate: string
+  ): Observable<ApiResponse<PlayResponse>> {
+    const params = new HttpParams()
+      .set('from_date', fromDate)
+      .set('to_date', toDate);
+    return this.http.get<ApiResponse<PlayResponse>>(
+      `${this.userStatisticUrl}/plays`,
+      { params }
+    );
+  }
+
+  // User Top Tracks
+  getUserTopTracks(
+    fromDate: string | null,
+    toDate: string | null
+  ): Observable<ApiResponse<TopTrack[]>> {
+    let params = new HttpParams();
+    if (fromDate && toDate) {
+      params = params.set('from_date', fromDate).set('to_date', toDate);
+    }
+
+    return this.http.get<ApiResponse<TopTrack[]>>(
+      `${this.userStatisticUrl}/top-tracks`,
+      { params }
+    );
+  }
+
+  getAllTopTracks(
+    fromDate: string | null,
+    toDate: string | null
+  ): Observable<ApiResponse<TopTrack[]>> {
+    let params = new HttpParams();
+    if (fromDate && toDate) {
+      params = params.set('from_date', fromDate).set('to_date', toDate);
+    }
+
+    return this.http.get<ApiResponse<TopTrack[]>>(
+      `${this.userStatisticUrl}/top-tracks/all`,
+      { params }
+    );
+  }
+}

@@ -53,7 +53,7 @@
       >
         Create account
       </button>
-      <a href="/" class="cursor-pointer text-white">For Artists</a>
+      <a [routerLink]="['']" class="cursor-pointer text-white">For Artists</a>
     </div>
   </div>
   <!-- Action -->
@@ -73,7 +73,7 @@
     </form>
     <span>or</span>
     <a
-      href="/"
+      [routerLink]="['']"
       class="text-base px-[23px] py-[13px] bg-[var(--primary-orange-color)] text-white rounded l"
       >Upload your own</a
     >
@@ -81,7 +81,7 @@
   <!-- Trending Tracks -->
   <div class="mt-32">
     <span class="text-2xl text-center block"
-      >Hear what’s trending for free in the SoundCloud community</span
+      >Hear what's trending for free in the SoundCloud community</span
     >
     <div class="grid grid-cols-4 xl:grid-cols-6 mt-[30px]">
       <div class="w-fit flex flex-col cursor-pointer">
@@ -338,10 +338,12 @@
         Xbox One.</span
       >
       <div class="mt-[28px] flex">
-        <a class="mr-2" href="/"
+        <a class="mr-2" [routerLink]="['']"
           ><img src="assets/icons/appstore_badge.png" alt=""
         /></a>
-        <a href="/"><img src="assets/icons/google_play_badge.png" alt="" /></a>
+        <a [routerLink]="['']"
+          ><img src="assets/icons/google_play_badge.png" alt=""
+        /></a>
       </div>
     </div>
   </div>
@@ -356,7 +358,7 @@
           your audience. What are you waiting for?</span
         >
         <a
-          href="/"
+          [routerLink]="['']"
           class="w-fit text-[18px] px-[24px] py-[13px] border-1 border-[#fff]"
           >Find out more</a
         >

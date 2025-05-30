@@ -1,9 +1,10 @@
 @use "tailwindcss";
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "@ng-select/ng-select/themes/default.theme.css";
 
 
-@import '@ng-select/ng-select/themes/default.theme.css';
+
 
 body {
   font-family: 'Inter', sans-serif;
@@ -80,3 +81,18 @@ body {
 .ng-select-container:focus-within {
   border-bottom: 1px solid black !important;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.custom-dialog-container .mat-mdc-dialog-surface {
+  padding: 24px !important;
+
+}
+
+::ng-deep .mat-menu-panel {
+  background: #1f2937;
+  color: red;
+}
+

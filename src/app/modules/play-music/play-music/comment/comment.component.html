@@ -1,7 +1,8 @@
 <div class="px-4">
   <div class="flex justify-between">
     <div class="text-[#999] flex gap-2 items-center">
-      <i class="fa-solid fa-comment"></i><span>5 comments</span>
+      <i class="fa-solid fa-comment"></i
+      ><span>{{ comments.length }} comments</span>
     </div>
     <div class="w-[100px]">
       <ng-select
@@ -11,12 +12,12 @@
         placeholder="Select Type"
         [(ngModel)]="selectedSortType"
         [clearable]="false"
+        (change)="onSortChange()"
       >
       </ng-select>
     </div>
   </div>
-  <div class="py-4"><app-comment-item /></div>
-  <div class="py-4"><app-comment-item /></div>
-  <div class="py-4"><app-comment-item /></div>
-  <div class="py-4"><app-comment-item /></div>
+  <div class="py-4" *ngFor="let comment of comments">
+    <app-comment-item [trackId]="trackId" [comment]="comment" />
+  </div>
 </div>

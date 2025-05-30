@@ -6,6 +6,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PinturaEditorOptions } from '@pqina/pintura';
@@ -16,6 +17,7 @@ import { openEditor } from '../../utils/image-edit';
   standalone: false,
   templateUrl: './dynamic-form.component.html',
   styleUrl: './dynamic-form.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class DynamicFormComponent implements OnInit {
   @Input() formFields: {
@@ -34,6 +36,7 @@ export class DynamicFormComponent implements OnInit {
     };
     dataSelect?: any;
   }[] = [];
+  @Input() key!: string;
   @Output() submit = new EventEmitter<{ [key: string]: any }>();
   @Output() image = new EventEmitter<File>();
   form!: FormGroup;
@@ -47,12 +50,13 @@ export class DynamicFormComponent implements OnInit {
     imageCropAspectRatio: 1,
   } as PinturaEditorOptions;
   editedImageUrl: string = '';
-  hasImageHorizontal: boolean = false;
+  hasImageHorizontal: boolean = true;
 
   constructor(private fb: FormBuilder) {
     this.formFields.forEach;
   }
   ngOnInit(): void {
+    console.log(this.formFields);
     const controls: { [key: string]: any } = {};
     this.formFields.forEach((field) => {
       if (field.type === 'image') {
@@ -64,13 +68,14 @@ export class DynamicFormComponent implements OnInit {
           },
         };
 
-        if (field.options?.imageOrientation === 'horizontal') {
-          this.hasImageHorizontal = true;
+        if (field.options?.imageOrientation !== 'horizontal') {
+          this.hasImageHorizontal = false;
         }
         if (field.options?.defaultValue) {
           this.selectedImageFile = field.options.defaultValue as File;
           this.editedImageUrl = URL.createObjectURL(this.selectedImageFile);
         }
+        console.log(this.hasImageHorizontal);
         return;
       }
       let value =

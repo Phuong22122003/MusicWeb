@@ -1,44 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { TrackAndWave } from '../../../core/models/track_wave';
+import { Track } from '../../../core/models/track';
+import { HistoryService } from '../../../core/services/history.service';
+import { createPlaceholders } from '../../../shared/utils/helper';
 
 @Component({
   selector: 'app-history',
   standalone: false,
   templateUrl: './history.component.html',
-  styleUrl: './history.component.scss'
+  styleUrl: './history.component.scss',
 })
-export class HistoryComponent implements OnInit{
-  tracks:TrackAndWave[] = [];
+export class HistoryComponent implements OnInit {
+  tracks: Track[] = [];
+  searchQuery = '';
+  constructor(private historyService: HistoryService) {}
   ngOnInit(): void {
-      for(let i =0;i<10;i++){
-        const track:TrackAndWave = {
-            id: '1',
-            name: 'My Song123123',
-            file_path: 'assets/audios/NhuNgayHomQua.mp3',
-            cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-            user_id: '123',
-            duration: '03:45',
-            create_at: '2024-03-17T12:00:00Z',
-            username: 'john_doe',
-            played:100,
-            liked:100,
-            comment:100,
-            tags:[
-              {
-                url:'/tag',
-                name:'Pop'
-              },
-              {
-                url:'/tag',
-                name:'Childrens'
-              },
-              {
-                url:'/tag',
-                name:'Rap'
-              },
-            ]
-          }
-        this.tracks.push(track);
-      }
+    this.historyService.getAllHistory().subscribe((res) => {
+      this.tracks = res.data;
+      console.log(res);
+    });
+  }
+  get filteredTracks(): Track[] {
+    const query = this.searchQuery.toLowerCase();
+
+    return this.tracks.filter(
+      (track) =>
+        track.title?.toLowerCase().includes(query) ||
+        track.displayName?.toLowerCase().includes(query)
+    );
+  }
+  get placeholders(): any[] {
+    return createPlaceholders(this.tracks);
   }
 }

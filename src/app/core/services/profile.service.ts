@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorHandlerService } from './error-handler-service';
 import { ApiResponse } from '../models/api_response';
 import { catchError, Observable } from 'rxjs';
@@ -50,5 +50,16 @@ export class ProfileService {
       this.apiAuthUrl + '/update-my-info',
       profile
     );
+  }
+
+  getProfileByIds(ids: string[]): Observable<ApiResponse<UserProfile[]>> {
+    let params = new HttpParams();
+    ids.forEach((id) => {
+      params = params.append('userIds', id);
+    });
+
+    return this.http
+      .get<ApiResponse<UserProfile[]>>(`${this.apiUrl}/bulk`, { params })
+      .pipe(catchError(this.errorHandlerService.handleError));
   }
 }

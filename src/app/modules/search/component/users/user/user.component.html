@@ -1,21 +1,32 @@
 <div class="flex justify-between items-center">
-    <div class="flex gap-5 items-center">
-        <a href="">
-            <img class="rounded-full w-30 h-30" src={{user.profile_picture}} alt="">
-        </a>
-        <div>
-            <a href="">
-                {{user.username}}
-            </a>
-            <div class="text-[#666] text-[12px]">
-                <i class="fa-solid fa-user"></i>
-                <a href="" class="ms-2 " >{{user.followers}} Followers</a>
-            </div>
-        </div>
-    </div>
+  <div class="flex gap-5 items-center">
+    <a href="">
+      <img
+        class="rounded-full w-30 h-30"
+        [src]="user.avatar ? `${avatarUrl}/${user.avatar}` : '/assets/images/music-placeholder.png'"
+        alt=""
+      />
+    </a>
     <div>
-        <button [class.follow]="!isFollowing" [class.following]="isFollowing" (click)="toggleFlow()">
-            {{isFollowing?'Following':'Follow'}}
-        </button>
+      <a [routerLink]="['/profile', user.userId]">
+        {{ user.displayName }}
+      </a>
+      <div class="text-[#666] text-[12px]">
+        <i class="fa-solid fa-user"></i>
+        <a [routerLink]="['/profile', user.userId]" class="ms-2"
+          >{{ user.followerCount }} Followers</a
+        >
+      </div>
     </div>
+  </div>
+  <div>
+    <button
+      *ngIf="!isMySelf"
+      [class.follow]="!isFollowing"
+      [class.following]="isFollowing"
+      (click)="toggleFollow()"
+    >
+      {{ isFollowing ? "Following" : "Follow" }}
+    </button>
+  </div>
 </div>

@@ -14,7 +14,6 @@ export class LibraryTabComponent {
     { name: 'Likes', route: 'likes', active: false },
     { name: 'Playlists', route: 'playlists', active: false },
     { name: 'Albums', route: 'albums', active: false },
-    { name: 'Stations', route: 'stations', active: false },
     { name: 'Following', route: 'following', active: false },
     { name: 'History', route: 'history', active: false },
   ];

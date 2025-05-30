@@ -10,6 +10,9 @@ import {
 } from '@angular/core';
 import { Track } from '../../../../../core/models/track';
 import { NextPlayListService } from '../../../../../core/services/next-play-list.service';
+import { COVER_BASE_URL } from '../../../../utils/url';
+import { LikedTrackService } from '../../../../../core/services/liked-track.service';
+import { AuthService } from '../../../../../core/services/auth-service';
 
 @Component({
   selector: 'app-next-up-item',
@@ -23,14 +26,16 @@ export class NextUpItemComponent implements OnInit {
   @Input('trackIndex') trackIndex!: number;
   @Input('isPlaying') isPlaying: boolean = false;
   @Output() deleteEvent = new EventEmitter<number>();
+  coverUrl = COVER_BASE_URL;
   constructor(
     private nextPlayListService: NextPlayListService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private likedTrackService: LikedTrackService,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.nextPlayListService.playPauseTrackInNextPLayListSubject.subscribe(
       (res) => {
-        console.log(res);
         if (this.trackIndex !== res.index) return;
         if (res.type === 'PLAY') {
           this.isPlaying = true;
@@ -64,5 +69,16 @@ export class NextUpItemComponent implements OnInit {
     //   this.nextPlayListService.deleteTrackByIndex.next(this.trackIndex);
     // }, 300);
     this.deleteEvent.emit(this.trackIndex);
+  }
+  toggleLike() {
+    const loggedId = this.authService.getUserId() || '';
+    if (loggedId === this.track.userId) return;
+    const action = this.track.isLiked
+      ? this.likedTrackService.unLikeTrack(this.track.id)
+      : this.likedTrackService.likeTrack(this.track.id);
+
+    action.subscribe((res) => {
+      this.track.isLiked = !this.track.isLiked;
+    });
   }
 }

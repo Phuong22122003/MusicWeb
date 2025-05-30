@@ -2,36 +2,208 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorHandlerService } from './error-handler-service';
-import { catchError, map, Observable } from 'rxjs';
+import {
+  catchError,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import { ApiResponse } from '../models/api_response';
 import { Track } from '../models/track';
+import { ProfileService } from './profile.service';
 @Injectable({
   providedIn: 'root', // Đăng ký service ở root để dùng toàn app
 })
 export class TrackService {
+  private updateDoneSubject = new Subject<Track>();
+  private deleteDoneSubject = new Subject<string>();
+  private trackPlaySubject = new Subject<{ isPlay: boolean; track: Track }>();
+  updateDone$ = this.updateDoneSubject.asObservable();
+  deleteDone$ = this.deleteDoneSubject.asObservable();
+  trackPlay$ = this.trackPlaySubject.asObservable();
   private apiUrl = environment.apiBaseUrl + '/music-service/track';
+  private apiUrlTracks = environment.apiBaseUrl + '/music-service/tracks';
   constructor(
     private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService
+    private errorHandlerService: ErrorHandlerService,
+    private profileService: ProfileService
   ) {}
-  getTrackById(trackId: string): Observable<ApiResponse<Track>> {
-    return this.http
-      .get<ApiResponse<Track>>(this.apiUrl + '/' + trackId)
-      .pipe(catchError(this.errorHandlerService.handleError));
+  emitUpdateDone(track: Track) {
+    this.updateDoneSubject.next(track);
   }
-  getTracksByIds(trackIds:string[]): Observable<Track[]>{
+  emitDeleteDone(trackId: string) {
+    this.deleteDoneSubject.next(trackId);
+  }
+  emitTrackPlay(payload: { isPlay: boolean; track: Track }) {
+    this.trackPlaySubject.next(payload);
+  }
+  private enrichTracksWithDisplayNames(tracks: Track[]): Observable<Track[]> {
+    const userIds = [...new Set(tracks.map((track) => track.userId))];
+    const profileRequests = userIds.map((userId) =>
+      this.profileService.getProfileById(userId).pipe(
+        map((res) => ({ userId, displayName: res.data.displayName })),
+        catchError(() => of({ userId, displayName: 'Unknown User' }))
+      )
+    );
+
+    return forkJoin(profileRequests).pipe(
+      map((profiles) => {
+        const profileMap = new Map(
+          profiles.map((p) => [p.userId, p.displayName])
+        );
+        return tracks.map((track) => ({
+          ...track,
+          displayName: profileMap.get(track.userId) || 'Unknown',
+        }));
+      })
+    );
+  }
+  getTrackById(trackId: string): Observable<ApiResponse<Track>> {
+    return this.http.get<ApiResponse<Track>>(this.apiUrl + '/' + trackId).pipe(
+      switchMap((res) =>
+        this.profileService.getProfileById(res.data.userId).pipe(
+          map((profileRes) => ({
+            ...res,
+            data: {
+              ...res.data,
+              displayName: profileRes.data.displayName,
+            },
+          })),
+          catchError(() =>
+            of({
+              ...res,
+              data: { ...res.data, displayName: 'Unknown User' },
+            })
+          )
+        )
+      ),
+      catchError(this.errorHandlerService.handleError)
+    );
+  }
+  updateTrack(
+    trackId: string,
+    updateData: any,
+    imageFile?: File,
+    trackFile?: File
+  ): Observable<any> {
+    const formData = new FormData();
+
+    // 1. Gửi JSON metadata
+    formData.append(
+      'meta-data',
+      new Blob([JSON.stringify(updateData)], { type: 'application/json' })
+    );
+
+    // 2. Gửi file ảnh nếu có
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
+    // 3. Gửi file nhạc nếu có
+    if (trackFile) {
+      formData.append('track', trackFile);
+    }
+
+    return this.http.put(`${this.apiUrl}/update/${trackId}`, formData);
+  }
+
+  getTracksByIds(trackIds: string[]): Observable<ApiResponse<Track[]>> {
     let params = new HttpParams();
-    trackIds.forEach(id => {
+
+    trackIds.forEach((id) => {
       params = params.append('ids', id);
     });
-    console.log(params.toString());
 
-    return this.http.get<ApiResponse<Track[]>>(
+    return this.http
+      .get<ApiResponse<Track[]>>(
         environment.apiBaseUrl + '/music-service/tracks/bulk',
-            { params:params }
-          ) .pipe(
-                map(response=>response.data),
-                catchError(this.errorHandlerService.handleError)
-            );
-    }
+        { params }
+      )
+      .pipe(
+        switchMap((res) => {
+          return this.enrichTracksWithDisplayNames(res.data).pipe(
+            map((tracksWithDisplayName) => ({
+              ...res,
+              data: tracksWithDisplayName,
+            }))
+          );
+        }),
+        catchError(this.errorHandlerService.handleError)
+      );
+  }
+  getTracksByUserId(userId: string): Observable<ApiResponse<Track[]>> {
+    return this.http
+      .get<ApiResponse<Track[]>>(`${this.apiUrl}/users/${userId}`)
+      .pipe(
+        switchMap((res) =>
+          this.enrichTracksWithDisplayNames(res.data).pipe(
+            map((tracks) => ({ ...res, data: tracks }))
+          )
+        ),
+        catchError(this.errorHandlerService.handleError)
+      );
+  }
+
+  getRelatedTracks(
+    trackIds: string[],
+    limit: number
+  ): Observable<ApiResponse<Track[]>> {
+    const params = {
+      'track-ids': trackIds,
+      limit: limit.toString(),
+    };
+
+    return this.http
+      .get<ApiResponse<Track[]>>(`${this.apiUrl}/list-ids-related`, { params })
+      .pipe(
+        switchMap((res) =>
+          this.enrichTracksWithDisplayNames(res.data).pipe(
+            map((tracks) => ({ ...res, data: tracks }))
+          )
+        ),
+        catchError(this.errorHandlerService.handleError)
+      );
+  }
+
+  getTracksByGenre(
+    genreId: string,
+    limit: number
+  ): Observable<ApiResponse<Track[]>> {
+    return this.http
+      .get<ApiResponse<Track[]>>(`${this.apiUrl}/list-by-genre`, {
+        params: { genreId, limit: limit.toString() },
+      })
+      .pipe(
+        switchMap((res) =>
+          this.enrichTracksWithDisplayNames(res.data).pipe(
+            map((tracks) => ({ ...res, data: tracks }))
+          )
+        ),
+        catchError(this.errorHandlerService.handleError)
+      );
+  }
+
+  getRandomTracks(limit: number): Observable<ApiResponse<Track[]>> {
+    return this.http
+      .get<ApiResponse<Track[]>>(`${this.apiUrl}/random`, {
+        params: { limit: limit.toString() },
+      })
+      .pipe(
+        switchMap((res) =>
+          this.enrichTracksWithDisplayNames(res.data).pipe(
+            map((tracks) => ({ ...res, data: tracks }))
+          )
+        ),
+        catchError(this.errorHandlerService.handleError)
+      );
+  }
+
+  deleteTrack(trackId: string): Observable<ApiResponse<string>> {
+    return this.http.delete<ApiResponse<string>>(
+      `${this.apiUrlTracks}/${trackId}`
+    );
+  }
 }

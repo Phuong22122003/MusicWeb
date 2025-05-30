@@ -1,76 +1,80 @@
-import { Component } from '@angular/core';
-import { Album } from '../../../../core/models/seach/album';
-import { AlbumComponent } from './album/album.component';
-import { Track } from '../../../../core/models/track';
-import { TrackAndWave } from '../../../../core/models/track_wave';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { TrackList } from '../../../../core/models/tracklist';
+import { AlbumService } from '../../../../core/services/album.service';
+import { SearchService } from '../../../../core/services/search.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-albums',
   standalone: false,
   templateUrl: './albums.component.html',
-  styleUrl: './albums.component.scss'
+  styleUrls: ['./albums.component.scss'],
 })
-export class AlbumsComponent {
-  albums: Album[] = [];
-  currentAlbumComponent?: AlbumComponent;
+export class AlbumsComponent implements OnInit {
+  albums: TrackList[] = [];
+  ids!: string[];
+  visibleIds!: string[];
+  currentId: number = 0;
+  itemsPerLoad: number = 10;
+  isLoading = false;
+  sub!: Subscription;
 
-  play(albumComponent: AlbumComponent) {
-    if (!this.currentAlbumComponent) {
-      this.currentAlbumComponent = albumComponent;
-    } else if (this.currentAlbumComponent !== albumComponent) {
-      this.currentAlbumComponent?.stopPlay();
-      this.currentAlbumComponent = albumComponent;
-    }
-  }
+  constructor(
+    private albumService: AlbumService,
+    private searchService: SearchService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    for (let i = 0; i < 10; i++) {
-      const tracks = this.getMockTracks();
-      const currentTrack = tracks[0];
-      currentTrack.id = '123' + i;
+    // Lắng nghe sự thay đổi của query trong search service
+    this.sub = this.route.queryParams.subscribe((params) => {
+      const query = params['q'];
+      this.searchService.emitSearchChange(query);
+      this.search(query);
+    });
+  }
 
-      this.albums.push({
-        id: '123' + i,
-        cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-        like: 100,
-        tracks: tracks,
-        release_date:"01/01/2025"
+  search(query: string): void {
+    this.searchService.searchAlbumIds(query).subscribe((ids) => {
+      this.ids = ids;
+      this.visibleIds = [];
+      this.loadMore();
+    });
+  }
+
+  loadMore(): void {
+    if (this.isLoading || this.currentId >= this.ids.length) return;
+    this.isLoading = true;
+    console.log('Load more albums...');
+    const nextItems = this.ids.slice(
+      this.currentId,
+      this.currentId + this.itemsPerLoad
+    );
+    this.visibleIds.push(...nextItems);
+    this.currentId += this.itemsPerLoad;
+    if (nextItems.length > 0) {
+      this.albumService.getAlbumsIds(nextItems).subscribe((albums) => {
+        this.albums.push(...albums.data);
+        this.isLoading = false;
       });
+    } else {
+      this.isLoading = false;
     }
   }
 
-  getMockTracks() {
-    const tracks: TrackAndWave[] = [];
-    for (let i = 0; i < 10; i++) {
-      const track:TrackAndWave = {
-        id: '1',
-        name: 'My Song123123',
-        file_path: 'assets/audios/NhuNgayHomQua.mp3',
-        cover_image_path: 'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-        user_id: '123',
-        duration: '03:45',
-        create_at: '2024-03-17T12:00:00Z',
-        username: 'john_doe',
-        played:100,
-        liked:100,
-        comment:100,
-        tags:[
-          {
-            url:'/tag',
-            name:'Pop'
-          },
-          {
-            url:'/tag',
-            name:'Childrens'
-          },
-          {
-            url:'/tag',
-            name:'Rap'
-          },
-        ]
-      }
-      tracks.push(track);
+  @HostListener('window:scroll', [])
+  onScroll(): void {
+    const threshold = 300;
+    const position = window.innerHeight + window.scrollY;
+    const height = document.body.offsetHeight;
+
+    if (position > height - threshold) {
+      this.loadMore();
     }
-    return tracks;
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) this.sub.unsubscribe();
   }
 }

@@ -9,6 +9,7 @@ export interface UserProfile {
   cover: string | null;
   avatar: string | null;
   userId: string;
-  followerCount?: 0; //Tiện cho việc hiển thi UI
-  followingCount?: 0; //Tiện cho việc hiển thi UI
+  followerCount?: number; //Tiện cho việc hiển thi UI
+  followingCount?: number; //Tiện cho việc hiển thi UI
+  isFollow?: boolean;
 }

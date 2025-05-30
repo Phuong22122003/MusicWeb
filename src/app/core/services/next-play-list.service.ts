@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Track } from '../models/track';
+import { AudioPlayerService } from './audio-player.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class NextPlayListService {
+export class NextPlayListService implements OnDestroy {
   addTrackSubject: BehaviorSubject<Track> = new BehaviorSubject<Track>({
     id: '0',
     name: 'Undefined',
@@ -31,5 +32,14 @@ export class NextPlayListService {
     type: string;
   }>();
 
-  constructor() {}
+  constructor(private audioPlayerService: AudioPlayerService) {}
+
+  ngOnDestroy() {
+    // Complete all subjects
+    this.addTrackSubject.complete();
+    this.addTrackListSubject.complete();
+    this.deleteTrackByIndex.complete();
+    this.deleteAll.complete();
+    this.playPauseTrackInNextPLayListSubject.complete();
+  }
 }

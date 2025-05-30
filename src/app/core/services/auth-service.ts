@@ -12,6 +12,7 @@ import { ApiResponse } from '../models/api_response';
 import { ErrorHandlerService } from './error-handler-service';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +28,17 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private errorHandlerService: ErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {
     this.startTokenCheck();
+    if (this.isLoggedIn()) {
+      this.notificationService.connect();
+    }
+  }
+  isAdmin(): boolean {
+    const decoded = this.decodeToken();
+    return decoded?.scope === 'ROLE_ADMIN'; // Check if the scope is 'ADMIN'
   }
 
   register(userData: any): Observable<ApiResponse<any>> {
@@ -51,6 +60,7 @@ export class AuthService {
     localStorage.setItem('auth_token', token);
     this.loggedInSubject.next(true);
     this.startTokenCheck();
+    this.notificationService.connect();
   }
 
   getToken(): string | null {
@@ -85,9 +95,11 @@ export class AuthService {
   }
 
   logout(): void {
+    this.notificationService.disconnect();
     localStorage.removeItem('auth_token');
     this.loggedInSubject.next(false);
     this.tokenCheckInterval?.unsubscribe();
+    this.tokenCheckInterval = undefined;
   }
 
   checkUsernameExisted(username: string): Observable<ApiResponse<any>> {

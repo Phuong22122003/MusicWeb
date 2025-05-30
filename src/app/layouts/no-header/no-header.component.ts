@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-no-header',
-  standalone: false,
   templateUrl: './no-header.component.html',
-  styleUrl: './no-header.component.scss',
+  styleUrls: ['./no-header.component.scss'],
+  standalone: false,
 })
 export class NoHeaderComponent {}

@@ -78,8 +78,13 @@
   </div>
   <div class="h-full flex items-center ml-[18px] gap-2">
     <img
+      *ngIf="tracks && tracks.length > 0"
       class="h-[30px] w-[30px] object-cover"
-      src="assets/images/image.png"
+      [src]="
+        tracks[currentIndex].coverImageName
+          ? coverUrl + '/' + tracks[currentIndex].coverImageName
+          : '/assets/images/music-placeholder.png'
+      "
       alt=""
     />
     <div class="flex w-[223px] flex-col">
@@ -92,8 +97,18 @@
       >
     </div>
     <div class="flex items-center gap-3">
-      <i class="cursor-pointer fa-solid fa-heart"></i>
-      <i class="cursor-pointer fa-solid fa-user-plus"></i>
+      <i
+        *ngIf="tracks[currentIndex]"
+        (click)="toggleLike()"
+        [ngClass]="{ 'text-red-500': tracks[currentIndex].isLiked }"
+        class="cursor-pointer fa-solid fa-heart"
+      ></i>
+      <i
+        *ngIf="tracks[currentIndex]"
+        (click)="toggleFollow()"
+        [ngClass]="{ 'text-orange-500': playingFollowUserId }"
+        class="cursor-pointer fa-solid fa-user-plus"
+      ></i>
 
       <div class="relative group">
         <i (click)="toggleNextUpList()" class="cursor-pointer fa-solid fa-list">
@@ -110,7 +125,7 @@
     </div>
   </div>
 </div>
-<audio
+<!-- <audio
   #audioPlayer
   (timeupdate)="updateProgress()"
   (loadedmetadata)="setDuration()"
@@ -118,4 +133,4 @@
 >
   <source [src]="audioUrl" type="audio/mpeg" />
   Your browser does not support the audio tag.
-</audio>
+</audio> -->

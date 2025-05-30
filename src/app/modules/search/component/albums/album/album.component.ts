@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Playlist } from '../../../../../core/models/seach/playlist';
 import { Track } from '../../../../../core/models/track';
 import { PlaylistComponent } from '../../playlists/playlist/playlist.component';
@@ -10,29 +16,29 @@ import { TrackAndWave } from '../../../../../core/models/track_wave';
   selector: 'app-album',
   standalone: false,
   templateUrl: './album.component.html',
-  styleUrl: './album.component.scss'
+  styleUrl: './album.component.scss',
 })
 export class AlbumComponent {
-  @Input() album!:Album;
+  @Input() album!: Album;
   @Output() play = new EventEmitter<AlbumComponent>();
-  currentAlbum!:TrackAndWave;
-  isPlaying=false;
+  currentAlbum!: TrackAndWave;
+  isPlaying = false;
 
-  @ViewChild('trackComponent') trackInfoAndWave!:TrackInfoAndWaveComponent ;
+  @ViewChild('trackComponent') trackInfoAndWave!: TrackInfoAndWaveComponent;
   ngOnInit(): void {
-    this.currentAlbum=this.album.tracks[0];
+    this.currentAlbum = this.album.tracks[0];
   }
-  togglePlay(isPlaying:boolean){
+  togglePlay(isPlaying: boolean) {
     this.isPlaying = isPlaying;
     this.play.emit(this);
   }
-  playNext(track:TrackAndWave){
-    this.togglePlay(true);
-    this.trackInfoAndWave.changeUrl(track.file_path);
-    this.currentAlbum = track;
+  playNext(track: TrackAndWave) {
+    // this.togglePlay(true);
+    // this.trackInfoAndWave.changeUrl(track.file_path);
+    // this.currentAlbum = track;
   }
-  stopPlay(){
-    this.trackInfoAndWave.pause();
+  stopPlay() {
+    // this.trackInfoAndWave.pause();
     this.isPlaying = false;
   }
 }

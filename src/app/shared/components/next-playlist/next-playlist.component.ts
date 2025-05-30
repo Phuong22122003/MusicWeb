@@ -9,7 +9,16 @@ import {
 } from '@angular/core';
 import { NextPlayListService } from '../../../core/services/next-play-list.service';
 import { Track } from '../../../core/models/track';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
+import { AudioPlayerService } from '../../../core/services/audio-player.service';
+import { TrackService } from '../../../core/services/track.service';
+import { AuthService } from '../../../core/services/auth-service';
+import { LikedTrackService } from '../../../core/services/liked-track.service';
+import { FollowService } from '../../../core/services/follow.service';
+import { COVER_BASE_URL } from '../../utils/url';
+import { ProfileService } from '../../../core/services/profile.service';
+
+const STORAGE_KEY = 'next_playlist_tracks';
 
 @Component({
   selector: 'app-next-playlist',
@@ -18,8 +27,11 @@ import { Subscription } from 'rxjs';
   styleUrl: './next-playlist.component.scss',
 })
 export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('audioPlayer', { static: true }) audioPlayer!: ElementRef;
+  // @ViewChild('audioPlayer', { static: true }) audioPlayer!: ElementRef;
   @ViewChild('processBar', { static: true }) processBar!: ElementRef;
+
+  // Track all subscriptions
+  private subscriptions: Subscription[] = [];
   addTrackSubs!: Subscription;
   addTrackListSubs!: Subscription;
   playPauseTrackSubs!: Subscription;
@@ -38,165 +50,229 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
   originalTracks: any[] = [];
   repeatModes = ['off', 'one', 'all'];
   repeatModeIndex = 0;
+  coverUrl = COVER_BASE_URL;
   isShuffle: boolean = false;
   currentVolume: number = 50;
+  private isTriggeringFromInternal = false;
   isFirstTime: boolean = true;
+  playingFollowUserId = true;
   get repeatMode() {
     return this.repeatModes[this.repeatModeIndex];
   }
   constructor(
     private renderer: Renderer2,
-    private nextPlayListService: NextPlayListService
+    private nextPlayListService: NextPlayListService,
+    private audioPlayerService: AudioPlayerService,
+    private trackService: TrackService,
+    private authService: AuthService,
+    private likedTrackService: LikedTrackService,
+    private followService: FollowService,
+    private profileService: ProfileService
   ) {}
   ngOnInit(): void {
+    this.loadTracksFromStorage();
     this.currentVolume = 50;
 
+    // Store subscription references
     this.addTrackSubs = this.nextPlayListService.addTrackSubject.subscribe(
       (track: Track) => {
         if (track && track.id !== '0') {
-          this.tracks.push(track);
+          const profileSub = this.profileService
+            .getProfileById(track.userId)
+            .subscribe((res) => {
+              track.displayName = res.data.displayName;
+              this.tracks.push(track);
+              this.saveTracksToStorage();
+            });
+          this.subscriptions.push(profileSub);
         }
       }
     );
+
     this.addTrackListSubs =
       this.nextPlayListService.addTrackListSubject.subscribe(
         (tracks: Track[]) => {
           if (tracks && tracks.length > 0) {
-            this.tracks = tracks;
-            this.username = this.tracks[0].username;
-            this.audioUrl = this.tracks[0].fileName;
-            this.trackName = this.tracks[0].name;
+            const profileRequests = tracks.map((track) =>
+              this.profileService.getProfileById(track.userId)
+            );
+            const forkJoinSub = forkJoin(profileRequests).subscribe(
+              (responses) => {
+                responses.forEach((res, index) => {
+                  tracks[index].displayName = res.data.displayName;
+                });
+                this.tracks = tracks;
+                this.username = this.tracks[0].username;
+                this.audioUrl = this.tracks[0].fileName;
+                this.trackName = this.tracks[0].name;
+                this.saveTracksToStorage();
+              }
+            );
+            this.subscriptions.push(forkJoinSub);
           }
         }
       );
+
     this.playPauseTrackSubs =
       this.nextPlayListService.playPauseTrackInNextPLayListSubject.subscribe(
         (res) => {
-          let audioPlayerEl = this.audioPlayer.nativeElement;
-          console.log(this.currentIndex, res.index);
-          let selectedTrack = this.tracks[res.index];
-          console.log(selectedTrack);
+          const selectedTrack = this.tracks[res.index];
           if (!selectedTrack) return;
-          if (res.type === 'PLAY') {
-            if (this.currentIndex !== res.index) {
-              this.audioUrl = selectedTrack.fileName;
-              this.username = selectedTrack.username;
-              this.trackName = selectedTrack.name;
-              audioPlayerEl.load();
+
+          this.isTriggeringFromInternal = true; // Bắt đầu chặn vòng lặp
+
+          try {
+            if (res.type === 'PLAY') {
+              if (this.currentIndex !== res.index) {
+                this.username = selectedTrack.username;
+                this.trackName = selectedTrack.name;
+
+                this.audioPlayerService.playTrack(selectedTrack);
+              } else {
+                this.audioPlayerService.resume();
+              }
+            } else {
+              this.audioPlayerService.pause();
             }
-            audioPlayerEl.play();
-            this.isPlay = true;
-          } else {
-            audioPlayerEl.pause();
-            this.isPlay = false;
+
+            this.currentIndex = res.index;
+            this.isFirstTime = false;
+          } finally {
+            this.isTriggeringFromInternal = false; // Mở lại cho các update tiếp theo
           }
-          this.currentIndex = res.index;
-          this.isFirstTime = false;
         }
       );
-    this.nextPlayListService.addTrackListSubject.next([
-      {
-        id: '1',
-        name: 'My Song123123',
-        title: 'Awesome Track',
-        description: 'A great song to listen to',
-        fileName: 'assets/audios/NhuNgayHomQua.mp3',
-        coverImagePath: '/assets/image.png',
-        userId: '123',
-        duration: '03:45',
-        createdAt: '2024-03-17T12:00:00Z',
-        username: 'john_doe',
-      },
-      {
-        id: '2',
-        name: 'My Song 2',
-        title: 'Awesome Track 2',
-        description: 'A great song to listen to 2',
-        fileName: 'assets/audios/NoiNayCoAnh.mp3',
-        coverImagePath: '/assets/image.png',
-        userId: '123',
-        duration: '03:30',
-        createdAt: '2024-03-17T12:00:00Z',
-        username: 'john_doe',
-      },
-      {
-        id: '3',
-        name: 'My Song 3',
-        title: 'Awesome Track 2',
-        description: 'A great song to listen to 2',
-        fileName: 'assets/audios/NoiNayCoAnh.mp3',
-        coverImagePath: '/assets/image.png',
-        userId: '123',
-        duration: '03:30',
-        createdAt: '2024-03-17T12:00:00Z',
-        username: 'john_doe',
-      },
-      {
-        id: '4',
-        name: 'My Song 4',
-        title: 'Awesome Track 2',
-        description: 'A great song to listen to 2',
-        fileName: 'assets/audios/NoiNayCoAnh.mp3',
-        coverImagePath: '/assets/image.png',
-        userId: '123',
-        duration: '03:30',
-        createdAt: '2024-03-17T12:00:00Z',
-        username: 'john_doe',
-      },
-    ]);
+    // this.trackService
+    //   .getTracksByUserId(this.authService.getUserId() || '')
+    //   .subscribe((res) => {
+    //     this.nextPlayListService.addTrackListSubject.next(res.data);
+    //   });
+
     this.deleteByIndexSubs =
       this.nextPlayListService.deleteTrackByIndex.subscribe((trackIndex) => {
         this.tracks.splice(trackIndex, 1);
         console.log(trackIndex);
+        this.saveTracksToStorage();
       });
     this.deleteAllSubs = this.nextPlayListService.deleteAll.subscribe(() => {
       let currentTrack = this.tracks[this.currentIndex];
       this.tracks = [];
       this.tracks.push(currentTrack);
+      this.saveTracksToStorage();
     });
+
+    // Add AudioPlayerService subscriptions to tracking
+    this.subscriptions.push(
+      this.audioPlayerService.isPlaying$.subscribe((isPlaying) => {
+        this.isPlay = isPlaying;
+        if (!this.isTriggeringFromInternal) {
+          const followSub = this.checkFollow();
+          if (followSub) {
+            this.subscriptions.push(followSub);
+          }
+          this.nextPlayListService.playPauseTrackInNextPLayListSubject.next({
+            index: this.currentIndex,
+            type: isPlaying ? 'PLAY' : 'STOP',
+          });
+        }
+      })
+    );
+
+    this.subscriptions.push(
+      this.audioPlayerService.duration$.subscribe((duration) => {
+        this.duration = duration;
+      })
+    );
+
+    this.subscriptions.push(
+      this.audioPlayerService.currentTime$.subscribe((currentTime) => {
+        this.currentTime = currentTime;
+        this.updateProgress();
+      })
+    );
+
+    this.subscriptions.push(
+      this.audioPlayerService.audioEnded$.subscribe(() => {
+        this.onAudioEnded();
+      })
+    );
+
+    this.subscriptions.push(
+      this.audioPlayerService.currentTrack$.subscribe((track) => {
+        if (!track) return;
+        const isExisted = this.tracks.some((t) => t.id === track.id);
+        console.log(isExisted);
+        if (!isExisted) {
+          // this.tracks = JSON.parse(JSON.stringify(this.tracks));
+          this.tracks = [];
+          this.tracks.unshift(track);
+        }
+        if (track.belongToTrackListId) {
+          this.audioPlayerService.setCurrentTrackList(
+            track.belongToTrackListId
+          );
+        }
+        this.currentIndex = this.tracks.findIndex((t) => t.id === track.id);
+        const currentTrack = this.tracks[this.currentIndex];
+        this.trackName = currentTrack.title;
+        this.username = currentTrack.displayName || 'Unknown User';
+        this.saveTracksToStorage();
+      })
+    );
+  }
+  checkFollow() {
+    if (!this.tracks || this.tracks.length == 0) return;
+    const loggedUserId = this.authService.getUserId() || '';
+    const playingUserId = this.tracks[this.currentIndex].userId;
+    const sub = this.followService
+      .isFollowing(loggedUserId, playingUserId)
+      .subscribe((res) => {
+        this.playingFollowUserId = res.data;
+      });
+    return sub;
   }
   ngAfterViewInit(): void {}
   updateProgress() {
-    const audio = this.audioPlayer.nativeElement;
-    this.currentTime = audio.currentTime;
-    this.progress = (audio.currentTime / audio.duration) * 100;
-
+    this.progress = (this.currentTime / this.duration) * 100;
     this.renderer.setStyle(
       this.processBar.nativeElement,
       'width',
       `${Math.round(this.progress)}%`
     );
   }
-  setDuration() {
-    console.log(this.audioPlayer.nativeElement.duration);
-    this.duration = this.audioPlayer.nativeElement.duration;
-  }
+  // setDuration() {
+  //   console.log(this.audioPlayer.nativeElement.duration);
+  //   this.duration = this.audioPlayer.nativeElement.duration;
+  // }
   formatDuration(seconds: number): string {
     const minutes = Math.floor(seconds / 60);
     const sec = Math.floor(seconds % 60);
     return `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
   }
   togglePlay() {
-    const audio = this.audioPlayer.nativeElement;
-    if (audio.paused) {
-      audio.play();
-      this.isPlay = true;
+    // const audio = this.audioPlayer.nativeElement;
+    if (!this.isPlay) {
+      if (this.isFirstTime) {
+        this.audioPlayerService.playTrack(this.tracks[this.currentIndex]);
+        this.isFirstTime = false;
+      } else {
+        this.audioPlayerService.resume();
+      }
       this.emitStatusTrack(this.currentIndex, 'PLAY');
     } else {
-      audio.pause();
+      // audio.pause();
+      this.audioPlayerService.pause();
       this.emitStatusTrack(this.currentIndex, 'STOP');
-      this.isPlay = false;
     }
   }
   seekAudio(event: any) {
-    const audio = this.audioPlayer.nativeElement;
-
-    audio.currentTime = (event.target.value / 100) * audio.duration;
+    let currentTime = (event.target.value / 100) * this.duration;
+    this.audioPlayerService.seekTo(currentTime);
   }
   changeVolume(event: any) {
-    const audio = this.audioPlayer.nativeElement;
+    // const audio = this.audioPlayer.nativeElement;
     this.currentVolume = event.target.value;
-    audio.volume = this.currentVolume / 100;
+    this.audioPlayerService.setVolume(this.currentVolume / 100);
   }
   toggleNextUpList() {
     this.isOpenNextUpList = !this.isOpenNextUpList;
@@ -211,18 +287,14 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
   onPlayTrack(index: number) {
     let track: Track = this.tracks[index];
     if (!track) return;
-    const audio = this.audioPlayer.nativeElement;
-    this.audioUrl = track.fileName;
+
     this.username = track.username;
     this.trackName = track.name;
-    audio.load();
-    audio.play();
-    this.isPlay = true;
+    this.audioPlayerService.playTrack(track);
     this.currentIndex = index;
     this.emitStatusTrack(this.currentIndex, 'PLAY');
   }
   onAudioEnded() {
-    this.isPlay = false;
     if (
       this.repeatMode === 'off' &&
       this.currentIndex < this.tracks.length - 1
@@ -286,6 +358,10 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   ngOnDestroy(): void {
+    // Unsubscribe from all tracked subscriptions
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+
+    // Unsubscribe from main service subscriptions
     if (this.playPauseTrackSubs) {
       this.playPauseTrackSubs.unsubscribe();
     }
@@ -304,11 +380,75 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   toggleMute() {
     this.currentVolume = this.currentVolume > 0 ? 0 : 50;
-    const audio = this.audioPlayer.nativeElement;
-    audio.volume = this.currentVolume / 100;
+    this.audioPlayerService.setVolume(this.currentVolume / 100);
   }
   handleDropDrag(event: any) {
     this.tracks = event.tracks;
     this.currentIndex = event.currentIndex;
+    this.saveTracksToStorage();
+  }
+
+  toggleLike() {
+    const currentTrack = this.tracks[this.currentIndex];
+    console.log(currentTrack.isLiked);
+    const action = currentTrack.isLiked
+      ? this.likedTrackService.unLikeTrack(currentTrack.id)
+      : this.likedTrackService.likeTrack(currentTrack.id);
+
+    action.subscribe((res) => {
+      this.tracks[this.currentIndex].isLiked =
+        !this.tracks[this.currentIndex].isLiked;
+    });
+  }
+
+  toggleFollow() {
+    const loggedUserId = this.authService.getUserId() || '';
+    const playingUserId = this.tracks[this.currentIndex].userId;
+    const action = this.playingFollowUserId
+      ? this.followService.unfollowUser(playingUserId)
+      : this.followService.followUser({ followingId: playingUserId });
+    action.subscribe((res) => {
+      this.playingFollowUserId = !this.playingFollowUserId;
+    });
+  }
+
+  private loadTracksFromStorage() {
+    const storedTracks = localStorage.getItem(STORAGE_KEY);
+    if (storedTracks) {
+      const tracks = JSON.parse(storedTracks) as Track[];
+      if (tracks && tracks.length > 0) {
+        // Set initial track info
+        this.tracks = tracks;
+        const firstTrack = tracks[0];
+        this.currentIndex = 0;
+        this.username =
+          firstTrack.displayName || firstTrack.username || 'Unknown User';
+        this.trackName = firstTrack.title;
+        this.audioUrl = firstTrack.fileName;
+        this.isFirstTime = true;
+
+        // Load profiles for all tracks
+        const profileRequests = tracks.map((track: Track) =>
+          this.profileService.getProfileById(track.userId)
+        );
+
+        forkJoin(profileRequests).subscribe((responses: any[]) => {
+          responses.forEach((res: any, index: number) => {
+            this.tracks[index].displayName = res.data.displayName;
+          });
+          // Update first track display name if needed
+          this.username = this.tracks[0].displayName || 'Unknown User';
+        });
+      }
+    }
+  }
+
+  private saveTracksToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tracks));
+  }
+
+  onDeleteByTrackIndex(index: number) {
+    this.tracks.splice(index, 1);
+    this.saveTracksToStorage();
   }
 }

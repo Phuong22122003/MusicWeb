@@ -1,7 +1,10 @@
+import { GenreResponse } from './genre/genre_response.model';
+import { TagResponse } from './tag/tag_response.model';
+
 export interface Track {
   id: string;
   name: string;
-  title?: string | null;
+  title: string;
   description?: string;
   fileName: string;
   coverImagePath: string;
@@ -10,8 +13,13 @@ export interface Track {
   duration: string;
   createdAt: string;
   username: string;
-  liked?: number;
-  played?: number;
-  comment?: number;
   countPlay?: number;
+  countLike?: number;
+  countComment?: number;
+  tags?: TagResponse[];
+  genre?: GenreResponse;
+  displayName?: string;
+  isLiked?: boolean;
+  privacy?: string;
+  belongToTrackListId?: string;
 }

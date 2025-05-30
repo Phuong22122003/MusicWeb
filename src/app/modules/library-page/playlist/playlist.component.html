@@ -1,36 +1,37 @@
 <div class="mx-auto">
-    <div class="flex flex-row justify-between items-center py-[10px]" filter>
-        <h2 class="text-[18px] font-[100] text-[#999;]">Hear your own playlists and the playlists you’ve liked:</h2>
-        <div class="flex flex-row justify-between items-center gap-[20px]">
-            <input 
-                type="text" 
-                class="filter" 
-                placeholder="Filter"
-                style="line-height: 26px"
-            >
-            <ng-select
-            class="w-[135px] text-[var(--soundcould-color)]"
-            [items]="options"
-            [(ngModel)]="selectedOption"
-            [clearable]="false"
-            >
-            </ng-select>
-        </div>
+  <div class="flex flex-row justify-between items-center py-[10px]">
+    <h2 class="text-[18px] font-[100] text-[#999]">
+      Hear your own playlists and the playlists you’ve liked:
+    </h2>
+    <div class="flex flex-row justify-between items-center gap-[20px]">
+      <input
+        type="text"
+        class="filter"
+        placeholder="Filter"
+        style="line-height: 26px"
+        [(ngModel)]="searchText"
+        (ngModelChange)="filterPlaylists()"
+      />
+      <ng-select
+        class="w-[135px] text-[var(--soundcould-color)]"
+        [items]="options"
+        [(ngModel)]="selectedOption"
+        (change)="onOptionChange()"
+        [clearable]="false"
+      >
+      </ng-select>
     </div>
-    <div class="grid grid-cols-6  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 justify-between" playlist>
-        <app-related-track
-            class="flex-none mb-7"
-            *ngFor="let playlist of playlists"
-            [relatedTrack]="playlist"
-        ></app-related-track>
-    </div>
+  </div>
+
+  <div class="flex gap-4 flex-wrap">
+    <app-related-track
+      class="mb-7 flex-grow"
+      *ngFor="let playlist of playlists"
+      [relatedTrackInput]="playlist"
+      (unlikeEvent)="unlike($event)"
+    ></app-related-track>
+    @for (_ of placeholders; track $index) {
+    <app-track-card class="flex-grow"></app-track-card>
+    }
+  </div>
 </div>
-<!-- sm: - Khi màn hình có chiều rộng từ 640px trở lên.
-
-md: - Khi màn hình có chiều rộng từ 768px trở lên.
-
-lg: - Khi màn hình có chiều rộng từ 1024px trở lên.
-
-xl: - Khi màn hình có chiều rộng từ 1280px trở lên.
-
-2xl: - Khi màn hình có chiều rộng từ 1536px trở lên. -->

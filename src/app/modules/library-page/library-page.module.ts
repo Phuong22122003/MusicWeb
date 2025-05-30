@@ -11,7 +11,6 @@ import { LibraryRoutingModule } from './library-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
-import { FollowingItemComponent } from './following/following-item/following-item.component';
 import { LibraryComponent } from './library.component';
 import { LibraryTabComponent } from './library-tab/library-tab.component';
 
@@ -24,7 +23,6 @@ import { LibraryTabComponent } from './library-tab/library-tab.component';
     StationsComponent,
     FollowingComponent,
     HistoryComponent,
-    FollowingItemComponent,
     LibraryComponent,
     LibraryTabComponent,
   ],

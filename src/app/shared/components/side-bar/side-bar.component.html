@@ -13,41 +13,34 @@
   </div>
   <div>
     <div class="flex justify-between">
-      <h3 class="">Artirst you should follow</h3>
+      <h3 class="font-medium">Artist you should follow</h3>
       <span class="sidebarHeader__more__webi_style">Refresh list</span>
     </div>
-    <app-user-card></app-user-card>
+    @for (profile of profiles; track $index) {
+    <app-user-card
+      [avatar]="profile.avatar ? `${avatarUrl}/${profile.avatar}` : '/assets/images/user-placeholder.jpg'"
+      [followers]="profile.followerCount || 0"
+      [name]="profile.displayName"
+      [userId]="profile.userId"
+    ></app-user-card>
+    }
   </div>
   <div>
     <div class="flex justify-between">
-      <h3>24 Likes</h3>
-      <span class="sidebarHeader__more__webi_style">View all</span>
-    </div>
-    <div *ngFor="let sound of soundCards">
-      <app-sound-card
-        [author]="sound.author"
-        [songTitle]="sound.songTitle"
-        [playCount]="sound.playCount"
-        [likeCount]="sound.likeCount"
-        [repeatCount]="sound.repeatCount"
-        [commentCount]="sound.commentCount"
+      <h3 class="font-medium">Listening History</h3>
+      <span class="sidebarHeader__more__webi_style"
+        ><a [routerLink]="['/library', 'history']">View all</a></span
       >
-      </app-sound-card>
-    </div>
-  </div>
-  <div>
-    <div class="flex justify-between">
-      <h3>Listening history</h3>
-      <span class="sidebarHeader__more__webi_style">View all</span>
     </div>
     <div *ngFor="let sound of soundCards">
       <app-sound-card
-        [author]="sound.author"
-        [songTitle]="sound.songTitle"
-        [playCount]="sound.playCount"
+        [author]="sound.displayName"
+        [songTitle]="sound.title"
+        [playCount]="sound.countPlay"
         [likeCount]="sound.likeCount"
-        [repeatCount]="sound.repeatCount"
         [commentCount]="sound.commentCount"
+        [avatar]="sound.coverImageName"
+        [track]="sound"
       >
       </app-sound-card>
     </div>

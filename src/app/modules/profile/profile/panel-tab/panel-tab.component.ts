@@ -8,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { FollowService } from '../../../../core/services/follow.service';
 import { AuthService } from '../../../../core/services/auth-service';
@@ -26,7 +27,8 @@ export class PanelTabComponent implements OnInit, OnChanges {
 
   constructor(
     private authService: AuthService,
-    private followService: FollowService
+    private followService: FollowService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {

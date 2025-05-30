@@ -11,7 +11,7 @@
         <div class="text-sm text-gray-500">Following</div>
       </div>
       <div>
-        <div class="text-lg font-semibold">5</div>
+        <div class="text-lg font-semibold">{{ tracks.length }}</div>
         <div class="text-sm text-gray-500">Tracks</div>
       </div>
     </div>
@@ -32,7 +32,9 @@
           [routerLink]="['/profile', userProfile.userId]"
         >
           <img
-            [src]="userProfile.avatar || 'assets/images/image.png'"
+            [src]="
+              getAvatarUrl(userProfile.avatar) || 'assets/images/image.png'
+            "
             alt="User"
             class="rounded-full w-10 h-10"
           />

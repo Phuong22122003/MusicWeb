@@ -14,6 +14,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AlbumService } from '../../../../core/services/album.service';
 import { ApiResponse } from '../../../../core/models/api_response';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../../../core/services/auth-service';
+import { GenreResponse } from '../../../../core/models/genre/genre_response.model';
+import { TagResponse } from '../../../../core/models/tag/tag_response.model';
+import { TagService } from '../../../../core/services/tag_service';
+import { GenreService } from '../../../../core/services/genre_service';
 
 @Component({
   selector: 'app-upload-album',
@@ -41,27 +46,30 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
   selectedIndexToEdit: number = -1;
   metaData: any;
   editedImageUrl: string = '';
-  genres: any = [
-    { id: 1, name: 'Pop' },
-    { id: 2, name: 'Rock' },
-    { id: 3, name: 'Hip-Hop' },
-    { id: 4, name: 'Jazz' },
-  ];
-  tags: any = [
-    { id: 1, name: 'Tag 1' },
-    { id: 2, name: 'Tag 2' },
-    { id: 3, name: 'Tag 3' },
-    { id: 4, name: 'Tag 4' },
-  ];
+  userId: string = '';
+  genres: GenreResponse[] = [];
+  tags: TagResponse[] = [];
   albumTypes = ['EP', 'ALBUM'];
   isScroll = false;
   ngOnInit(): void {
     this.getTrackDetails();
+    const authUser = this.authService.getUserId();
+    if (!authUser) return;
+    this.userId = authUser;
+    this.tagService.getAllTags().subscribe((res) => {
+      this.tags = res.data;
+    });
+    this.genreService.getAllGenres().subscribe((res) => {
+      this.genres = res.data;
+    });
   }
 
   constructor(
     private albumService: AlbumService,
-    private toastr: ToastrService
+    private authService: AuthService,
+    private toastr: ToastrService,
+    private tagService: TagService,
+    private genreService: GenreService
   ) {}
 
   getTrackDetails() {
@@ -71,6 +79,7 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
   }
   onSubmitMetadata(metaData: any) {
     this.metaData = metaData;
+
     this.isScroll = true;
   }
   onSubmit() {
@@ -144,8 +153,9 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
   }
   onSubmitEdit(metaData: TrackCreation) {
     if (this.selectedIndexToEdit < 0) return;
-    this.trackCreations[this.selectedIndexToEdit] = metaData;
 
+    this.trackCreations[this.selectedIndexToEdit] = metaData;
+    this.trackCreations[this.selectedIndexToEdit].privacy = 'public';
     this.selectedIndexToEdit = -1;
   }
   onEditImage(image: File) {
@@ -204,10 +214,9 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
         srcAudio: audio.src,
         isPlay: false,
       });
-      console.log('vao dayyyy');
       this.pushTrackToList({
         title: trackFile.name.substring(0, trackFile.name.lastIndexOf('.')),
-        userId: 'user1',
+        userId: this.userId,
         privacy: 'public',
         mainArtists: 'user1',
         genreId: '',

@@ -3,11 +3,13 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   Output,
   QueryList,
   Renderer2,
+  SimpleChanges,
   ViewChildren,
 } from '@angular/core';
 import { NextPlayListService } from '../../../../core/services/next-play-list.service';
@@ -48,7 +50,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
     ]),
   ],
 })
-export class NextUpComponent implements OnInit, OnDestroy {
+export class NextUpComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChildren('appNextUp', { read: ElementRef })
   appNextUp!: QueryList<ElementRef>;
   @Input('isOpenNextUpList') isOpenNextUpList: boolean = false;
@@ -69,8 +71,12 @@ export class NextUpComponent implements OnInit, OnDestroy {
     private nextPlayListService: NextPlayListService,
     private renderer: Renderer2
   ) {}
-  ngOnInit(): void {
-    console.log(this.isFirstTime);
+  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (changes['tracks']) {
+      this.tracks = changes['tracks'].currentValue;
+    }
   }
   ngOnDestroy(): void {}
   trackById(index: number, track: any): number {

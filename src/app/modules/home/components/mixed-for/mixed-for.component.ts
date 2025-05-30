@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Track } from '../../../../core/models/track';
+import { RecommendedService } from '../../../../core/services/recommend_service';
+import { createPlaceholders } from '../../../../shared/utils/helper';
 
 @Component({
   selector: 'app-mixed-for',
@@ -8,25 +10,16 @@ import { Track } from '../../../../core/models/track';
   styleUrl: './mixed-for.component.scss',
 })
 export class MixedForComponent {
-  tracks!: Track[];
+  tracks: Track[] = [];
+  constructor(private recommendService: RecommendedService) {}
   ngOnInit(): void {
-    this.tracks = this.mockData();
+    this.recommendService.getMixedForUser().subscribe((res) => {
+      this.tracks = res.data;
+      console.log(this.tracks);
+    });
   }
-  mockData() {
-    const mock_tracks: Track[] = [];
-    for (let i = 0; i < 10; i++) {
-      const track: Track = {
-        id: `${i}`,
-        name: `Track${i}`,
-        userId: String(i),
-        username: 'user' + i,
-        fileName: './assets/audio/music.mp3',
-        coverImagePath: '/assets/images/image.png',
-        duration: '0:12',
-        createdAt: '01/01/2025',
-      };
-      mock_tracks.push(track);
-    }
-    return mock_tracks;
+
+  get placeholders(): any[] {
+    return createPlaceholders(this.tracks);
   }
 }

@@ -1,3 +1,3 @@
-<ng-container *ngFor="let album of albums;">
-    <app-album (play)="play($event)" [album]="album"></app-album>
+<ng-container *ngFor="let album of albums">
+  <app-track-list [tracklist]="album"></app-track-list>
 </ng-container>

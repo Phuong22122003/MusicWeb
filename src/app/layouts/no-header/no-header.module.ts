@@ -7,5 +7,6 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   declarations: [NoHeaderComponent],
   imports: [CommonModule, SharedModule, RouterModule],
+  exports: [NoHeaderComponent],
 })
 export class NoHeaderModule {}

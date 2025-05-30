@@ -12,6 +12,7 @@ export class UploadComponent implements OnInit {
   files: File[] = [];
   isUploadTrack = false;
   isUploadAlbum = false;
+
   ngOnInit(): void {}
   openFilePicker() {
     this.inputFiles.nativeElement.click();

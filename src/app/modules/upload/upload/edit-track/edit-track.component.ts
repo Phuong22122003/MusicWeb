@@ -8,6 +8,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { TagResponse } from '../../../../core/models/tag/tag_response.model';
+import { GenreResponse } from '../../../../core/models/genre/genre_response.model';
 
 @Component({
   selector: 'app-edit-track',
@@ -27,8 +29,8 @@ import {
 export class EditTrackComponent {
   Validators = Validators;
   @Input('trackCreation') trackCreation!: TrackCreation;
-  @Input('tagList') tagList = [];
-  @Input('genreList') genreList = [];
+  @Input('tagList') tagList: TagResponse[] = [];
+  @Input('genreList') genreList: GenreResponse[] = [];
   @Output() close = new EventEmitter<void>();
   @Output() submit = new EventEmitter<TrackCreation>();
   panelState: 'in' | 'out' = 'in';

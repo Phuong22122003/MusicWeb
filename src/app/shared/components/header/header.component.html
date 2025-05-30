@@ -4,7 +4,7 @@
       <li
         class="w-[69px] flex items-center justify-center cursor-pointer border-r border-[#111] bg-[linear-gradient(#f70,#f30)]"
       >
-        <a href="/" class=""
+        <a [routerLink]="['']" class=""
           ><img
             src="https://a-v2.sndcdn.com/assets/images/brand-1b72dd82.svg"
             alt=""
@@ -34,8 +34,14 @@
         class="relative min-w-[150px] w-[100%] h-[28px] rounded bg-white py-[5px] px-[7px]"
       >
         <form>
-          <input type="text" class="w-full outline-none" #searchBox (keydown.enter)="onSearch(searchBox.value)" placeholder="Search" />
-          <button type="button" class="cursor-pointer">
+          <input
+            type="text"
+            class="w-full outline-none"
+            #searchBox
+            (keydown.enter)="onSearch(searchBox.value)"
+            placeholder="Search"
+          />
+          <button type="button" class="cursor-pointer" aria-label="Search">
             <i
               class="fa-solid fa-magnifying-glass absolute right-2 top-1/2 transform -translate-y-1/2"
             ></i>
@@ -49,114 +55,141 @@
     >
       <li class="m-[10px]">
         <a
-          href="/"
-          class="bg-black text-white border-1 border-[rgb(255,85,0)] px-[10px] py-[2px] whitespace-nowrap"
+          [routerLink]="['']"
+          class="bg-black text-white border border-[#ff5500] px-4 py-2 rounded-full hover:bg-[#ff5500] transition-all duration-300 ease-in-out whitespace-nowrap font-medium"
           >Upgrade Now</a
         >
       </li>
       <li
-        class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer"
+        class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer transition-colors duration-200"
       >
         For Artists
       </li>
       <li
         routerLink="upload"
-        class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer"
+        class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer transition-colors duration-200"
       >
         Upload
       </li>
       <li
-        class="group cursor-pointer hover:bg-[#111] flex justify-between items-center px-[10px] py-[12px] gap-3 relative"
+        class="group cursor-pointer hover:bg-[#111] flex justify-between items-center px-[10px] py-[12px] gap-3 relative transition-all duration-200"
       >
         <img
-          [src]="
-            userProfile.avatar?.startsWith('https')
-              ? userProfile.avatar
-              : avatarUrl + '/' + userProfile.avatar
-          "
+          [src]="avatarUrl ? avatarUrl : '/assets/images/user-placeholder.jpg'"
           alt=""
-          class="rounded-full object-cover h-[26px] w-[26px]"
+          class="rounded-full object-cover h-[26px] w-[26px] ring-2 ring-transparent group-hover:ring-[#ff5500] transition-all duration-300"
         />
-        <i class="fa-solid fa-arrow-down text-white text-[8px]"></i>
+        <i
+          class="fa-solid fa-arrow-down text-white text-[8px] group-hover:rotate-180 transition-transform duration-300"
+        ></i>
         <ul
-          class="z-100 hidden absolute left-0 top-full border border-[#ccc] bg-[#fff] group-hover:block"
+          class="z-100 hidden absolute left-0 top-full border border-gray-200 bg-white shadow-lg rounded-md group-hover:block transform origin-top-right transition-transform duration-200 min-w-[200px]"
         >
           <li>
             <a
-              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
               [routerLink]="['/profile', userProfile.userId]"
             >
-              <i class="fa-solid fa-user"></i>
+              <i class="fa-solid fa-user text-[#ff5500]"></i>
               Profile
             </a>
           </li>
           <li>
             <a
-              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
               [routerLink]="['/library', 'likes']"
             >
-              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-heart text-[#E0245E]"></i>
               Likes
             </a>
           </li>
           <li>
             <a
-              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
               [routerLink]="['/library', 'playlists']"
             >
-              <i class="fa-solid fa-list"></i>
+              <i class="fa-solid fa-list text-[#1DB954]"></i>
               Playlists
             </a>
           </li>
           <li>
             <a
-              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
               [routerLink]="['/library', 'following']"
             >
-              <i class="fa-solid fa-person-walking-arrow-right"></i>
+              <i
+                class="fa-solid fa-person-walking-arrow-right text-[#1DA1F2]"
+              ></i>
               Following
             </a>
           </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
+          <li>
             <a
-              class="hover:bg-[#f2f2f2] block whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
               [routerLink]="['/library', 'following']"
             >
-              <i class="fa-solid fa-person-walking-arrow-loop-left"></i>
+              <i
+                class="fa-solid fa-person-walking-arrow-loop-left text-[#1DA1F2]"
+              ></i>
               Who to follow
             </a>
           </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-music"></i>
-            Tracks
+          <li>
+            <a
+              [routerLink]="['/you/tracks']"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
+            >
+              <i class="fa-solid fa-music text-[#ff5500]"></i>
+              Tracks
+            </a>
           </li>
-          <li
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
-          >
-            <i class="fa-solid fa-star"></i>
-            Insights
+          <li>
+            <a
+              [routerLink]="['/you', 'insights']"
+              class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
+            >
+              <i class="fa-solid fa-star text-[#FFD700]"></i>
+              Insights
+            </a>
           </li>
           <li
             (click)="onLogOut()"
-            class="hover:bg-[#f2f2f2] whitespace-nowrap text-xs text-[#333] font-bold py-2 px-[10px]"
+            class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200 cursor-pointer"
           >
-            <i class="fa-solid fa-arrows-up-down-left-right"></i>
+            <i class="fa-solid fa-arrows-up-down-left-right text-gray-600"></i>
             Logout
+          </li>
+          <li
+            *ngIf="isAdmin"
+            class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
+          >
+            <a [routerLink]="['/admin']" class="flex items-center gap-3">
+              <i class="fa-solid fa-right-from-bracket text-[#ff5500]"></i>
+              Admin
+            </a>
           </li>
         </ul>
       </li>
-      <li class="cursor-pointer">
+      <li class="cursor-pointer relative" (click)="toggleNotification()">
         <i
-          class="fa-solid fa-bell px-[10px] py-[12px] text-[#ccc] hover:text-[#fff]"
-        ></i>
+          class="notification-icon relative fa-solid fa-bell px-[10px] py-[12px] text-[#ccc] hover:text-[#fff] transition-colors duration-200"
+        >
+          <span
+            *ngIf="notificationCount > 0"
+            class="absolute -top-1 -right-1 text-xs text-white bg-[#ff5500] rounded-full w-5 h-5 flex items-center justify-center transform scale-100 hover:scale-110 transition-transform duration-200"
+          >
+            {{ notificationCount }}
+          </span>
+        </i>
+        <div
+          class="notification-area absolute top-full right-0 transform translate-y-2"
+        >
+          <app-notification [isOpen]="isOpenNotification"></app-notification>
+        </div>
       </li>
       <li class="cursor-pointer">
         <i
-          class="fa-solid fa-ellipsis px-[10px] py-[12px] text-[#ccc] hover:text-[#fff] text-2xl"
+          class="fa-solid fa-ellipsis px-[10px] py-[12px] text-[#ccc] hover:text-[#fff] text-2xl transition-colors duration-200"
         ></i>
       </li>
     </ul>

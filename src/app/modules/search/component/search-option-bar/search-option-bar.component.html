@@ -1,8 +1,44 @@
-<div class="h-full w-[360px]">
-    <ul class="options">
-        <li><a routerLinkActive="active-link" class="option" routerLink="tracks">Tracks</a></li>
-        <li><a routerLinkActive="active-link" class="option" routerLink="users">Users</a></li>
-        <li><a routerLinkActive="active-link" class="option" routerLink="playlists">Playlists</a></li>
-        <li><a routerLinkActive="active-link" class="option" routerLink="albums">Albums</a></li>
-    </ul>
+<div class="h-full">
+  <ul class="options">
+    <li>
+      <a
+        [routerLink]="['tracks']"
+        [queryParams]="query ? { q: query } : null"
+        routerLinkActive="active-link"
+        class="option"
+      >
+        Tracks
+      </a>
+    </li>
+    <li>
+      <a
+        [routerLink]="['users']"
+        [queryParams]="query ? { q: query } : null"
+        routerLinkActive="active-link"
+        class="option"
+      >
+        Users
+      </a>
+    </li>
+    <li>
+      <a
+        [routerLink]="['playlists']"
+        [queryParams]="query ? { q: query } : null"
+        routerLinkActive="active-link"
+        class="option"
+      >
+        Playlists
+      </a>
+    </li>
+    <li>
+      <a
+        [routerLink]="['albums']"
+        [queryParams]="query ? { q: query } : null"
+        routerLinkActive="active-link"
+        class="option"
+      >
+        Albums
+      </a>
+    </li>
+  </ul>
 </div>

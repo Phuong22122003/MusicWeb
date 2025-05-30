@@ -1,27 +1,3 @@
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
-<div>
-  <app-track-info-and-wave [trackAndWave]="track"></app-track-info-and-wave>
-</div>
+@for (item of tracks; track $index) {
+<app-track-info-and-wave [track]="item"></app-track-info-and-wave>
+}

@@ -1,4 +1,4 @@
-<div *ngIf="profile && track" class="bg-[#a3a3b6] px-8 py-4 flex gap-6">
+<div class="bg-[#a3a3b6] px-8 py-4 flex gap-6">
   <div id="top" class="ml-4 grow-7 flex flex-col justify-between">
     <div class="flex items-center justify-between">
       <div class="flex gap-2 items-center">
@@ -57,9 +57,11 @@
         </div>
         <div class="text-white flex flex-col gap-2">
           <span class="bg-[#212227] p-2">{{ track.title }}</span>
-          <span class="text-[#ccc] hover:text-white bg-[#212227] p-2">{{
-            profile.displayName
-          }}</span>
+          <span
+            class="text-[#ccc] hover:text-white bg-[#212227] p-2"
+            *ngIf="profile"
+            >{{ profile.displayName }}</span
+          >
         </div>
         <!-- <svg *ngIf="isPlaying"  width="48px" height="48px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M9 9H11V15H9V9Z" fill="white" />
@@ -71,15 +73,20 @@
       </div>
     </div>
     <app-wavesurfer
-      *ngIf="track"
-      [trackUrl]="trackBaseUrl + '/' + track.fileName"
-      [isPlay]="muted"
+      #waveform
+      [track]="track"
+      [isPlay]="!muted"
+      (playStateChanged)="changePlayState($event)"
     ></app-wavesurfer>
   </div>
   <div class="w-[340px] h-[340px]">
     <img
       class="w-full h-full object-cover"
-      [src]="track.coverImagePath || '/assets/images/image.png'"
+      [src]="
+        track.coverImageName
+          ? coverBaseUrl + '/' + track.coverImageName
+          : '/assets/images/music-placeholder.png'
+      "
       alt=""
     />
   </div>

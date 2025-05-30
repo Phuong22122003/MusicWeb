@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class FileService {
-  public avatarApi = `${environment.apiBaseUrl}/file-service/image/avatar`;
-  public coverApi = `${environment.apiBaseUrl}/file-service/image/cover`;
+  public avatarApi = `${environment.apiBaseUrl}/file-service/images/avatars`;
+  public coverApi = `${environment.apiBaseUrl}/file-service/images/covers`;
 
   constructor(private http: HttpClient) {}
 

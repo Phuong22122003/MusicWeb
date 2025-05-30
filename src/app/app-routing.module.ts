@@ -6,12 +6,21 @@ import { HomepageLogoutAndroidComponent } from './modules/homepage-signed-out/co
 import { MainModule } from './layouts/main/main.module';
 import { NoHeaderComponent } from './layouts/no-header/no-header.component';
 import { SocialLoginComponent } from './shared/components/social-login/social-login.component';
+import { AdminAuthGuard } from './core/services/admin-auth-guard';
 
 const routes: Routes = [
   {
     path: '',
     component: MainComponent,
     children: [
+      {
+        path: 'you/insights',
+        loadChildren: () =>
+          import('./modules/insight/insight.module').then(
+            (m) => m.InsightModule
+          ),
+        canActivate: [AuthGuard],
+      },
       {
         path: 'discover',
         loadChildren: () =>
@@ -44,7 +53,22 @@ const routes: Routes = [
           import('./modules/profile/profile.module').then(
             (m) => m.ProfileModule
           ),
-        canActivate: [],
+      },
+      {
+        path: 'you/insights',
+        loadChildren: () =>
+          import('./modules/insight/insight.module').then(
+            (m) => m.InsightModule
+          ),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'notifications',
+        loadChildren: () =>
+          import('./modules/notifications/notifications.module').then(
+            (m) => m.NotificationsModule
+          ),
+        canActivate: [AuthGuard],
       },
       {
         path: 'song/:trackId',
@@ -55,6 +79,22 @@ const routes: Routes = [
         canActivate: [],
       },
       { path: 'logout/android', component: HomepageLogoutAndroidComponent },
+      {
+        path: 'playlists/:tracklistId',
+        loadChildren: () =>
+          import('./modules/play-music/play-music.module').then(
+            (m) => m.PlayMusicModule
+          ),
+        canActivate: [],
+      },
+      {
+        path: 'albums/:tracklistId',
+        loadChildren: () =>
+          import('./modules/play-music/play-music.module').then(
+            (m) => m.PlayMusicModule
+          ),
+        canActivate: [],
+      },
       { path: '', redirectTo: '/home', pathMatch: 'full' },
     ],
   },
@@ -82,11 +122,23 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'admin',
+    loadChildren: () =>
+      import('./modules/admin/admin.module').then((m) => m.AdminModule),
+    canActivate: [AdminAuthGuard],
+  },
+  {
+    path: 'you/tracks',
+    loadChildren: () =>
+      import('./modules/track-management/track-management.module').then(
+        (m) => m.TrackManagementModule
+      ),
+  },
+  {
     path: 'error',
     loadChildren: () =>
       import('./layouts/errors/errors.module').then((m) => m.ErrorsModule),
   },
-
   { path: '**', redirectTo: 'error/404', pathMatch: 'full' },
 ];
 
