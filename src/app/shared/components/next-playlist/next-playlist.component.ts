@@ -18,7 +18,7 @@ import { FollowService } from '../../../core/services/follow.service';
 import { COVER_BASE_URL } from '../../utils/url';
 import { ProfileService } from '../../../core/services/profile.service';
 
-const STORAGE_KEY = 'next_playlist_tracks';
+const STORAGE_KEY = 'next_playlist_track_ids';
 
 @Component({
   selector: 'app-next-playlist',
@@ -413,33 +413,42 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private loadTracksFromStorage() {
-    const storedTracks = localStorage.getItem(STORAGE_KEY);
-    if (storedTracks) {
-      const tracks = JSON.parse(storedTracks) as Track[];
-      if (tracks && tracks.length > 0) {
-        // Set initial track info
-        this.tracks = tracks;
+    const storedTrackIds = localStorage.getItem(STORAGE_KEY);
+    if (storedTrackIds) {
+      const trackIds = JSON.parse(storedTrackIds) as string[];
+      if (trackIds && trackIds.length > 0) {
+        // Load full track data for each ID
+        this.trackService.getTracksByIds(trackIds).subscribe((response) => {
+          if (response.data) {
+            console.log(response.data);
+            this.tracks = response.data;
 
-        this.profileService
-          .getProfileByIds(tracks.map((track) => track.userId))
-          .subscribe((res) => {
-            this.tracks.forEach((track, index) => {
-              track.displayName = res.data[index].displayName;
-            });
+            // Load display names for all tracks
+            this.profileService
+              .getProfileByIds(this.tracks.map((track) => track.userId))
+              .subscribe((profileResponse) => {
+                this.tracks.forEach((track, index) => {
+                  track.displayName = profileResponse.data[index].displayName;
+                });
 
-            const firstTrack = tracks[0];
-            this.currentIndex = 0;
-            this.username = firstTrack.displayName || 'Unknown User';
-            this.trackName = firstTrack.title;
-            this.audioUrl = firstTrack.fileName;
-            this.isFirstTime = true;
-          });
+                // Set initial track info after all data is loaded
+                const firstTrack = this.tracks[0];
+                this.currentIndex = 0;
+                this.username = firstTrack.displayName || 'Unknown User';
+                this.trackName = firstTrack.title;
+                this.audioUrl = firstTrack.fileName;
+                this.isFirstTime = true;
+              });
+          }
+        });
       }
     }
   }
 
   private saveTracksToStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tracks));
+    // Only save track IDs to storage
+    const trackIds = this.tracks.map((track) => track.id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(trackIds));
   }
 
   onDeleteByTrackIndex(index: number) {

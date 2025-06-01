@@ -14,6 +14,7 @@ export class FollowService {
   private followChangeSubject = new Subject<{
     userId: string;
     action: 'follow' | 'unfollow';
+    initiatorId: string;
   }>();
   followChange$ = this.followChangeSubject.asObservable();
   constructor(private http: HttpClient) {}
@@ -21,6 +22,7 @@ export class FollowService {
   // 🔄 Follow user
   followUser(followData: {
     followingId: string;
+    initiatorId?: string;
   }): Observable<ApiResponse<any>> {
     return new Observable((observer) => {
       this.http.post<ApiResponse<any>>(this.baseAuthUrl, followData).subscribe({
@@ -28,6 +30,7 @@ export class FollowService {
           this.followChangeSubject.next({
             userId: followData.followingId,
             action: 'follow',
+            initiatorId: followData.initiatorId || '',
           });
           observer.next(res);
           observer.complete();
@@ -38,13 +41,20 @@ export class FollowService {
   }
 
   // 🚫 Unfollow user
-  unfollowUser(userId: string): Observable<ApiResponse<any>> {
+  unfollowUser(
+    userId: string,
+    initiatorId?: string
+  ): Observable<ApiResponse<any>> {
     return new Observable((observer) => {
       this.http
         .delete<ApiResponse<any>>(`${this.baseAuthUrl}/unfollow/${userId}`)
         .subscribe({
           next: (res) => {
-            this.followChangeSubject.next({ userId, action: 'unfollow' });
+            this.followChangeSubject.next({
+              userId,
+              action: 'unfollow',
+              initiatorId: initiatorId || '',
+            });
             observer.next(res);
             observer.complete();
           },
