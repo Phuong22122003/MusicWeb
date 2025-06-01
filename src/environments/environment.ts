@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8888/api',
-  fileApi: `http://localhost:8888/api/file-service`,
+  apiBaseUrl:
+    'https://specializing-outsourcing-latvia-pas.trycloudflare.com/api',
+  fileApi: `https://specializing-outsourcing-latvia-pas.trycloudflare.com/api/file-service`,
+  notificationApi: `https://defensive-ie-caught-outstanding.trycloudflare.com`,
 };

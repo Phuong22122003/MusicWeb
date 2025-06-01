@@ -6,6 +6,8 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { TrackCreation } from '../../../../core/models/TrackCreation';
@@ -19,6 +21,16 @@ import { GenreResponse } from '../../../../core/models/genre/genre_response.mode
 import { TagResponse } from '../../../../core/models/tag/tag_response.model';
 import { TagService } from '../../../../core/services/tag_service';
 import { GenreService } from '../../../../core/services/genre_service';
+import { Router } from '@angular/router';
+
+interface TrackFile {
+  file: File;
+  tempId: string;
+}
+
+interface TrackCreationWithId extends TrackCreation {
+  tempId: string;
+}
 
 @Component({
   selector: 'app-upload-album',
@@ -28,14 +40,14 @@ import { GenreService } from '../../../../core/services/genre_service';
 })
 export class UploadAlbumComponent implements OnInit, OnDestroy {
   Validators = Validators;
-  @Input('trackFiles') trackFiles!: File[];
+  @Input('trackFiles') inputTrackFiles!: File[];
   @ViewChild('uploadedTracksSection') uploadedTracksSection!: ElementRef;
   @ViewChild('audio') audio!: ElementRef;
 
   selectedImageFile!: File;
   isOpenEditPanel = false;
   formatDuration = formatDuration;
-  trackCreations: TrackCreation[] = [];
+  trackCreations: TrackCreationWithId[] = [];
   currentIndex: number | null = null;
   infoTrackList: {
     duration: number;
@@ -51,6 +63,16 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
   tags: TagResponse[] = [];
   albumTypes = ['EP', 'ALBUM'];
   isScroll = false;
+  trackFiles: TrackFile[] = [];
+  isSubmitting = false;
+  showTrackSection = false;
+
+  get hasInvalidTracks(): boolean {
+    return this.trackCreations.some(
+      (track) => !track.title || track.title.trim().length === 0
+    );
+  }
+
   ngOnInit(): void {
     this.getTrackDetails();
     const authUser = this.authService.getUserId();
@@ -69,33 +91,38 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private toastr: ToastrService,
     private tagService: TagService,
-    private genreService: GenreService
+    private genreService: GenreService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   getTrackDetails() {
-    this.trackFiles.forEach((file) => {
+    this.inputTrackFiles.forEach((file) => {
       this.extractInfoFromTrackFile(file);
     });
   }
   onSubmitMetadata(metaData: any) {
     this.metaData = metaData;
+    this.showTrackSection = true;
 
-    this.isScroll = true;
+    // Sử dụng setTimeout để đảm bảo DOM đã được cập nhật
+    setTimeout(() => {
+      this.scrollToSection();
+    });
   }
   onSubmit() {
     let isInvalid = this.trackCreations.some(
       (trackCreation) => trackCreation.title.length <= 0
     );
-    if (isInvalid) return;
-    console.log(
-      this.metaData,
-      this.trackCreations,
-      this.trackFiles,
-      this.selectedImageFile
-    );
+    if (isInvalid) {
+      this.toastr.error('Please fill in all track titles');
+      return;
+    }
+
+    this.isSubmitting = true;
+
     const formData = new FormData();
     // 1. Meta data (AlbumRequest)
-
     formData.append(
       'meta-data',
       new Blob([JSON.stringify(this.metaData)], { type: 'application/json' })
@@ -114,39 +141,50 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
       })
     );
 
-    // 4. Track files (MP3,...)
-    this.trackFiles.forEach((file) => {
-      formData.append('track-files', file);
+    // 4. Track files (MP3,...) - Add files in the same order as trackCreations
+    this.trackCreations.forEach((track) => {
+      const matchingFileObj = this.trackFiles.find(
+        (tf) => tf.tempId === track.tempId
+      );
+      if (matchingFileObj) {
+        formData.append('track-files', matchingFileObj.file);
+      }
     });
 
     // 5. Gửi request
     this.albumService.uploadAlbum(formData).subscribe({
       next: (res: ApiResponse<any>) => {
         this.showSuccess('Upload thành công');
-        console.log(res);
+        this.router.navigate(['/']);
       },
       error: (err: ApiResponse<any>) => {
         this.showFail('Upload thất bại:' + err.message);
-        console.log(err);
+        this.isSubmitting = false;
+        this.showTrackSection = false;
+        this.metaData = null; // Reset metadata to force user to resubmit form
       },
     });
   }
   scrollToSection() {
+    if (!this.uploadedTracksSection) return;
+
     this.uploadedTracksSection.nativeElement.scrollIntoView({
       behavior: 'smooth',
     });
-    this.isScroll = false;
   }
-  ngAfterViewChecked() {
-    if (this.metaData && this.uploadedTracksSection && this.isScroll) {
-      this.scrollToSection();
-    }
-  }
+
   onDeleteTrack(index: number) {
     URL.revokeObjectURL(this.infoTrackList[index].srcAudio);
+    const deletedTrack = this.trackCreations[index];
     this.trackCreations.splice(index, 1);
     this.infoTrackList.splice(index, 1);
-    this.trackFiles.splice(index, 1);
+    // Remove from trackFiles using tempId
+    const fileIndex = this.trackFiles.findIndex(
+      (tf) => tf.tempId === deletedTrack.tempId
+    );
+    if (fileIndex !== -1) {
+      this.trackFiles.splice(fileIndex, 1);
+    }
   }
   onEditTrack(index: number) {
     this.selectedIndexToEdit = index;
@@ -154,8 +192,12 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
   onSubmitEdit(metaData: TrackCreation) {
     if (this.selectedIndexToEdit < 0) return;
 
-    this.trackCreations[this.selectedIndexToEdit] = metaData;
-    this.trackCreations[this.selectedIndexToEdit].privacy = 'public';
+    const existingTempId = this.trackCreations[this.selectedIndexToEdit].tempId;
+    this.trackCreations[this.selectedIndexToEdit] = {
+      ...metaData,
+      tempId: existingTempId,
+      privacy: 'public',
+    };
     this.selectedIndexToEdit = -1;
   }
   onEditImage(image: File) {
@@ -198,13 +240,13 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
     if (inputFile.files && inputFile.files.length > 0) {
       for (const file of inputFile.files) {
         this.extractInfoFromTrackFile(file);
-        this.trackFiles.push(file);
       }
     }
   }
   extractInfoFromTrackFile(trackFile: File) {
     const audio = new Audio();
     const objectURL = URL.createObjectURL(trackFile);
+    const tempId = Math.random().toString(36).substr(2, 9);
 
     audio.src = objectURL;
     audio.addEventListener('loadedmetadata', () => {
@@ -214,25 +256,21 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
         srcAudio: audio.src,
         isPlay: false,
       });
-      this.pushTrackToList({
+
+      const newTrack: TrackCreationWithId = {
         title: trackFile.name.substring(0, trackFile.name.lastIndexOf('.')),
         userId: this.userId,
         privacy: 'public',
         mainArtists: 'user1',
         genreId: '',
         tagIds: [],
-      });
+        tempId: tempId,
+      };
+      this.trackCreations.push(newTrack);
+
+      // Store file with its tempId
+      this.trackFiles.push({ file: trackFile, tempId: tempId });
     });
-  }
-  pushTrackToList(track: TrackCreation) {
-    track = {
-      ...track,
-      tempId: Math.random().toString(36).substr(2, 9),
-    } as TrackCreation;
-    this.trackCreations.push(track);
-  }
-  closeEditTrack() {
-    this.selectedIndexToEdit = -1;
   }
   drop(event: CdkDragDrop<any>) {
     moveItemInArray(
@@ -257,5 +295,9 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
 
   showFail(msg: string) {
     this.toastr.error(msg, 'Fail');
+  }
+
+  closeEditTrack() {
+    this.selectedIndexToEdit = -1;
   }
 }

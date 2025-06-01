@@ -37,6 +37,7 @@ export class DynamicFormComponent implements OnInit {
     dataSelect?: any;
   }[] = [];
   @Input() key!: string;
+  @Input() disabled: boolean = false;
   @Output() submit = new EventEmitter<{ [key: string]: any }>();
   @Output() image = new EventEmitter<File>();
   form!: FormGroup;

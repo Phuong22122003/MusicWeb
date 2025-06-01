@@ -52,6 +52,7 @@ export class RecommendedService {
       .pipe(
         catchError(this.errorHandlerService.handleError),
         switchMap((res) => {
+          console.log(res);
           return this.trackEnricher
             .enrichTracksWithDisplayNames(res.data)
             .pipe(map((enrichedTracks) => ({ ...res, data: enrichedTracks })));

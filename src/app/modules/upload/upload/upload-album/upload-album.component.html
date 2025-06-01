@@ -1,5 +1,6 @@
 <div class="max-w-[1140px] mx-auto">
   <app-dynamic-form
+    [disabled]="isSubmitting"
     (submit)="onSubmitMetadata($event)"
     (image)="onEditImage($event)"
     [formFields]="[{
@@ -77,7 +78,11 @@
       validators: [Validators.required],
     }]"
   ></app-dynamic-form>
-  <div class="mt-12" *ngIf="metaData" #uploadedTracksSection>
+  <div
+    class="mt-12"
+    *ngIf="metaData && showTrackSection"
+    #uploadedTracksSection
+  >
     <div class="flex flex-col gap-4">
       <div class="text-lg font-semibold mb-4">Uploaded Tracks</div>
       <div
@@ -153,20 +158,26 @@
       ><span class="text-[#121212] font-semibold">Add tracks</span></label
     >
     <button
+      [disabled]="isSubmitting"
       type="button"
       (click)="onSubmit()"
       class="ml-auto w-[150px] bg-black h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#009b49] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 text-[#fff]"
     >
-      Submit
+      <span *ngIf="!isSubmitting">Submit</span>
+      <div *ngIf="isSubmitting" class="flex items-center gap-2">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        <span>Uploading...</span>
+      </div>
     </button>
   </div>
 </div>
 <audio #audio src="" hidden></audio>
 <app-edit-track
   *ngIf="selectedIndexToEdit >= 0"
-  (close)="closeEditTrack()"
+  (close)="selectedIndexToEdit = -1"
   (submit)="onSubmitEdit($event)"
   [trackCreation]="trackCreations[selectedIndexToEdit]"
   [genreList]="genres"
   [tagList]="tags"
+  [disabled]="isSubmitting"
 ></app-edit-track>

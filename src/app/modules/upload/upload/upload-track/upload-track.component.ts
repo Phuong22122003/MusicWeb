@@ -12,6 +12,7 @@ import { TagService } from '../../../../core/services/tag_service';
 import { GenreService } from '../../../../core/services/genre_service';
 import { TagResponse } from '../../../../core/models/tag/tag_response.model';
 import { GenreResponse } from '../../../../core/models/genre/genre_response.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-track',
@@ -27,6 +28,17 @@ export class UploadTrackComponent implements OnInit {
   genres: GenreResponse[] = [];
   tags: TagResponse[] = [];
   loggedUserId: string = '';
+  isSubmitting = false;
+
+  constructor(
+    private musicService: MusicService,
+    private authService: AuthService,
+    private toast: ToastrService,
+    private tagService: TagService,
+    private genreService: GenreService,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
     this.loggedUserId = this.authService.getUserId() || '';
     this.tagService.getAllTags().subscribe((res) => {
@@ -37,41 +49,38 @@ export class UploadTrackComponent implements OnInit {
     });
   }
 
-  constructor(
-    private musicService: MusicService,
-    private authService: AuthService,
-    private toast: ToastrService,
-    private tagService: TagService,
-    private genreService: GenreService
-  ) {}
   onEditImage(image: File) {
     this.selectedImageFile = image;
   }
-  onSubmitMetadata(metaData: any) {
-    this.metaData = metaData;
-    console.log(metaData);
-    this.uploadTrack();
-  }
 
-  uploadTrack() {
-    if (!this.loggedUserId) return;
+  onSubmitMetadata(metaData: any) {
+    this.isSubmitting = true;
+
+    if (!this.loggedUserId) {
+      this.isSubmitting = false;
+      return;
+    }
+
     const trackRequest: TrackRequest = {
       countPlay: 0,
-      privacy: this.metaData.privacy,
-      title: this.metaData.title,
-      genreId: this.metaData.genre || '',
-      tagIds: this.metaData.tags || [],
-      description: this.metaData.description,
+      privacy: metaData.privacy,
+      title: metaData.title,
+      genreId: metaData.genre || '',
+      tagIds: metaData.tags || [],
+      description: metaData.description,
       userId: this.loggedUserId,
     };
+
     this.musicService
       .uploadTrack(this.selectedImageFile, this.trackFile, trackRequest)
       .subscribe({
-        next: (res) => {
-          this.toast.success('Add track successfully');
+        next: (response) => {
+          this.toast.success('Upload thành công');
+          this.router.navigate(['/']);
         },
-        error: (err) => {
-          this.toast.error(err);
+        error: (error) => {
+          this.toast.error('Upload thất bại: ' + error.message);
+          this.isSubmitting = false;
         },
       });
   }

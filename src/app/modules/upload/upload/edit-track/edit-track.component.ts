@@ -31,26 +31,29 @@ export class EditTrackComponent {
   @Input('trackCreation') trackCreation!: TrackCreation;
   @Input('tagList') tagList: TagResponse[] = [];
   @Input('genreList') genreList: GenreResponse[] = [];
+  @Input('disabled') disabled: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() submit = new EventEmitter<TrackCreation>();
   panelState: 'in' | 'out' = 'in';
   result!: TrackCreation;
-  onSubmit(result: any) {
-    this.result = {
-      mainArtists: result['mainArtists'],
-      privacy: result['privacy'],
-      title: result['trackTitle'],
-      userId: result['useId'],
-      description: result['description'],
-      genreId: result['genre'],
-      tagIds: result['tags'],
-    };
+  formData: any;
 
-    this.panelState = 'out';
-    setTimeout(() => {
-      this.submit.emit(this.result);
-    }, 300);
+  onSubmit(data?: any) {
+    if (data) {
+      this.formData = data;
+    }
+    if (!this.formData) return;
+
+    const updatedTrack: TrackCreation = {
+      ...this.trackCreation,
+      title: this.formData.title,
+      genreId: this.formData.genre || '',
+      tagIds: this.formData.tags || [],
+      description: this.formData.description,
+    };
+    this.submit.emit(updatedTrack);
   }
+
   onClose(event: Event) {
     event.stopPropagation();
     this.panelState = 'out';

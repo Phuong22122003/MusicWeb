@@ -14,8 +14,6 @@ import { ProfileService } from '../../../../core/services/profile.service';
 import { UserProfile } from '../../../../core/models/user_profile';
 import getAvatarUrl from '../../../../shared/utils/get-avatar-url';
 
-import { AVATAR_BASE_URL } from '../../../../shared/utils/url';
-
 @Component({
   selector: 'app-send-comment',
   standalone: false,
@@ -29,7 +27,7 @@ export class SendCommentComponent implements OnInit {
   loggedUserId: string | null = '';
   commentText: string = '';
   avatarUrl = '';
-  avatarBaseUrl = AVATAR_BASE_URL;
+
   constructor(
     private commentService: CommentService,
     private authService: AuthService,

@@ -198,6 +198,7 @@ export class NotificationsListComponent implements OnInit, OnDestroy {
   loadData() {
     this.notificationService.getNotificationIds().subscribe({
       next: (response) => {
+        console.log(response);
         this.allIds = response.data;
         this.loadMoreNotifications();
       },

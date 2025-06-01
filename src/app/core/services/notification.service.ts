@@ -18,11 +18,12 @@ import {
 import { ProfileService } from './profile.service';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ApiResponse } from '../models/api_response';
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  private baseUrl = 'http://localhost:8087';
+  private baseUrl = environment.notificationApi;
   private stompClient: CompatClient | null = null;
   private connected = false;
   private messageSubject = new BehaviorSubject<Notification | null>(null);
