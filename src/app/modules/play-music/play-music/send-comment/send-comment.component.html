@@ -3,7 +3,11 @@
   <div class="w-[40px] h-[40px] rounded-full">
     <img
       class="w-full h-full object-cover rounded-full"
-      [src]="avatarUrl"
+      [src]="
+        avatarUrl
+          ? avatarBaseUrl + '/' + avatarUrl
+          : 'assets/images/user-placeholder.jpg'
+      "
       alt=""
     />
   </div>

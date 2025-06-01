@@ -10,6 +10,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { NoHeaderModule } from './layouts/no-header/no-header.module';
 import { MainModule } from './layouts/main/main.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { MainModule } from './layouts/main/main.module';
     CoreModule,
     SharedModule,
     HttpClientModule,
+    MatSnackBarModule,
   ],
   providers: [provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],

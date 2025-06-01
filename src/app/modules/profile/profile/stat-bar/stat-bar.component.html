@@ -23,7 +23,11 @@
         class="flex justify-between items-center font-semibold text-sm border-b pb-2"
       >
         <span>{{ followings.length }} FOLLOWING</span>
-        <a href="#" class="text-blue-600 hover:underline text-xs">View all</a>
+        <a
+          (click)="showComingSoon()"
+          class="cursor-pointer text-blue-600 hover:underline text-xs"
+          >View all</a
+        >
       </div>
       @for (userProfile of followings; track userProfile.userId) {
       <div class="cursor-pointer flex items-center mt-4 gap-3">
@@ -67,11 +71,13 @@
           src="assets\icons\appstore_badge.png"
           alt="App Store"
           class="h-10"
+          (click)="showComingSoon()"
         />
         <img
           src="assets\icons\google_play_badge.png"
           alt="Google Play"
           class="h-10"
+          (click)="showComingSoon()"
         />
       </div>
     </div>

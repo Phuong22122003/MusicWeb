@@ -53,14 +53,15 @@
       *ngIf="isLoggedIn && userProfile; else noLoggedIn"
       class="flex items-center justify-between"
     >
-      <li class="m-[10px]">
+      <li class="m-[10px] cursor-pointer">
         <a
-          [routerLink]="['']"
           class="bg-black text-white border border-[#ff5500] px-4 py-2 rounded-full hover:bg-[#ff5500] transition-all duration-300 ease-in-out whitespace-nowrap font-medium"
+          (click)="showComingSoon()"
           >Upgrade Now</a
         >
       </li>
       <li
+        (click)="showComingSoon()"
         class="hover:text-white px-[10px] py-[12px] text-[rgb(204,204,204)] cursor-pointer transition-colors duration-200"
       >
         For Artists
@@ -126,7 +127,7 @@
           <li>
             <a
               class="flex items-center gap-3 hover:bg-gray-50 text-gray-700 block whitespace-nowrap text-sm font-medium py-3 px-4 transition-colors duration-200"
-              [routerLink]="['/library', 'following']"
+              (click)="showComingSoon()"
             >
               <i
                 class="fa-solid fa-person-walking-arrow-loop-left text-[#1DA1F2]"
@@ -187,7 +188,7 @@
           <app-notification [isOpen]="isOpenNotification"></app-notification>
         </div>
       </li>
-      <li class="cursor-pointer">
+      <li class="cursor-pointer" (click)="showComingSoon()">
         <i
           class="fa-solid fa-ellipsis px-[10px] py-[12px] text-[#ccc] hover:text-[#fff] text-2xl transition-colors duration-200"
         ></i>

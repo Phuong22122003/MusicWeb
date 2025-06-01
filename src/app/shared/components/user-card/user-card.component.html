@@ -1,11 +1,17 @@
 <div class="flex items-center justify-between gap-1 p-3">
   <!-- Avatar + Name -->
   <div>
-    <img [src]="avatar" alt="Avatar" class="w-10 h-10 rounded-full" />
+    <a [routerLink]="['/profile', userId]">
+      <img [src]="avatar" alt="Avatar" class="w-10 h-10 rounded-full" />
+    </a>
   </div>
 
   <div class="flex flex-grow-1 flex-col items-start space-x-3">
-    <p class="font-semibold text-gray-800">{{ name }}</p>
+    <a
+      [routerLink]="['/profile', userId]"
+      class="font-semibold text-gray-800"
+      >{{ name }}</a
+    >
     <div class="flex space-x-3 text-gray-500 text-sm">
       <div class="flex">
         <img class="w-5 h-5" src="/assets/svg/people-svgrepo-com.svg" alt="" />

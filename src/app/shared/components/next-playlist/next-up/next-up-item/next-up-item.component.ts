@@ -13,7 +13,7 @@ import { NextPlayListService } from '../../../../../core/services/next-play-list
 import { COVER_BASE_URL } from '../../../../utils/url';
 import { LikedTrackService } from '../../../../../core/services/liked-track.service';
 import { AuthService } from '../../../../../core/services/auth-service';
-
+import { UiNotificationService } from '../../../../../core/services/ui-notification.service';
 @Component({
   selector: 'app-next-up-item',
   standalone: false,
@@ -31,7 +31,8 @@ export class NextUpItemComponent implements OnInit {
     private nextPlayListService: NextPlayListService,
     private renderer: Renderer2,
     private likedTrackService: LikedTrackService,
-    private authService: AuthService
+    private authService: AuthService,
+    private uiNotification: UiNotificationService
   ) {}
   ngOnInit(): void {
     this.nextPlayListService.playPauseTrackInNextPLayListSubject.subscribe(
@@ -70,7 +71,8 @@ export class NextUpItemComponent implements OnInit {
     // }, 300);
     this.deleteEvent.emit(this.trackIndex);
   }
-  toggleLike() {
+  toggleLike(event: any) {
+    event.stopPropagation();
     const loggedId = this.authService.getUserId() || '';
     if (loggedId === this.track.userId) return;
     const action = this.track.isLiked
@@ -80,5 +82,9 @@ export class NextUpItemComponent implements OnInit {
     action.subscribe((res) => {
       this.track.isLiked = !this.track.isLiked;
     });
+  }
+  showComingSoon(event: any) {
+    event.stopPropagation();
+    this.uiNotification.showComingSoon();
   }
 }

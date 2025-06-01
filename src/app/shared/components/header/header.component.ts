@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import getImageUrl from '../../utils/get-avatar-url';
 import { NotificationService } from '../../../core/services/notification.service';
+import { UiNotificationService } from '../../../core/services/ui-notification.service';
 @Component({
   selector: 'app-header',
   standalone: false,
@@ -27,7 +28,8 @@ export class HeaderComponent implements OnInit {
     private profileService: ProfileService,
     private router: Router,
     private notificationService: NotificationService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private uiNotification: UiNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -90,5 +92,8 @@ export class HeaderComponent implements OnInit {
         this.isOpenNotification = false;
       }
     }
+  }
+  showComingSoon() {
+    this.uiNotification.showComingSoon();
   }
 }

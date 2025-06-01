@@ -96,3 +96,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: red;
 }
 
+// Custom Snackbar Styles
+.custom-snackbar {
+  background: #3f51b5;
+  color: white;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.info-snackbar {
+  background: #2196f3;
+  color: white;
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+

@@ -419,26 +419,21 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
       if (tracks && tracks.length > 0) {
         // Set initial track info
         this.tracks = tracks;
-        const firstTrack = tracks[0];
-        this.currentIndex = 0;
-        this.username =
-          firstTrack.displayName || firstTrack.username || 'Unknown User';
-        this.trackName = firstTrack.title;
-        this.audioUrl = firstTrack.fileName;
-        this.isFirstTime = true;
 
-        // Load profiles for all tracks
-        const profileRequests = tracks.map((track: Track) =>
-          this.profileService.getProfileById(track.userId)
-        );
+        this.profileService
+          .getProfileByIds(tracks.map((track) => track.userId))
+          .subscribe((res) => {
+            this.tracks.forEach((track, index) => {
+              track.displayName = res.data[index].displayName;
+            });
 
-        forkJoin(profileRequests).subscribe((responses: any[]) => {
-          responses.forEach((res: any, index: number) => {
-            this.tracks[index].displayName = res.data.displayName;
+            const firstTrack = tracks[0];
+            this.currentIndex = 0;
+            this.username = firstTrack.displayName || 'Unknown User';
+            this.trackName = firstTrack.title;
+            this.audioUrl = firstTrack.fileName;
+            this.isFirstTime = true;
           });
-          // Update first track display name if needed
-          this.username = this.tracks[0].displayName || 'Unknown User';
-        });
       }
     }
   }

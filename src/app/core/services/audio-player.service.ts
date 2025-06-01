@@ -66,14 +66,13 @@ export class AudioPlayerService implements OnDestroy {
     const volume = Math.max(0, Math.min(1, value));
     this.audio.volume = volume;
   }
-  playTrack(track: Track) {
+  playTrack(track: Track, justUpdate: boolean = false) {
     if (this.currentTrackSubject.value?.id === track.id) {
       this.resume();
       return;
     }
     this.audio.src = `${this.trackUrl}/${track.fileName}`;
     this.audio.load();
-
     const onCanPlayThrough = () => {
       this.audio.removeEventListener('canplaythrough', onCanPlayThrough);
       this.audio

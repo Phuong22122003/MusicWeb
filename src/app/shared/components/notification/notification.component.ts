@@ -15,7 +15,7 @@ import {
   getNotificationType,
   navigateToNotification,
 } from '../../utils/helper';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-notification',

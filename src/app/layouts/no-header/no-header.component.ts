@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'app-no-header',
   templateUrl: './no-header.component.html',

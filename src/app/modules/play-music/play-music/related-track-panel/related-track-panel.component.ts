@@ -7,7 +7,7 @@ import { TrackStatisticsService } from '../../../../core/services/track-statisti
 import { forkJoin } from 'rxjs';
 import { LikedTrackService } from '../../../../core/services/liked-track.service';
 import { environment } from '../../../../../environments/environment';
-
+import { UiNotificationService } from '../../../../core/services/ui-notification.service';
 @Component({
   selector: 'app-related-track-panel',
   standalone: false,
@@ -24,7 +24,8 @@ export class RelatedTrackPanelComponent implements OnInit {
     private trackService: TrackService,
     private profileService: ProfileService,
     private trackStatisticsService: TrackStatisticsService,
-    private likedTrackService: LikedTrackService
+    private likedTrackService: LikedTrackService,
+    private uiNotification: UiNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -67,5 +68,8 @@ export class RelatedTrackPanelComponent implements OnInit {
             });
         }
       });
+  }
+  showComingSoon() {
+    this.uiNotification.showComingSoon();
   }
 }

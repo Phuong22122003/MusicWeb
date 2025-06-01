@@ -17,7 +17,7 @@ import { TrackStatisticsService } from '../../../../core/services/track-statisti
 import { TrackService } from '../../../../core/services/track.service';
 import { Track } from '../../../../core/models/track';
 import getAvatarUrl from '../../../../shared/utils/get-avatar-url';
-
+import { UiNotificationService } from '../../../../core/services/ui-notification.service';
 @Component({
   selector: 'app-stat-bar',
   standalone: false,
@@ -35,7 +35,8 @@ export class StatBarComponent implements OnInit, OnChanges {
     private followService: FollowService,
     private toast: ToastrService,
     private authService: AuthService,
-    private trackService: TrackService
+    private trackService: TrackService,
+    private uiNotification: UiNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -81,5 +82,8 @@ export class StatBarComponent implements OnInit, OnChanges {
 
   getAvatarUrl(avatar: string | null) {
     return getAvatarUrl(avatar as string, null);
+  }
+  showComingSoon() {
+    this.uiNotification.showComingSoon();
   }
 }
