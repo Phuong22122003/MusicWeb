@@ -59,9 +59,16 @@
       <button
         (click)="onCheckUsername()"
         type="button"
-        class="cursor-pointer w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        class="w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [disabled]="isLoading"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed': isLoading,
+          'opacity-100 cursor-pointer': !isLoading
+        }"
       >
-        Continue
+        @if (isLoading) {
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        } Continue
       </button>
       <span
         class="text-end block text-[#044DD2] text-[12px] font-medium mb-[16px]"
@@ -155,9 +162,16 @@
       <button
         (click)="onSignIn()"
         type="button"
-        class="cursor-pointer w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [disabled]="isLoading"
+        class="w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed': isLoading,
+          'opacity-100 cursor-pointer': !isLoading
+        }"
       >
-        Sign In
+        @if (isLoading) {
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        } Sign In
       </button>
       <span
         class="hover:text-[#333] cursor-pointer text-end block text-[#044DD2] text-[12px] font-medium"
@@ -285,9 +299,16 @@
       <button
         (click)="onSignUp()"
         type="button"
-        class="cursor-pointer w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [disabled]="isLoading"
+        class="w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed': isLoading,
+          'opacity-100 cursor-pointer': !isLoading
+        }"
       >
-        Accept & Continue
+        @if (isLoading) {
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        } Accept & Continue
       </button>
     </div>
     } @default {

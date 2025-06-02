@@ -13,20 +13,7 @@ import { TrackStatisticsService } from '../../../../../core/services/track-stati
 })
 export class TrackTabComponent implements OnInit {
   routePath = '';
-  // track: TrackAndWave = {
-  //   id: '1',
-  //   name: 'My Song123123',
-  //   file_path: 'assets/audios/NhuNgayHomQua.mp3',
-  //   cover_image_path:
-  //     'https://i1.sndcdn.com/artworks-L0HsMyzKHuyVgijn-GawcCA-t500x500.jpg',
-  //   user_id: '123',
-  //   duration: '03:45',
-  //   create_at: '2024-03-17T12:00:00Z',
-  //   username: 'john_doe',
-  //   liked: 150,
-  //   played: 2000,
-  //   comment: 45,
-  // };
+  isLoading = false;
   tracks: Track[] = [];
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +22,7 @@ export class TrackTabComponent implements OnInit {
     private trackStatisticService: TrackStatisticsService
   ) {}
   ngOnInit(): void {
+    this.isLoading = true;
     const routePath = this.route.snapshot.url[0]?.path;
     const userId = this.route.parent?.snapshot.paramMap.get('userId');
     if (!userId) return;
@@ -42,15 +30,18 @@ export class TrackTabComponent implements OnInit {
     if (routePath === 'tracks') {
       this.trackService.getTracksByUserId(userId).subscribe((res) => {
         this.tracks = res.data;
+        this.isLoading = false;
       });
     } else {
+      const userId = this.route.parent?.snapshot.paramMap.get('userId');
+      if (!userId) return;
       this.trackStatisticService
-        .getUserTopTracks(null, null)
+        .getUserTopTracks(userId, null, null)
         .subscribe((res) => {
           this.tracks = res.data
             .map((track) => track.track)
             .filter((track) => track !== null);
-          console.log(this.tracks);
+          this.isLoading = false;
         });
     }
   }

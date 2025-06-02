@@ -28,8 +28,7 @@ export class UploadTrackComponent implements OnInit {
   genres: GenreResponse[] = [];
   tags: TagResponse[] = [];
   loggedUserId: string = '';
-  isSubmitting = false;
-
+  isLoading = false;
   constructor(
     private musicService: MusicService,
     private authService: AuthService,
@@ -54,10 +53,7 @@ export class UploadTrackComponent implements OnInit {
   }
 
   onSubmitMetadata(metaData: any) {
-    this.isSubmitting = true;
-
     if (!this.loggedUserId) {
-      this.isSubmitting = false;
       return;
     }
 
@@ -70,17 +66,18 @@ export class UploadTrackComponent implements OnInit {
       description: metaData.description,
       userId: this.loggedUserId,
     };
-
+    this.isLoading = true;
     this.musicService
       .uploadTrack(this.selectedImageFile, this.trackFile, trackRequest)
       .subscribe({
         next: (response) => {
+          this.isLoading = false;
           this.toast.success('Upload thành công');
           this.router.navigate(['/']);
         },
         error: (error) => {
           this.toast.error('Upload thất bại: ' + error.message);
-          this.isSubmitting = false;
+          this.isLoading = false;
         },
       });
   }

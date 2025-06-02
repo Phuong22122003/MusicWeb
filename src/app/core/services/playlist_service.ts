@@ -51,7 +51,6 @@ export class PlaylistService {
                   type: 'playlist',
                   displayName: profileRes.displayName,
                 };
-                console.log(trackList);
                 return JSON.parse(JSON.stringify(trackList));
               })
             )

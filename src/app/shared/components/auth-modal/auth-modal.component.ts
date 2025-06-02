@@ -10,6 +10,7 @@ import { AuthService } from '../../../core/services/auth-service';
 import { UserCreation } from '../../../core/models/UserCreation';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
 enum Scene {
   EnterUserName,
   EnterPasswordNewAccount,
@@ -24,6 +25,7 @@ enum Scene {
   styleUrl: './auth-modal.component.scss',
 })
 export class AuthModalComponent {
+  isLoading = false;
   Scene = Scene;
   username: string = '';
   password: string = '';
@@ -44,6 +46,7 @@ export class AuthModalComponent {
   displayMessage = '';
   isOpen = true;
   isClosing = false;
+  BaseUrl = environment.apiBaseUrl;
   @Output() modalClosed = new EventEmitter<void>();
   constructor(
     private authService: AuthService,
@@ -51,12 +54,14 @@ export class AuthModalComponent {
     private toast: ToastrService
   ) {}
   onCheckUsername() {
+    this.isLoading = true;
     if (this.username.length < 3) {
       this.usernameMessage = 'User is at least 3 characters';
       return;
     }
     this.authService.checkUsernameExisted(this.username).subscribe({
       next: (res) => {
+        this.isLoading = false;
         if (res.data['existed']) {
           this.currentScene = Scene.EnterPasswordExistedAccount;
         } else {
@@ -64,6 +69,7 @@ export class AuthModalComponent {
         }
       },
       error: (err) => {
+        this.isLoading = false;
         console.log(err);
       },
     });
@@ -74,6 +80,7 @@ export class AuthModalComponent {
     this.password = '';
   }
   onSignIn() {
+    this.isLoading = true;
     if (this.password.length < 8) {
       this.passwordMessage = 'Enter a valid password. (at least 8 characters)';
       return;
@@ -82,11 +89,13 @@ export class AuthModalComponent {
       .login({ username: this.username, password: this.password })
       .subscribe({
         next: (res) => {
+          this.isLoading = false;
           this.authService.saveToken(res.data['token']);
           this.router.navigate(['/discover']);
           this.onCloseModal();
         },
         error: (err) => {
+          this.isLoading = false;
           this.passwordMessage = err.message;
         },
       });
@@ -158,7 +167,7 @@ export class AuthModalComponent {
     }
 
     if (!isValid) return;
-
+    this.isLoading = true;
     let user: UserCreation = {
       username: this.username,
       password: this.password,
@@ -173,13 +182,14 @@ export class AuthModalComponent {
 
     this.authService.register(user).subscribe({
       next: (value) => {
+        this.isLoading = false;
         this.toast.success('Register successfully', 'Success');
         this.router.navigate(['home']);
         this.onCloseModal();
       },
       error: (err) => {
+        this.isLoading = false;
         console.log(err);
-
         if (err['code'] === 1014) {
           this.emailMessage = 'Email existed';
         }
@@ -187,7 +197,6 @@ export class AuthModalComponent {
     });
   }
   loginWithGoogle() {
-    window.location.href =
-      'http://localhost:8888/api/identity/oauth2/authorization/google';
+    window.location.href = `${this.BaseUrl}/identity/oauth2/authorization/google`;
   }
 }

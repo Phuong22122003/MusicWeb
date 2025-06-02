@@ -6,6 +6,7 @@ import { Color, ScaleType } from '@swimlane/ngx-charts';
 import { formatDate } from '../../shared/utils/helper';
 import { ProfileService } from '../../core/services/profile.service';
 import { TopTrack } from '../../core/models/statistic/statistic.model';
+import { AuthService } from '../../core/services/auth-service';
 
 @Component({
   selector: 'app-insight',
@@ -58,7 +59,8 @@ export class InsightComponent implements OnInit {
 
   constructor(
     private statisticsService: TrackStatisticsService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -200,8 +202,10 @@ export class InsightComponent implements OnInit {
     }
   }
   getTopTracks(fromDate: string | null, toDate: string | null) {
+    const userId = this.authService.getUserId();
+    if (!userId) return;
     this.statisticsService
-      .getUserTopTracks(fromDate, toDate)
+      .getUserTopTracks(userId, fromDate, toDate)
       .subscribe((res) => {
         this.topTracks = res.data;
       });

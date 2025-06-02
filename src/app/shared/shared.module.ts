@@ -38,6 +38,7 @@ import { EditTrackComponent } from './components/track-action/edit-track/edit-tr
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { FollowingCircleComponent } from './components/following-circle/following-circle.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { LoadingComponent } from './components/loading/loading.component';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -71,6 +72,7 @@ import { NotificationComponent } from './components/notification/notification.co
     FormatDatePipe,
     FollowingCircleComponent,
     NotificationComponent,
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -111,6 +113,7 @@ import { NotificationComponent } from './components/notification/notification.co
     FormatDatePipe,
     FollowingCircleComponent,
     NotificationComponent,
+    LoadingComponent,
   ],
 })
 export class SharedModule {}

@@ -31,6 +31,7 @@ export class StatBarComponent implements OnInit, OnChanges {
   followers: UserProfile[] = [];
   tracks: Track[] = [];
   avatarUrl = '';
+  isOwner = false;
   constructor(
     private followService: FollowService,
     private toast: ToastrService,
@@ -43,6 +44,7 @@ export class StatBarComponent implements OnInit, OnChanges {
     if (this.userId) {
       this.loadFollowData();
     }
+    this.isOwner = this.authService.getUserId() === this.userId;
   }
 
   ngOnChanges(changes: SimpleChanges): void {

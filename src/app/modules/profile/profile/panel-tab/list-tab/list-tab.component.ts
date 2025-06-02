@@ -18,7 +18,7 @@ import { AlbumService } from '../../../../../core/services/album.service';
 })
 export class ListTabComponent implements OnInit {
   trackLists: TrackList[] = [];
-
+  isLoading = false;
   constructor(
     private playlistService: PlaylistService,
     private dialog: MatDialog,
@@ -31,10 +31,10 @@ export class ListTabComponent implements OnInit {
     if (!userId) return;
     if (routePath === 'playlists') {
       this.playlistService.getAllPlaylists(userId).subscribe((res) => {
-        console.log(res.data);
         this.trackLists = [...res.data];
       });
     } else {
+      console.log('albums');
       this.albumService.getAlbumsByUserId(userId).subscribe((res) => {
         this.trackLists = [...res.data];
       });

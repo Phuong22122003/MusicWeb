@@ -1,6 +1,6 @@
 <div>
   <app-dynamic-form
-    [disabled]="isSubmitting"
+    [disabled]="isLoading"
     (image)="onEditImage($event)"
     (submit)="onSubmitMetadata($event)"
     [formFields]="[{

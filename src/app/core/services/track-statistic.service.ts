@@ -138,6 +138,7 @@ export class TrackStatisticsService {
 
   // User Top Tracks
   getUserTopTracks(
+    userId: string,
     fromDate: string | null,
     toDate: string | null
   ): Observable<ApiResponse<TopTrack[]>> {
@@ -145,7 +146,9 @@ export class TrackStatisticsService {
     if (fromDate && toDate) {
       params = params.set('from_date', fromDate).set('to_date', toDate);
     }
-
+    if (userId) {
+      params = params.set('user_id', userId);
+    }
     return this.http.get<ApiResponse<TopTrack[]>>(
       `${this.userStatisticUrl}/top-tracks`,
       { params }
