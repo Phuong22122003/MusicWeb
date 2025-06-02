@@ -38,6 +38,7 @@ export class CommentItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.userProfile);
     if (this.authService.getUserId()) {
       this.loggedUserId = this.authService.getUserId() as string;
       this.profileService.getProfileById(this.loggedUserId).subscribe((res) => {

@@ -51,7 +51,6 @@ export class TrackListComponent implements OnInit, OnDestroy {
     private audioPlayerService: AudioPlayerService
   ) {}
   ngOnInit(): void {
-    console.log(this.tracklist);
     this.currentTrack = this.tracklist.tracks[0];
     this.audioPlayerService.currentTrack$.subscribe((track) => {
       const index = this.tracklist.tracks.findIndex(
@@ -77,20 +76,17 @@ export class TrackListComponent implements OnInit, OnDestroy {
     this.togglePlay();
   }
   updatePlay(isPlay: boolean) {
-    // this.isPlaying = isPlay;
+    this.isPlaying = isPlay;
   }
   togglePlay() {
     const currentTrack = this.audioPlayerService.getCurrentTrack();
     const isCurrent = currentTrack?.id === this.currentTrack.id;
-
-    if (isCurrent) {
-      if (this.isPlaying) {
-        this.audioPlayerService.pause();
-      } else {
-        this.audioPlayerService.playTrack(this.currentTrack);
-      }
+    console.log(currentTrack, this.currentTrack);
+    if (isCurrent && this.isPlaying) {
+      this.audioPlayerService.pause();
     } else {
       this.audioPlayerService.playTrack(this.currentTrack);
+      console.log(this.audioPlayerService.getCurrentTrack());
     }
   }
 

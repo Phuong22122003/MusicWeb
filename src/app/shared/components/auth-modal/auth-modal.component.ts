@@ -197,6 +197,6 @@ export class AuthModalComponent {
     });
   }
   loginWithGoogle() {
-    window.location.href = `${this.BaseUrl}/identity/oauth2/authorization/google`;
+    window.location.href = `http://localhost:8080/identity/oauth2/authorization/google`;
   }
 }

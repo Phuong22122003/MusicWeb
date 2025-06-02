@@ -124,7 +124,12 @@ export class ListActionComponent implements OnChanges {
     this.isCopy = true;
   }
   toggleLike() {
-    if (this.loggedUserId === this.tracklist.userId) return;
+    if (
+      this.tracklist.type !== 'album' &&
+      this.tracklist.userId === this.loggedUserId
+    ) {
+      return;
+    }
     const currentlyLiked = this.tracklist.isLiked;
 
     const onSuccess = () => {

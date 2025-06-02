@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { UserProfile } from '../../core/models/user_profile';
 import { ProfileService } from '../../core/services/profile.service';
 import { AVATAR_BASE_URL } from '../../shared/utils/url';
+import { TagService } from '../../core/services/tag_service';
+import { GenreService } from '../../core/services/genre_service';
 
 @Component({
   selector: 'app-track-management',
@@ -38,7 +40,9 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private authService: AuthService,
     private router: Router,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private tagService: TagService,
+    private genreService: GenreService
   ) {}
   ngOnInit(): void {
     this.userId = this.authService.getUserId() || '';
@@ -61,6 +65,7 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
   }
 
   async updateFormField() {
+    console.log('updateFormField', this.trackToEdit);
     this.isUpdateFormDone = false;
     let coverImageValue: File | undefined;
     if (this.trackToEdit.coverImageName) {
@@ -69,7 +74,8 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
       );
       this.coverImage = coverImageValue;
     }
-
+    const genre = (await firstValueFrom(this.genreService.getAllGenres())).data;
+    const tags = (await firstValueFrom(this.tagService.getAllTags())).data;
     this.formField = [
       {
         name: 'image',
@@ -100,9 +106,9 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
         type: 'select',
         placeholder: 'Select a genre',
         options: {
-          defaultValue: this.trackToEdit.genre,
+          defaultValue: this.trackToEdit.genre?.id,
         },
-        dataSelect: [],
+        dataSelect: genre,
       },
       {
         columnSpan: 2,
@@ -111,9 +117,9 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
         type: 'multi-select',
         placeholder: 'Select tags',
         options: {
-          defaultValue: this.trackToEdit.tags,
+          defaultValue: this.trackToEdit.tags?.map((tag) => tag.id),
         },
-        dataSelect: [],
+        dataSelect: tags,
       },
       {
         columnSpan: 2,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { ErrorHandlerService } from './error-handler-service';
 import { ApiResponse } from '../models/api_response';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { UserProfile } from '../models/user_profile';
 import { environment } from '../../../environments/environment';
 export interface ProfileUpdateRequest {
@@ -53,6 +53,13 @@ export class ProfileService {
   }
 
   getProfileByIds(ids: string[]): Observable<ApiResponse<UserProfile[]>> {
+    if (ids.length === 0) {
+      return of({
+        code: 200,
+        message: 'Success',
+        data: [],
+      });
+    }
     let params = new HttpParams();
     ids.forEach((id) => {
       params = params.append('userIds', id);

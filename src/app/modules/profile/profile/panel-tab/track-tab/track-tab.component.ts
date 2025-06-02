@@ -24,25 +24,27 @@ export class TrackTabComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     const routePath = this.route.snapshot.url[0]?.path;
-    const userId = this.route.parent?.snapshot.paramMap.get('userId');
-    if (!userId) return;
-
-    if (routePath === 'tracks') {
-      this.trackService.getTracksByUserId(userId).subscribe((res) => {
-        this.tracks = res.data;
-        this.isLoading = false;
-      });
-    } else {
-      const userId = this.route.parent?.snapshot.paramMap.get('userId');
-      if (!userId) return;
-      this.trackStatisticService
-        .getUserTopTracks(userId, null, null)
-        .subscribe((res) => {
-          this.tracks = res.data
-            .map((track) => track.track)
-            .filter((track) => track !== null);
-          this.isLoading = false;
-        });
-    }
+    this.route.parent?.params.subscribe((params) => {
+      this.isLoading = true;
+      if (params['userId']) {
+        if (routePath === 'tracks') {
+          this.trackService
+            .getTracksByUserId(params['userId'])
+            .subscribe((res) => {
+              this.tracks = res.data;
+              this.isLoading = false;
+            });
+        } else {
+          this.trackStatisticService
+            .getUserTopTracks(params['userId'], null, null)
+            .subscribe((res) => {
+              this.tracks = res.data
+                .map((track) => track.track)
+                .filter((track) => track !== null);
+              this.isLoading = false;
+            });
+        }
+      }
+    });
   }
 }

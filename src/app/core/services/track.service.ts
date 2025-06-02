@@ -41,6 +41,9 @@ export class TrackService {
     this.trackPlaySubject.next(payload);
   }
   private enrichTracksWithDisplayNames(tracks: Track[]): Observable<Track[]> {
+    if (tracks.length === 0) {
+      return of([]);
+    }
     const userIds = [...new Set(tracks.map((track) => track.userId))];
     const profileRequests = userIds.map((userId) =>
       this.profileService.getProfileById(userId).pipe(
@@ -138,11 +141,11 @@ export class TrackService {
     return this.http
       .get<ApiResponse<Track[]>>(`${this.apiUrl}/users/${userId}`)
       .pipe(
-        switchMap((res) =>
-          this.enrichTracksWithDisplayNames(res.data).pipe(
+        switchMap((res) => {
+          return this.enrichTracksWithDisplayNames(res.data).pipe(
             map((tracks) => ({ ...res, data: tracks }))
-          )
-        ),
+          );
+        }),
         catchError(this.errorHandlerService.handleError)
       );
   }

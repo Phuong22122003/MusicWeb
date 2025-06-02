@@ -16,7 +16,7 @@ export class AudioPlayerService implements OnDestroy {
   private isTrackInListPlayingSubject = new BehaviorSubject<boolean>(false);
   private durationSubject = new BehaviorSubject<number>(0);
   private audioEndedSubject = new BehaviorSubject<void>(undefined);
-
+  public isLoadWavFileSubject = new BehaviorSubject<boolean>(false);
   // Observable streams
   currentTrack$ = this.currentTrackSubject.asObservable();
   currentTrackList$ = this.currentTrackListSubject.asObservable();
@@ -25,7 +25,6 @@ export class AudioPlayerService implements OnDestroy {
   isTrackInListPlaying$ = this.isTrackInListPlayingSubject.asObservable();
   duration$ = this.durationSubject.asObservable();
   audioEnded$ = this.audioEndedSubject.asObservable();
-
   private onTimeUpdate = () => {
     this.currentTimeSubject.next(this.audio.currentTime);
   };
@@ -93,6 +92,38 @@ export class AudioPlayerService implements OnDestroy {
 
     this.audio.addEventListener('canplaythrough', onCanPlayThrough);
   }
+  // playTrack(track: Track, justUpdate: boolean = false) {
+  //   if (this.currentTrackSubject.value?.id === track.id) {
+  //     this.resume();
+  //     return;
+  //   }
+  //   this.audio.src = `${this.trackUrl}/${track.fileName}`;
+  //   this.audio.load();
+  //   this.isLoadWavFileSubject.subscribe((isLoadWavFile) => {
+  //     if (isLoadWavFile) {
+  //       const onCanPlayThrough = () => {
+  //         this.audio.removeEventListener('canplaythrough', onCanPlayThrough);
+  //         this.audio
+  //           .play()
+  //           .then(() => {
+  //             if (track.belongToTrackListId) {
+  //               this.currentTrackListSubject.next(track.belongToTrackListId);
+  //               this.isTrackInListPlayingSubject.next(true);
+  //             }
+  //             this.currentTrackSubject.next(track);
+  //             this.isPlayingSubject.next(true);
+  //             this.historyService.listenTrack(track.id);
+  //             this.isLoadWavFileSubject.unsubscribe();
+  //           })
+  //           .catch((err) => {
+  //             console.error('Playback error:', err);
+  //             this.isLoadWavFileSubject.unsubscribe();
+  //           });
+  //       };
+  //       this.audio.addEventListener('canplaythrough', onCanPlayThrough);
+  //     }
+  //   });
+  // }
 
   setCurrentTrackList(trackListId: string) {
     this.currentTrackListSubject.next(trackListId);

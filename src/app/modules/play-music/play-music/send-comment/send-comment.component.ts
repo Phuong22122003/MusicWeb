@@ -53,7 +53,7 @@ export class SendCommentComponent implements OnInit {
       userId: this.loggedUserId,
       likeCount: 0,
     };
-
+    console.log(commentReq);
     this.commentService.addComment(commentReq).subscribe({
       next: () => {
         this.commentText = '';

@@ -97,7 +97,6 @@ export class TrackActionComponent implements OnInit {
   ];
 
   onToggleLike(): void {
-    if (this.loggedUserId === this.track.userId) return;
     const action: Observable<ApiResponse<boolean>> = this.isLiked
       ? this.likedTrackService.unLikeTrack(this.track.id)
       : this.likedTrackService.likeTrack(this.track.id);
