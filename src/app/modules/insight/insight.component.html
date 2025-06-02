@@ -87,7 +87,7 @@
     {{ getDisplayText() }}
     <a
       *ngFor="let topTrack of topTracks; let i = index"
-      [routerLink]="['/track', topTrack.track.id]"
+      [routerLink]="['/song', topTrack.track.id]"
       class="flex gap-2 mt-4 relative hover:bg-gray-100 p-2 cursor-pointer"
     >
       <img

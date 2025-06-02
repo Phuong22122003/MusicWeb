@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { FollowService } from '../../../../core/services/follow.service';
 import { UserProfile } from '../../../../core/models/user_profile';
@@ -37,14 +37,18 @@ export class StatBarComponent implements OnInit, OnChanges {
     private toast: ToastrService,
     private authService: AuthService,
     private trackService: TrackService,
-    private uiNotification: UiNotificationService
+    private uiNotification: UiNotificationService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     if (this.userId) {
       this.loadFollowData();
     }
-    this.isOwner = this.authService.getUserId() === this.userId;
+
+    this.route.params.subscribe((params) => {
+      this.isOwner = this.authService.getUserId() === params['userId'];
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
