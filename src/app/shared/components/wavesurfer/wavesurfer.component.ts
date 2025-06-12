@@ -117,11 +117,11 @@ export class WavesurferComponent implements OnInit, AfterViewInit, OnChanges {
   //   this.isSubscribedToState = false;
   // }
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['track'] && !changes['track'].firstChange) {
+    if (changes['track']) {
       const newTrack: Track = changes['track'].currentValue;
-
+      console.log(newTrack);
       // Re-init WaveSurfer
-      this.initWavesurfer(this.isCurrent);
+      // this.initWavesurfer(true);
 
       // Load new track
       const newUrl = `${TRACK_BASE_URL}/${newTrack.fileName}`;
