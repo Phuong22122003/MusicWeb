@@ -130,6 +130,9 @@ export class WavesurferComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private changeUrl(url: string) {
+    if (!this.wavesurfer) {
+      return;
+    }
     this.wavesurfer.load(url);
     this.wavesurfer.once('ready', () => {
       this.duration = this.wavesurfer.getDuration();

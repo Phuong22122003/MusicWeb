@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from './profile.service';
-import { ErrorHandlerService } from './error-handler-service';
 import { catchError, forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { Track } from '../models/track';
 import { ApiResponse } from '../models/api_response';
@@ -19,7 +18,6 @@ export class RecommendedService {
   constructor(
     private http: HttpClient,
     private profileService: ProfileService,
-    private errorHandlerService: ErrorHandlerService,
     private trackEnricher: TrackEnricherService
   ) {}
 
@@ -50,7 +48,6 @@ export class RecommendedService {
     return this.http
       .get<ApiResponse<Track[]>>(`${this.baseUrl}/mixed-for`)
       .pipe(
-        catchError(this.errorHandlerService.handleError),
         switchMap((res) => {
           console.log(res);
           return this.trackEnricher
@@ -72,8 +69,7 @@ export class RecommendedService {
               data: tracksWithDisplayName,
             }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -120,8 +116,7 @@ export class RecommendedService {
               data: tracksWithDisplayName,
             }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
   getArtistYouShouldKnow(): Observable<ApiResponse<UserProfile[]>> {

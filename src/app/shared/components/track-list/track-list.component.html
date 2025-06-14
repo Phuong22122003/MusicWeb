@@ -75,9 +75,9 @@
         </a>
       </div>
       <div>
-        <div class="upload-time text-sm text-gray-400">
-          {{ tracklist.releaseDate | timeAgo }}
-        </div>
+        <!-- <div class="upload-time text-sm text-gray-400">
+          {{ tracklist.createdTime | timeAgo }}
+        </div> -->
         <div
           *ngIf="tracklist.tags && tracklist.tags.length > 0"
           class="tag px-3 py-1 rounded-[10px] bg-[#f3f3f3]"

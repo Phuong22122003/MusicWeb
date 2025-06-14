@@ -18,7 +18,6 @@ export class LikedPlaylistService {
 
   constructor(
     private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService,
     private profileService: ProfileService
   ) {}
 
@@ -49,27 +48,28 @@ export class LikedPlaylistService {
               data: trackLists,
             }))
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
 
   isLiked(playlistId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .get<ApiResponse<boolean>>(`${this.apiUrl}/is_liked/${playlistId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<boolean>>(
+      `${this.apiUrl}/is_liked/${playlistId}`
+    );
   }
 
   likePlaylist(playlistId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${this.apiUrl}/like/${playlistId}`, {})
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<boolean>>(
+      `${this.apiUrl}/like/${playlistId}`,
+      {}
+    );
   }
 
   unLikePlaylist(playlistId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${this.apiUrl}/unlike/${playlistId}`, {})
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<boolean>>(
+      `${this.apiUrl}/unlike/${playlistId}`,
+      {}
+    );
   }
   countLike(playlistId: string): Observable<ApiResponse<number>> {
     return this.http.get<ApiResponse<number>>(
@@ -95,8 +95,6 @@ export class LikedPlaylistService {
     };
   }
   private getProfileForTrackList(userId: string): Observable<any> {
-    return this.profileService
-      .getProfileById(userId)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.profileService.getProfileById(userId);
   }
 }

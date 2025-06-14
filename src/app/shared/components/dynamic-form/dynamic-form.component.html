@@ -93,7 +93,8 @@
                 [id]="field.name + '-' + data.id"
                 [formControlName]="field.name"
                 [value]="data.id"
-                checked
+                [checked]="compareValues(form.get(field.name)?.value, data.id)"
+                [title]="data.name"
               />
               <span class="radio-box"></span>
               <label [for]="field.name + '-' + data.id">

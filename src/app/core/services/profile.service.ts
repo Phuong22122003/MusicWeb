@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ErrorHandlerService } from './error-handler-service';
 import { ApiResponse } from '../models/api_response';
-import { catchError, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserProfile } from '../models/user_profile';
 import { environment } from '../../../environments/environment';
 export interface ProfileUpdateRequest {
@@ -19,14 +18,9 @@ export interface ProfileUpdateRequest {
 export class ProfileService {
   private apiUrl = environment.apiBaseUrl + '/profile/users';
   private apiAuthUrl = environment.apiBaseUrl + '/profile/auth/users';
-  constructor(
-    private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
+  constructor(private http: HttpClient) {}
   getProfileById(userId: string): Observable<ApiResponse<UserProfile>> {
-    return this.http
-      .get<ApiResponse<UserProfile>>(`${this.apiUrl}/` + userId)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<UserProfile>>(`${this.apiUrl}/` + userId);
   }
 
   uploadAvatar(avatar: FormData): Observable<ApiResponse<any>> {
@@ -65,8 +59,8 @@ export class ProfileService {
       params = params.append('userIds', id);
     });
 
-    return this.http
-      .get<ApiResponse<UserProfile[]>>(`${this.apiUrl}/bulk`, { params })
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<UserProfile[]>>(`${this.apiUrl}/bulk`, {
+      params,
+    });
   }
 }

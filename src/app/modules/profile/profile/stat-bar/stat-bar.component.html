@@ -37,7 +37,8 @@
         >
           <img
             [src]="
-              getAvatarUrl(userProfile.avatar) || 'assets/images/image.png'
+              getAvatarUrl(userProfile.avatar) ||
+              '/assets/images/user-placeholder.jpg'
             "
             alt="User"
             class="rounded-full w-10 h-10"

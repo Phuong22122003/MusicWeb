@@ -79,7 +79,7 @@ export class EditPlaylistComponent implements OnInit {
         id: this.tracklist.listId,
         title: formData['title'],
         description: formData['description'],
-        privacy: formData['privacy'],
+        privacy: formData['privacy'].toLowerCase(),
         releaseDate: formData['releaseDate'],
         tagIds: formData['tagIds'],
         trackIds: this.newTracklist?.tracks?.map((track) => track.id) ?? [],
@@ -93,7 +93,7 @@ export class EditPlaylistComponent implements OnInit {
         description: formData['description'],
         ...(formData['genreId'] ? { genreId: formData['genreId'] } : {}),
         mainArtists: formData['mainArtists'],
-        privacy: formData['privacy'],
+        privacy: formData['privacy'].toLowerCase(),
         tagsId: formData['tagIds'],
       };
     }
@@ -122,7 +122,7 @@ export class EditPlaylistComponent implements OnInit {
       return {
         id: tracklist.listId,
         description: tracklist.description,
-        privacy: tracklist.privacy,
+        privacy: tracklist.privacy.toLowerCase(),
         releaseDate: tracklist.releaseDate,
         tagIds: tracklist.tags,
         title: tracklist.listname,
@@ -138,7 +138,7 @@ export class EditPlaylistComponent implements OnInit {
         description: tracklist.description,
         ...(tracklist.genre ? { genreId: tracklist.genre.id } : {}),
         mainArtists: tracklist.displayName || '',
-        privacy: tracklist.privacy,
+        privacy: tracklist.privacy.toLowerCase(),
         tagsId: tracklist.tags.map((tag) => tag.id),
         trackIds: tracklist.tracks?.map((track) => track.id) ?? [],
       };

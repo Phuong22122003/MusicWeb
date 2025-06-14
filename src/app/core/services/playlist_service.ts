@@ -1,8 +1,7 @@
 import { environment } from '../../../environments/environment';
 import { HttpClient, JsonpClientBackend } from '@angular/common/http';
-import { ErrorHandlerService } from './error-handler-service';
 import { ApiResponse } from '../models/api_response';
-import { catchError, forkJoin, map, Observable, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import {
   PlaylistResponse,
   PlaylistTypeResponse,
@@ -26,14 +25,11 @@ export class PlaylistService {
 
   constructor(
     private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService,
     private profileService: ProfileService
   ) {}
 
   private getProfileForTrackList(userId: string): Observable<any> {
-    return this.profileService
-      .getProfileById(userId)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.profileService.getProfileById(userId);
   }
 
   getAllPlaylists(userId: string): Observable<ApiResponse<TrackList[]>> {
@@ -118,17 +114,17 @@ export class PlaylistService {
               };
             })
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
 
   addPlaylist(
     request: AddPlaylistRequest
   ): Observable<ApiResponse<PlaylistResponse>> {
-    return this.http
-      .post<ApiResponse<PlaylistResponse>>(`${this.baseUrl}`, request)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<PlaylistResponse>>(
+      `${this.baseUrl}`,
+      request
+    );
   }
 
   updatePlaylistInfo(
@@ -161,33 +157,35 @@ export class PlaylistService {
               };
             })
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
 
   deletePlaylistById(id: string): Observable<ApiResponse<string>> {
-    return this.http
-      .delete<ApiResponse<string>>(`${this.baseUrl}/delete/${id}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.delete<ApiResponse<string>>(
+      `${this.baseUrl}/delete/${id}`
+    );
   }
 
   addTrackToPlaylist(
     request: AddPlaylistTrackRequest
   ): Observable<ApiResponse<PlaylistTrackResponse>> {
-    return this.http
-      .post<ApiResponse<PlaylistTrackResponse>>(`${this.trackUrl}/add`, request)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<PlaylistTrackResponse>>(
+      `${this.trackUrl}/add`,
+      request
+    );
   }
 
   deleteTrackFromPlaylist(
     request: AddPlaylistTrackRequest
   ): Observable<ApiResponse<string>> {
-    return this.http
-      .request<ApiResponse<string>>('delete', `${this.trackUrl}/delete`, {
+    return this.http.request<ApiResponse<string>>(
+      'delete',
+      `${this.trackUrl}/delete`,
+      {
         body: request,
-      })
-      .pipe(catchError(this.errorHandlerService.handleError));
+      }
+    );
   }
   getAllYourPlaylists(): Observable<ApiResponse<TrackList[]>> {
     return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/you/all`).pipe(
@@ -212,8 +210,7 @@ export class PlaylistService {
             data: trackLists,
           }))
         );
-      }),
-      catchError(this.errorHandlerService.handleError)
+      })
     );
   }
 
@@ -240,8 +237,7 @@ export class PlaylistService {
             data: trackLists,
           }))
         );
-      }),
-      catchError(this.errorHandlerService.handleError)
+      })
     );
   }
 
@@ -270,8 +266,7 @@ export class PlaylistService {
               data: trackLists,
             }))
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
   private mapToTrackList(playlist: any): TrackList {

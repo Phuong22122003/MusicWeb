@@ -27,71 +27,67 @@ export class CommentService {
   addComment(
     comment: CommentRequest
   ): Observable<ApiResponse<CommentResponse>> {
-    return this.http
-      .post<ApiResponse<CommentResponse>>(`${this.apiUrl}`, comment)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<CommentResponse>>(
+      `${this.apiUrl}`,
+      comment
+    );
   }
 
   getComments(trackId: string): Observable<ApiResponse<CommentResponse[]>> {
-    return this.http
-      .get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/track/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<CommentResponse[]>>(
+      `${this.apiUrl}/track/${trackId}`
+    );
   }
 
   getCommentLikeCount(commentId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/likes/${commentId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/likes/${commentId}`
+    );
   }
 
   likeComment(
     commentId: string,
     userId: string
   ): Observable<ApiResponse<void>> {
-    return this.http
-      .post<ApiResponse<void>>(`${this.apiUrl}/${commentId}/likes`, {})
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<void>>(
+      `${this.apiUrl}/${commentId}/likes`,
+      {}
+    );
   }
 
   unlikeComment(
     commentId: string,
     userId: string
   ): Observable<ApiResponse<void>> {
-    return this.http
-      .delete<ApiResponse<void>>(`${this.apiUrl}/${commentId}/likes`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.delete<ApiResponse<void>>(
+      `${this.apiUrl}/${commentId}/likes`
+    );
   }
 
   updateComment(
     id: string,
     content: string
   ): Observable<ApiResponse<CommentResponse>> {
-    return this.http
-      .put<ApiResponse<CommentResponse>>(
-        `${this.apiUrl}/update/${id}`,
-        content,
-        {
-          headers: { 'Content-Type': 'text/plain' },
-        }
-      )
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.put<ApiResponse<CommentResponse>>(
+      `${this.apiUrl}/update/${id}`,
+      content,
+      {
+        headers: { 'Content-Type': 'text/plain' },
+      }
+    );
   }
 
   deleteComment(id: string): Observable<ApiResponse<void>> {
-    return this.http
-      .delete<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.delete<ApiResponse<void>>(`${this.apiUrl}/delete/${id}`);
   }
 
   replyToComment(
     commentId: string,
     request: CommentRequest
   ): Observable<ApiResponse<CommentResponse>> {
-    return this.http
-      .post<ApiResponse<CommentResponse>>(
-        `${this.apiUrl}/${commentId}/replies`,
-        request
-      )
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<CommentResponse>>(
+      `${this.apiUrl}/${commentId}/replies`,
+      request
+    );
   }
 }

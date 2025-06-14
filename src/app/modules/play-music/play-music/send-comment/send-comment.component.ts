@@ -13,6 +13,7 @@ import { CommentRequest } from '../../../../core/models/comment/comment-request.
 import { ProfileService } from '../../../../core/services/profile.service';
 import { UserProfile } from '../../../../core/models/user_profile';
 import getAvatarUrl from '../../../../shared/utils/get-avatar-url';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-send-comment',
@@ -31,16 +32,18 @@ export class SendCommentComponent implements OnInit {
   constructor(
     private commentService: CommentService,
     private authService: AuthService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private toast: ToastrService
   ) {}
   ngOnInit(): void {
     this.loggedUserId = this.authService.getUserId();
     if (!this.loggedUserId) return;
-    this.profileService.getProfileById(this.loggedUserId).subscribe((res) => {
-      this.profile = res.data;
-      console.log(this.profile);
-      this.avatarUrl = getAvatarUrl(this.profile.avatar as string, null);
-      console.log(this.avatarUrl);
+    this.profileService.getProfileById(this.loggedUserId).subscribe({
+      next: (res) => {
+        this.profile = res.data;
+        this.avatarUrl = getAvatarUrl(this.profile.avatar as string, null);
+      },
+      error: (err) => this.toast.error(err.message),
     });
   }
   sendComment(): void {
@@ -53,13 +56,12 @@ export class SendCommentComponent implements OnInit {
       userId: this.loggedUserId,
       likeCount: 0,
     };
-    console.log(commentReq);
     this.commentService.addComment(commentReq).subscribe({
       next: () => {
         this.commentText = '';
         this.commentService.emitCommentAdded();
       },
-      error: (err) => console.error(err),
+      error: (err) => this.toast.error(err.message),
     });
   }
 }

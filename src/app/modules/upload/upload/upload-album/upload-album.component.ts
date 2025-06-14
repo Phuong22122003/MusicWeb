@@ -111,6 +111,7 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
     });
   }
   onSubmit() {
+    console.log('=vaoday=');
     let isInvalid = this.trackCreations.some(
       (trackCreation) => trackCreation.title.length <= 0
     );
@@ -150,7 +151,9 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
         formData.append('track-files', matchingFileObj.file);
       }
     });
-
+    console.log(formData.getAll('track-files'));
+    console.log(formData.getAll('track-request'));
+    console.log(formData.getAll('meta-data'));
     // 5. Gửi request
     this.albumService.uploadAlbum(formData).subscribe({
       next: (res: ApiResponse<any>) => {
@@ -198,6 +201,7 @@ export class UploadAlbumComponent implements OnInit, OnDestroy {
       tempId: existingTempId,
       privacy: 'public',
     };
+    console.log(this.trackCreations[this.selectedIndexToEdit]);
     this.selectedIndexToEdit = -1;
   }
   onEditImage(image: File) {

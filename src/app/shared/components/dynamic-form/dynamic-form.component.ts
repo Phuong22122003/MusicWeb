@@ -56,6 +56,18 @@ export class DynamicFormComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.formFields.forEach;
   }
+
+  normalizeValue(value: any): string {
+    if (value === null || value === undefined) return '';
+    return value.toString().toLowerCase();
+  }
+
+  compareValues(value1: any, value2: any): boolean {
+    if (value1 === null || value1 === undefined) value1 = '';
+    if (value2 === null || value2 === undefined) value2 = '';
+    return this.normalizeValue(value1) === this.normalizeValue(value2);
+  }
+
   ngOnInit(): void {
     console.log(this.formFields);
     const controls: { [key: string]: any } = {};
@@ -83,9 +95,30 @@ export class DynamicFormComponent implements OnInit {
         field.options?.defaultValue ??
         (field.type === 'multi-select' ? [] : null);
 
+      // For radio buttons, normalize the default value
+      if (field.type === 'radio' && value) {
+        value = this.normalizeValue(value);
+      }
+
       controls[field.name] = [value, field.validators || []];
     });
     this.form = this.fb.group(controls);
+
+    // Add value change subscriptions for radio buttons
+    this.formFields.forEach((field) => {
+      if (field.type === 'radio') {
+        const control = this.form.get(field.name);
+        if (control) {
+          control.valueChanges.subscribe((value) => {
+            // Normalize the value when it changes
+            const normalizedValue = this.normalizeValue(value);
+            if (normalizedValue !== value) {
+              control.setValue(normalizedValue, { emitEvent: false });
+            }
+          });
+        }
+      }
+    });
   }
 
   onSubmit() {

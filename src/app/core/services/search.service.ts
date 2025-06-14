@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandlerService } from './error-handler-service';
-import { catchError, map, Observable, Subject } from 'rxjs';
+import { map, Observable, Subject } from 'rxjs';
 import { ApiResponse } from '../models/api_response';
-import { Track } from '../models/track';
 @Injectable({
   providedIn: 'root', // Đăng ký service ở root để dùng toàn app
 })
@@ -16,19 +14,11 @@ export class SearchService {
     if (!query) return;
     this.searchChange.next(query);
   }
-  constructor(
-    private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
+  constructor(private http: HttpClient) {}
   searchTrackIds(query: string): Observable<string[]> {
     return this.http
       .get<ApiResponse<string[]>>(this.apiUrl + `/tracks?q=${query}`)
-      .pipe(
-        map((response) => {
-          return response.data;
-        }),
-        catchError(this.errorHandlerService.handleError)
-      );
+      .pipe(map((response) => response.data));
   }
 
   // Tìm kiếm Users

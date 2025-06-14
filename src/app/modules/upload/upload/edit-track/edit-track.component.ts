@@ -61,4 +61,8 @@ export class EditTrackComponent {
       this.close.emit();
     }, 300);
   }
+  clickOutside(event: Event) {
+    event.stopPropagation();
+    this.close.emit();
+  }
 }

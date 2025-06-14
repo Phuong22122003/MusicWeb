@@ -16,6 +16,8 @@ enum Scene {
   EnterPasswordNewAccount,
   EnterPasswordExistedAccount,
   EnterNameBirthdayGender,
+  EnterEmailForForgotPassword,
+  EnterOTPAndNewPassword,
 }
 
 @Component({
@@ -47,6 +49,10 @@ export class AuthModalComponent {
   isOpen = true;
   isClosing = false;
   BaseUrl = environment.apiBaseUrl;
+  otp: string = '';
+  newPassword: string = '';
+  confirmNewPassword: string = '';
+  loadingOTP = false;
   @Output() modalClosed = new EventEmitter<void>();
   constructor(
     private authService: AuthService,
@@ -83,6 +89,7 @@ export class AuthModalComponent {
     this.isLoading = true;
     if (this.password.length < 8) {
       this.passwordMessage = 'Enter a valid password. (at least 8 characters)';
+      this.isLoading = false;
       return;
     }
     this.authService
@@ -95,6 +102,7 @@ export class AuthModalComponent {
           this.onCloseModal();
         },
         error: (err) => {
+          console.log(err.message);
           this.isLoading = false;
           this.passwordMessage = err.message;
         },
@@ -103,6 +111,12 @@ export class AuthModalComponent {
   onNextSceneEnterPasswordNewAccount() {
     if (this.password.length === 0) {
       this.passwordMessage = 'Enter a valid password.';
+      this.isLoading = false;
+      return;
+    }
+    if (this.password.length < 8) {
+      this.passwordMessage = 'Password must be at least 8 characters';
+      this.isLoading = false;
       return;
     }
     this.currentScene = Scene.EnterNameBirthdayGender;
@@ -190,13 +204,68 @@ export class AuthModalComponent {
       error: (err) => {
         this.isLoading = false;
         console.log(err);
-        if (err['code'] === 1014) {
-          this.emailMessage = 'Email existed';
+        if (err.message === 'Email đã tồn tại') {
+          this.emailMessage = 'Email đã tồn tại';
         }
       },
     });
   }
   loginWithGoogle() {
     window.location.href = `http://localhost:8080/identity/oauth2/authorization/google`;
+  }
+  onClickForgotPassword() {
+    this.currentScene = Scene.EnterEmailForForgotPassword;
+  }
+  onNextSceneEnterOTPAndNewPassword() {
+    this.currentScene = Scene.EnterOTPAndNewPassword;
+  }
+  onClickSendOTP() {
+    this.isLoading = true;
+    this.authService.sendOTP(this.email).subscribe({
+      next: (value) => {
+        this.toast.success('OTP sent successfully', 'Success');
+        this.currentScene = Scene.EnterOTPAndNewPassword;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.toast.error(err.message, 'Error');
+        this.isLoading = false;
+      },
+    });
+  }
+  onClickConfirmOTP() {
+    if (this.otp.length === 0) {
+      this.toast.error('Please enter your OTP', 'Error');
+      return;
+    }
+    if (this.newPassword.length === 0) {
+      this.toast.error('Please enter your new password', 'Error');
+      return;
+    }
+    if (this.confirmNewPassword.length === 0) {
+      this.toast.error('Please enter your confirm new password', 'Error');
+      return;
+    }
+    if (this.newPassword !== this.confirmNewPassword) {
+      this.toast.error(
+        'New password and confirm new password do not match',
+        'Error'
+      );
+      return;
+    }
+    this.isLoading = true;
+    this.authService
+      .confirmOTP(this.email, this.otp, this.newPassword)
+      .subscribe({
+        next: (value) => {
+          this.toast.success('OTP confirmed successfully', 'Success');
+          this.isLoading = false;
+          this.onCloseModal();
+        },
+        error: (err) => {
+          this.toast.error(err.message, 'Error');
+          this.isLoading = false;
+        },
+      });
   }
 }

@@ -422,7 +422,6 @@ export class NextPlaylistComponent implements OnInit, OnDestroy, AfterViewInit {
           if (response.data) {
             console.log(response.data);
             this.tracks = response.data;
-
             // Load display names for all tracks
             this.profileService
               .getProfileByIds(this.tracks.map((track) => track.userId))

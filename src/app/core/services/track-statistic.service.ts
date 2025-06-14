@@ -19,41 +19,38 @@ export class TrackStatisticsService {
   private apiUrl = `${environment.apiBaseUrl}/music-service/track-statistics`;
   private adminStatisticUrl = `${environment.apiBaseUrl}/admin-service/statistic`;
   private userStatisticUrl = `${environment.apiBaseUrl}/user-library/statistic`;
-  constructor(
-    private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getCommentsForTrack(
     trackId: string
   ): Observable<ApiResponse<CommentResponse[]>> {
-    return this.http
-      .get<ApiResponse<CommentResponse[]>>(`${this.apiUrl}/comments/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<CommentResponse[]>>(
+      `${this.apiUrl}/comments/${trackId}`
+    );
   }
 
   getCommentCountForTrack(trackId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/comments/count/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/comments/count/${trackId}`
+    );
   }
 
   getPlayCount(trackId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/cout_play/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/cout_play/${trackId}`
+    );
   }
 
   getTotalCommentLikes(trackId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/comments/likes/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/comments/likes/${trackId}`
+    );
   }
 
   getTrackLikeCount(trackId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/liked/count/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/liked/count/${trackId}`
+    );
   }
   // Admin Statistic Url
   getPlayResponse(

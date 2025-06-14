@@ -72,6 +72,7 @@
       </button>
       <span
         class="text-end block text-[#044DD2] text-[12px] font-medium mb-[16px]"
+        (click)="onClickForgotPassword()"
       >
         Need help?
       </span>
@@ -174,6 +175,7 @@
         } Sign In
       </button>
       <span
+        (click)="onClickForgotPassword()"
         class="hover:text-[#333] cursor-pointer text-end block text-[#044DD2] text-[12px] font-medium"
       >
         Don't know your password?
@@ -309,6 +311,67 @@
         @if (isLoading) {
         <i class="fa-solid fa-spinner fa-spin"></i>
         } Accept & Continue
+      </button>
+    </div>
+    } @case (Scene.EnterEmailForForgotPassword) {
+    <div class="flex flex-col items-center justify-center">
+      <div class="mb-[32px] text-center text-[32px] font-semibold">
+        Forgot Password
+      </div>
+      <input
+        type="email"
+        placeholder="Your email"
+        class="w-full px-[16px] py-[7px] border border-[#ccc] rounded outline-none mb-[8px] text-[20px]"
+        [(ngModel)]="email"
+        name="email"
+      />
+      <button
+        (click)="onClickSendOTP()"
+        type="button"
+        class="w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+        [disabled]="isLoading"
+        [ngClass]="{
+          'opacity-50 cursor-not-allowed': isLoading,
+          'opacity-100 cursor-pointer': !isLoading
+        }"
+      >
+        @if (isLoading) {
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        } Send OTP
+      </button>
+    </div>
+    } @case (Scene.EnterOTPAndNewPassword) {
+    <div class="flex flex-col items-center justify-center">
+      <div class="mb-[32px] text-center text-[32px] font-semibold">
+        Enter OTP and New Password
+      </div>
+      <input
+        type="text"
+        placeholder="Your OTP"
+        class="w-full px-[16px] py-[7px] border border-[#ccc] rounded outline-none mb-[8px] text-[20px]"
+        [(ngModel)]="otp"
+        name="otp"
+      />
+      <input
+        type="password"
+        placeholder="Your new password"
+        class="w-full px-[16px] py-[7px] border border-[#ccc] rounded outline-none mb-[8px] text-[20px]"
+        [(ngModel)]="newPassword"
+        name="newPassword"
+      />
+      <input
+        type="password"
+        placeholder="Confirm your new password"
+        class="w-full px-[16px] py-[7px] border border-[#ccc] rounded outline-none mb-[8px] text-[20px]"
+        [(ngModel)]="confirmNewPassword"
+        name="confirmNewPassword"
+      />
+      <button
+        (click)="onClickConfirmOTP()"
+        type="button"
+        class="w-full px-[15px] py-[10px] bg-[var(--primary-orange-color)] text-white text-[16px] mb-[16px] rounded"
+      >
+        Confirm OTP
       </button>
     </div>
     } @default {

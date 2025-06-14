@@ -179,6 +179,7 @@ export class ListActionComponent implements OnChanges {
     dialogRef.componentInstance.cancelTracklist.subscribe(() =>
       dialogRef.close()
     );
+
     dialogRef.componentInstance.updateInfo.subscribe((formData) => {
       console.log('Form submitted!', formData);
       this.update.emit();
@@ -302,10 +303,14 @@ export class ListActionComponent implements OnChanges {
               columnSpan: 2,
               name: 'albumType',
               label: 'Album Type',
-              type: 'text',
+              type: 'select',
+              dataSelect: [
+                { id: 'ep', name: 'EP' },
+                { id: 'album', name: 'Album' },
+              ],
               validators: [Validators.required],
               options: {
-                defaultValue: this.tracklist.type, // nếu cần truyền chính xác albumType khác với 'album'
+                defaultValue: this.tracklist.albumType,
               },
             },
             {

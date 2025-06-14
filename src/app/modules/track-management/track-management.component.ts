@@ -101,7 +101,7 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
       },
       {
         columnSpan: 2,
-        name: 'genre',
+        name: 'genreId',
         label: 'Genre',
         type: 'select',
         placeholder: 'Select a genre',
@@ -112,7 +112,7 @@ export class TrackManagementComponent implements OnInit, OnDestroy {
       },
       {
         columnSpan: 2,
-        name: 'tags',
+        name: 'tagIds',
         label: 'Tags',
         type: 'multi-select',
         placeholder: 'Select tags',

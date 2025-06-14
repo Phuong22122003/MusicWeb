@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ErrorHandlerService } from './error-handler-service';
 import {
   catchError,
   forkJoin,
@@ -28,7 +27,6 @@ export class TrackService {
   private apiUrlTracks = environment.apiBaseUrl + '/music-service/tracks';
   constructor(
     private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService,
     private profileService: ProfileService
   ) {}
   emitUpdateDone(track: Track) {
@@ -82,8 +80,7 @@ export class TrackService {
             })
           )
         )
-      ),
-      catchError(this.errorHandlerService.handleError)
+      )
     );
   }
   updateTrack(
@@ -133,8 +130,7 @@ export class TrackService {
               data: tracksWithDisplayName,
             }))
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
   getTracksByUserId(userId: string): Observable<ApiResponse<Track[]>> {
@@ -145,8 +141,7 @@ export class TrackService {
           return this.enrichTracksWithDisplayNames(res.data).pipe(
             map((tracks) => ({ ...res, data: tracks }))
           );
-        }),
-        catchError(this.errorHandlerService.handleError)
+        })
       );
   }
 
@@ -166,8 +161,7 @@ export class TrackService {
           this.enrichTracksWithDisplayNames(res.data).pipe(
             map((tracks) => ({ ...res, data: tracks }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -184,8 +178,7 @@ export class TrackService {
           this.enrichTracksWithDisplayNames(res.data).pipe(
             map((tracks) => ({ ...res, data: tracks }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -199,8 +192,7 @@ export class TrackService {
           this.enrichTracksWithDisplayNames(res.data).pipe(
             map((tracks) => ({ ...res, data: tracks }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 

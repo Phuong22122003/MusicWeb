@@ -14,8 +14,7 @@ export class HistoryService {
 
   constructor(
     private http: HttpClient,
-    private profileService: ProfileService,
-    private errorHandlerService: ErrorHandlerService
+    private profileService: ProfileService
   ) {}
 
   private enrichTracksWithDisplayNames(tracks: Track[]): Observable<Track[]> {
@@ -43,9 +42,7 @@ export class HistoryService {
 
   getAllHistory(): Observable<ApiResponse<Track[]>> {
     return this.http.get<ApiResponse<Track[]>>(`${this.apiUrl}/all`).pipe(
-      catchError(this.errorHandlerService.handleError),
       switchMap((res) => {
-        console.log(res);
         return this.enrichTracksWithDisplayNames(res.data).pipe(
           map((enriched) => ({ ...res, data: enriched }))
         );

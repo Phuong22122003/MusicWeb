@@ -33,8 +33,7 @@ export class AlbumService {
           this.getTrackListWithDisplayName(res.data).pipe(
             map((trackList) => ({ ...res, data: trackList }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -46,8 +45,7 @@ export class AlbumService {
           this.getTrackListWithDisplayName(res.data).pipe(
             map((trackList) => ({ ...res, data: trackList }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -59,8 +57,7 @@ export class AlbumService {
           this.getTrackListWithDisplayName(res.data).pipe(
             map((trackList) => ({ ...res, data: trackList }))
           )
-        ),
-        catchError(this.errorHandlerService.handleError)
+        )
       );
   }
 
@@ -149,8 +146,7 @@ export class AlbumService {
         return forkJoin(requests).pipe(
           map((trackLists: TrackList[]) => ({ ...response, data: trackLists }))
         );
-      }),
-      catchError(this.errorHandlerService.handleError)
+      })
     );
   }
 

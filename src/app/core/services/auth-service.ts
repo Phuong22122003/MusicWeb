@@ -42,18 +42,20 @@ export class AuthService {
   }
 
   register(userData: any): Observable<ApiResponse<any>> {
-    return this.http
-      .post<ApiResponse<any>>(`${this.apiUrl}/users/registration`, userData)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<any>>(
+      `${this.apiUrl}/users/registration`,
+      userData
+    );
   }
 
   login(credentials: {
     username: string;
     password: string;
   }): Observable<ApiResponse<any>> {
-    return this.http
-      .post<ApiResponse<any>>(`${this.apiUrl}/authenticate/login`, credentials)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<any>>(
+      `${this.apiUrl}/authenticate/login`,
+      credentials
+    );
   }
 
   saveToken(token: string): void {
@@ -116,5 +118,29 @@ export class AuthService {
         this.logout();
       }
     });
+  }
+
+  sendOTP(email: string): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(
+      `${this.apiUrl}/authenticate/otp`,
+      {
+        email: email,
+      }
+    );
+  }
+
+  confirmOTP(
+    email: string,
+    otp: string,
+    newPassword: string
+  ): Observable<ApiResponse<void>> {
+    return this.http.post<ApiResponse<void>>(
+      `${this.apiUrl}/authenticate/otp/confirm`,
+      {
+        email: email,
+        otp: otp,
+        newPassword: newPassword,
+      }
+    );
   }
 }

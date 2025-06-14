@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ErrorHandlerService } from './error-handler-service';
 import { environment } from '../../../environments/environment';
 import { Track } from '../models/track';
 import { ApiResponse } from '../models/api_response';
@@ -16,13 +15,11 @@ export class LikedTrackService {
 
   constructor(
     private http: HttpClient,
-    private errorHandlerService: ErrorHandlerService,
     private trackEnricher: TrackEnricherService
   ) {}
 
   getAllLikedTracks(): Observable<ApiResponse<Track[]>> {
     return this.http.get<ApiResponse<Track[]>>(`${this.apiUrl}/all`).pipe(
-      catchError(this.errorHandlerService.handleError),
       switchMap((res) => {
         return this.trackEnricher
           .enrichTracksWithDisplayNames(res.data)
@@ -32,32 +29,34 @@ export class LikedTrackService {
   }
 
   getTrackLikeCount(trackId: string): Observable<ApiResponse<number>> {
-    return this.http
-      .get<ApiResponse<number>>(`${this.apiUrl}/count/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<number>>(
+      `${this.apiUrl}/count/${trackId}`
+    );
   }
 
   isTrackLiked(trackId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .get<ApiResponse<boolean>>(`${this.apiUrl}/is_liked/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<boolean>>(
+      `${this.apiUrl}/is_liked/${trackId}`
+    );
   }
 
   likeTrack(trackId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${this.apiUrl}/like/${trackId}`, {})
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<boolean>>(
+      `${this.apiUrl}/like/${trackId}`,
+      {}
+    );
   }
 
   unLikeTrack(trackId: string): Observable<ApiResponse<boolean>> {
-    return this.http
-      .post<ApiResponse<boolean>>(`${this.apiUrl}/unlike/${trackId}`, {})
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.post<ApiResponse<boolean>>(
+      `${this.apiUrl}/unlike/${trackId}`,
+      {}
+    );
   }
 
   getUserIdsLikedTrack(trackId: string): Observable<ApiResponse<string[]>> {
-    return this.http
-      .get<ApiResponse<string[]>>(`${this.apiUrl}/users/${trackId}`)
-      .pipe(catchError(this.errorHandlerService.handleError));
+    return this.http.get<ApiResponse<string[]>>(
+      `${this.apiUrl}/users/${trackId}`
+    );
   }
 }
